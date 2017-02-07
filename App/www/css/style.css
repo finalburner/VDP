@@ -1,1 +1,38 @@
-/* Empty. Add your own CSS if you like */
+.Bandeau
+{
+
+  background-color: #BD2759;
+  font-family: verdana;
+  font-size: 48px;
+  color: white;
+  height: 90px;
+
+  text-align: center ;
+  p
+  {
+
+  }
+}
+.Menu
+{
+
+background-color: #F3F3F3;
+height: 640px;
+}
+.Menu p
+{
+  font: 30px Verdana, sans-serif;
+  margin: 20px 0px 0px 16px;
+
+}
+.Menu button
+{
+  margin: 40px 0 20px 16px;
+
+}
+.titre
+{
+  font-size:xx-large;
+  text-align: center ;
+
+}

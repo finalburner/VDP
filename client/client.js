@@ -55,7 +55,7 @@ function check_id (user,pass){
   var sen = 'SELECT username,password FROM '+table+' WHERE username ="' + user + '" AND password="' +pass+ '"';
   con.query( sen ,  function(err,rows){
   //  console.log(sen);
-   console.log(rows[0]);
+    console.log(rows[0]);
     if (err) console.log("ERR");
   else
   {  if (rows[0] ){
