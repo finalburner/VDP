@@ -26,13 +26,13 @@ io.on('connection', function(socket){
 //demande login
   socket.on('login', function(data){
      console.log('id: ' + data.id + ',user: ' + data.user +',pass: ' + data.pass);
-     check_id(data.user,data.pass);
+      socket.emit('login_rep' , check_id(data.user,data.pass));
       });
 });
 
 //---------------------------SQL----------------------------
 var mysql = require("mysql");
-
+var table = "users" ;
 // First you need to create a connection to the db
 var con = mysql.createConnection({
   host: "localhost",
@@ -51,31 +51,25 @@ con.connect(function(err){
 
 });
 
-function sql_read(command){
-  con.query(command  ,function(err,rows){
-
+function check_id (user,pass){
+  var sen = 'SELECT username,password FROM '+table+' WHERE username ="' + user + '" AND password="' +pass+ '"';
+  con.query( sen ,  function(err,rows){
+  //  console.log(sen);
+   console.log(rows[0]);
     if (err) console.log("ERR");
-  else console.log(rows[0])
+  else
+  {  if (rows[0] ){
+    console.log("SQL user ok" );
+    return 1 ;
+  } else {
+    console.log("SQL user fail ");
+    return  0;
+  }
+}
 });
-con.end(function(err) {
-  // The connection is terminated gracefully
-  // Ensures all previously enqueued queries are still
-  // before sending a COM_QUIT packet to the MySQL server.
-});
-//---------------------------------------------------------
 };
 
-
-function check_id(user,pass){
-// var ab = new Array();
-ab =  sql_read('SELECT username,password FROM users WHERE username in [admin2]');
-  //rows.foreach(function(item){
-    //console.log(item.Id);
-  //  res.json(ab);
- console.log(ab);
-//  });
-};
-check_id(0,0);
+check_id('admin','pass');
 
 var ids = [
 "/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_ECHAN00000_TEMP3DEPAR",
@@ -98,7 +92,12 @@ function update(nodeid,val) {
       });
     }
 
-
+    // con.end(function(err) {
+    //   // The connection is terminated gracefully
+    //   // Ensures all previously enqueued queries are still
+    //   // before sending a COM_QUIT packet to the MySQL server.
+    // });
+    // //---------------------------------------------------------
 async.series([
 
     // step 1 : connect to
