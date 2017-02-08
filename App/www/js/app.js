@@ -41,43 +41,61 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: '/search',
+  .state('app.synop', {
+    url: '/synop',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html',
+        templateUrl: 'templates/synop.html',
         controller: 'MyCtrl'
       }
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.alarmes', {
+      url: '/alarmes',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/alarmes.html',
+            controller: 'MyCtrl'
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
+    .state('app.rapport', {
+      url: '/rapport',
       views: {
         'menuContent': {
-          templateUrl: 'templates/playlists.html',
+          templateUrl: 'templates/rapport.html',
           controller: 'MyCtrl'
         }
       }
     })
-
-  .state('app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+    .state('app.admin', {
+      url: '/admin',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/admin.html',
+          controller: 'MyCtrl'
+        }
       }
-    }
-  });
+    })
+    .state('app.biblio', {
+      url: '/biblio',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/biblio.html',
+          controller: 'MyCtrl'
+        }
+      }
+    });
+  // .state('app.single', {
+  //   url: '/playlists/:playlistId',
+  //   views: {
+  //     'menuContent': {
+  //       templateUrl: 'templates/playlist.html',
+  //       controller: 'PlaylistCtrl'
+  //     }
+  //   }
+  // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/admin');
 });
