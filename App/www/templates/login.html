@@ -1,18 +1,18 @@
 
-  <div class="Bandeau">
-  </div>
   <ion-content>
+    <div class="Bandeau">
+    </div>
     <form ng-submit="doLogin()">
       <div class="list">
-        <label class="item item-input">
+        <label class="item item-input row" margin-top= "50px">
           <span class="input-label">Username</span>
           <input type="text" ng-model="loginData.username">
         </label>
-        <label class="item item-input">
+        <label class="item item-input row ">
           <span class="input-label">Password</span>
           <input type="password" ng-model="loginData.password">
         </label>
-        <label class="item">
+        <label class="item row">
           <button class="button button-block button-positive" type="submit">Log in</button>
         </label>
       </div>
