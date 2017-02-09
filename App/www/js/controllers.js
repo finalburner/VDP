@@ -29,6 +29,18 @@ angular.module('starter.controllers', [ ])
     $scope.modal = modal;
   });
 
+    $ionicModal.fromTemplateUrl('templates/modalN1.html', function(modal) {
+          $scope.modalCtrl = modal;
+        }, {
+          scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
+          animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
+          focusFirstInput: true
+        });
+
+    $scope.N1 = function(name) {
+          $scope.modalCtrl.show();
+          $scope.modalCtrl.name= name;
+        };
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
     $scope.modal.hide();

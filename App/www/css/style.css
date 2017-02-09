@@ -79,5 +79,17 @@ display:table-cell;
 vertical-align:middle;
 font-style: oblique;
 
+}
+.N1_menu
+{
+top:40%;
+}
+.N1_row
+{
 
+height: 50px;
+font-size:15px;
+font-weight: bold;
+vertical-align:middle;
+margin:0 0 0 0 ;
 }
