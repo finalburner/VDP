@@ -58,14 +58,34 @@ angular.module('starter.controllers', [ ])
 })
 
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
+.controller('CTctrl', function($scope) {
+  $scope.list_CT = [
+  { name: 'CT 49850',
+      addr : '18,rue du Breil 75018 Paris',
+      pow : '100kW Gaz SED14',
+      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+    },
+  { name: 'CT 49200',
+      addr : '18,rue du Breil 75018 Paris',
+      pow : '100kW Gaz SED14',
+      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+    },
+
+  { name: 'CT 49100',
+        addr : '18,rue du Breil 75018 Paris',
+        pow : '100kW Gaz SED14',
+        alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+      },
+    { name: 'CT 49850',
+          addr : '18,rue du Breil 75018 Paris',
+          pow : '100kW Gaz SED14',
+          alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+        },
+     { name: 'CT 49650',
+            addr : '18,rue du Breil 75018 Paris',
+            pow : '100kW Gaz SED14',
+            alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+          }
   ];
 })
 

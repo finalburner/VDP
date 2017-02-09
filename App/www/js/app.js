@@ -49,7 +49,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
     views: {
       'menuContent': {
         templateUrl: 'templates/synop.html',
-        controller: 'MyCtrl'
+        controller: 'CTctrl'
       }
     }
   })

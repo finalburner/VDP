@@ -36,3 +36,48 @@ height: 640px;
   text-align: center ;
 
 }
+.recherche
+ {
+    border: 0px;
+    padding: 0px;
+    margin:0px;
+}
+.CT_row
+{
+height:120px ;
+
+}
+
+.CT_bar_color
+{
+background-color: #cc0000 !important;
+width:7px;
+}
+.CT_tit
+{
+font-weight: bold;
+font-size:14px;
+height: 30px;
+}
+.CT_loc
+{
+font-size:12px;
+height: 25px;
+}
+.CT_ala
+{
+height: 40px;
+display:table;
+width: 50px;
+text-align: justify;
+}
+
+#CT_ala
+{
+font-size:13px;
+display:table-cell;
+vertical-align:middle;
+font-style: oblique;
+
+
+}
