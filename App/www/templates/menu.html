@@ -9,8 +9,8 @@
     </button>
       </ion-nav-buttons>
       <ion-nav-buttons side="right">
-        <a  ion-button  href="#/app/synop/carto"class="button button-icon ion-ios-location" >  </a >
-        <a  ion-button  href="#/app/synop/CT"class="button button-icon ion-social-windows" >  </a >
+        <a  ion-button ng-if=" 'app.synop'| includedByState" ui-sref="app.synop.carto" class="button button-icon ion-ios-location" >  </a >
+        <a  ion-button ng-if=" 'app.synop'| includedByState" ui-sref="app.synop.CT" class="button button-icon ion-social-windows" >  </a >
       <!--button class="button button-icon ion-ios-location "ng-if=" 'app.synop'| includedByState">  </button>
       <button class="button button-icon ion-social-windows" ng-if=" 'app.synop'| includedByState" ng-click="doSomething()"-->
 

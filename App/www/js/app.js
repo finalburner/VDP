@@ -58,7 +58,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
       authentificate: true,
     views: {
       'menuContent': {
-        templateUrl: 'templates/carto.html',
+        templateUrl: 'templates/synop/carto.html',
         controller: 'MyCtrl'
       }
     }
@@ -68,7 +68,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
       authentificate: true,
     views: {
       'menuContent': {
-        templateUrl: 'templates/CT.html',
+        templateUrl: 'templates/synop/CT.html',
         controller: 'MyCtrl'
       }
     }
