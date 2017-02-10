@@ -1,5 +1,21 @@
 <ion-view view-title="biblio">
   <ion-content>
     <h1>biblio</h1>
+
+<div class="card">
+                <div class="item item-text-wrap">
+                    <h1>Network: {{network}}</h1>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="item item-text-wrap">
+                    <ion-toggle ng-model="isOnline" ng-checked="item.checked">
+                        <h1 ng-show="isOnline">I'm online</h1>
+                        <h1 ng-show="! isOnline">I'm offline</h1>
+                    </ion-toggle>
+                </div>
+            </div>
   </ion-content>
 </ion-view>

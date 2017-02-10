@@ -1,5 +1,46 @@
-<ion-view view-title="alarmes">
-  <ion-content>
-    <h1>alarmes</h1>
+
+<div class="row"><ion-content scroll="false">
+<!--Barre de recherche-->
+<div class="list list-inset recherche">
+<label class="item item-input ">
+<i class="icon ion-search placeholder-icon"></i>
+<input type="text" placeholder="Search">
+</label>
+
+<!--Bouton CT - Intervention-->
+        <div class="item button-bar recherche">
+     <a class="button">En cours</a>
+      <!-- <select class="button" >
+            <option>Blue</option>
+            <option selected>Green</option>
+            <option>Red</option>
+    </select> -->
+          <a class="button">Toutes</a>
+        </div>
+      </div>
+    </ion-content></div>
+    <ion-view view-title="Journal des alarmes">
+<!--Liste de AL-->
+  <div class="row">  <ion-content>
+      <ion-list ng-controller="ALctrl">
+        <div ng-repeat="item in list_AL">
+          <ion-item class="item-stable row "                                                                                                                                        
+                    ng-click="toggleGroup(group)"
+                    ng-class="{active: isGroupShown(group)}">
+                    <div class="col-5 CT_bar_color"></div>
+                    <div class="col">{{item.type}}</div>
+                    <div class="col">{{item.date}}</div>
+            <div class="col"><i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i></div>
+       </ion-item>
+    </div>
+
+          <!-- <ion-item class="item-accordion"
+                    ng-show="isGroupShown(group)">
+            {{item.name}}
+          </ion-item> -->
+
+      </ion-list>
+
   </ion-content>
+</div>
 </ion-view>

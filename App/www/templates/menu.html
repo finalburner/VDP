@@ -42,15 +42,16 @@
     Administration
   </a >
   <div class="row" >
-  <p ng-model='username'> <p>
+  <h5> {{clientid}} - {{auth}} </h5>
   </div>
   <div class="row">
     <button class="button button-light button-block" ng-hide='auth' ng-click="login()">
   Connexion
 </button>
- <button class="button button-light button-block" ng-show='auth' >
+ <button class="button button-light button-block" ng-show='auth' ng-click="unlog()">
   Déconnexion
 </button>
+{{isOnline}}
   </div>
   <div class="row">
   </div>
