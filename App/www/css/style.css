@@ -50,7 +50,7 @@ height:120px ;
 
 .CT_bar_color
 {
-background-color: #cc0000 !important;
+
 width:7px;
 }
 .CT_tit
@@ -75,14 +75,26 @@ text-align: justify;
 #CT_ala
 {
 font-size:13px;
-display:table-cell;
 vertical-align:middle;
 font-style: oblique;
 
 }
 .N1_menu
 {
-top:40%;
+
+ top:30%
+}
+.N1_menu_title
+{
+font-size:13px;
+margin: 6px 0 0 8px ;
+font-weight: bold;
+vertical-align:middle;
+}
+.N1_menu_color
+{
+  background-color: #cc0000 !important;
+  width:7px;
 }
 .N1_row
 {
@@ -91,5 +103,60 @@ height: 50px;
 font-size:15px;
 font-weight: bold;
 vertical-align:middle;
-margin:0 0 0 0 ;
+
+}
+
+.N1_bar_header
+{
+  height: 40px ;
+  margin : 0 0 0 0 ;
+  padding : 0 0 0 0 ;
+  border: 0 8px 0 0 ;
+}
+
+.expand-item{
+  position: relative;
+  width: 100%;
+  max-height: 50px;
+  transition: max-height 0.1s ease-out;
+  overflow: hidden;
+}
+
+.expand-item.active {
+  max-height: 200px;
+  transition: max-height 0.3s ease-out;
+}
+.AL_bar
+{
+  height: auto;
+}
+.AL_bar_color
+{
+  height: 150px ;
+  max-width: 10px;
+}
+.AL_row_text
+{
+  width: 50px ;
+
+}
+.AL_row_state
+{}
+
+.AL_type
+{
+
+  font-size:15px;
+  font-weight: bold;
+}
+.AL_date
+{
+
+  font-size:12px;
+
+}
+.AL_row_btn
+{
+
+
 }

@@ -69,7 +69,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
     views: {
       'menuContent': {
         templateUrl: 'templates/synop/CT.html',
-        controller: 'MyCtrl'
+        controller: 'AppCtrl'
       }
     }
   })
@@ -80,7 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/alarmes.html',
-            controller: 'MyCtrl'
+            controller: 'AppCtrl'
         }
       }
     })
@@ -90,7 +90,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/rapport.html',
-          controller: 'MyCtrl'
+          controller: 'AppCtrl'
         }
       }
     })
@@ -100,7 +100,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/admin.html',
-          controller: 'MyCtrl'
+          controller: 'AppCtrl'
         }
       }
     })
@@ -111,7 +111,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/biblio.html',
-          controller: 'MyCtrl'
+          controller: 'AppCtrl'
         }
       }
     });

@@ -1,14 +1,14 @@
-
-<div class="row"><ion-content scroll="false">
+<ion-view view-title="Journal des alarmes">
+<ion-content ng-controller="ALctrl" >
 <!--Barre de recherche-->
-<div class="list list-inset recherche">
-<label class="item item-input ">
+  <div class="recherche col">
+<label class="item item-input row ">
 <i class="icon ion-search placeholder-icon"></i>
-<input type="text" placeholder="Search">
+<input type="text" placeholder="Search" ng-model="search">
 </label>
 
 <!--Bouton CT - Intervention-->
-        <div class="item button-bar recherche">
+        <div class="item button-bar recherche row">
      <a class="button">En cours</a>
       <!-- <select class="button" >
             <option>Blue</option>
@@ -17,14 +17,35 @@
     </select> -->
           <a class="button">Toutes</a>
         </div>
-      </div>
-    </ion-content></div>
-    <ion-view view-title="Journal des alarmes">
+  </div>
 <!--Liste de AL-->
-  <div class="row">  <ion-content>
-      <ion-list ng-controller="ALctrl">
+
+<ion-list>
+    <ion-item class="row"ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'" ng-repeat="item in list_AL " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
+
+<div class="col AL_bar_color" style="background-color: {{item.color}};"></div>
+<div class="col">
+<div class="row AL_bar">
+
+            <div class="col AL_type ">{{item.type}}</div>
+            <div class="col AL_date ">{{item.date}}</div>
+            <div class="col ">  <i class="icon" ng-class="isItemExpanded(item) ? 'ion-minus' : 'ion-plus'"></i></div>
+</div>
+<div class="row AL_row_text">{{item.alarm}}</div>
+<div class="row AL_row_state">Etat : {{item.etat}}</div>
+<div class="row AL_row_btn">
+<button class="col col-33 boutton-block boutton-positive">Créer un Avis</boutton>
+  <button class="col col-33 boutton-block boutton-positive">Acquitter</boutton>
+    <button class="col col-33 boutton-block boutton-positive">Voir</boutton>
+</div>
+</div>
+
+          </ion-item>
+</ion-list>
+
+      <!-- <ion-list ng-controller="ALctrl">
         <div ng-repeat="item in list_AL">
-          <ion-item class="item-stable row "                                                                                                                                        
+          <ion-item class="item-stable row "
                     ng-click="toggleGroup(group)"
                     ng-class="{active: isGroupShown(group)}">
                     <div class="col-5 CT_bar_color"></div>
@@ -32,6 +53,11 @@
                     <div class="col">{{item.date}}</div>
             <div class="col"><i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i></div>
        </ion-item>
+       <ion-item class="item-accordion"
+
+                    ng-show="isGroupShown(group)">
+            {{item}}
+          </ion-item>
     </div>
 
           <!-- <ion-item class="item-accordion"
@@ -39,8 +65,7 @@
             {{item.name}}
           </ion-item> -->
 
-      </ion-list>
+      <!--  -->
 
   </ion-content>
-</div>
 </ion-view>

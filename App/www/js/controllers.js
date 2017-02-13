@@ -8,7 +8,8 @@ angular.module('starter.controllers', [ ])
           password: '',
            auth: ''
        };
-     })
+    })
+
 .controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket) {
 
 $scope.auth = 0 ;
@@ -43,6 +44,9 @@ $scope.auth = 0 ;
           $scope.modalCtrl.show();
           $scope.modalCtrl.name= name;
         };
+    $scope.N1_close = function(name) {
+                $scope.modalCtrl.hide();
+              };
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
     $scope.modalCnx.hide();
@@ -84,10 +88,44 @@ $scope.auth= 0;
 })
 
 .controller('CTctrl', function($scope,socket) {
-    socket.emit('ListeCT');
-    socket.on('ListeCT_rep', function(data){
-    $scope.list_CT = data ;
-  });
+
+    // socket.emit('ListeCT');
+    // socket.on('ListeCT_rep', function(data){
+    //$scope.list_CT = data ;
+    $scope.list_CT =  [
+      { name: 'CT 49850',
+          addr : '18,rue du Breil 75018 Paris',
+          pow : '100kW Gaz SED14',
+          alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
+          color: '#FF6633' //orange
+        },
+      { name: 'CT 49200',
+          addr : '18,rue du Breil 75018 Paris',
+          pow : '100kW Gaz SED14',
+          alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
+          color: '#6633FF' //violet
+        },
+
+      { name: 'CT 49100',
+            addr : '18,rue du Breil 75018 Paris',
+            pow : '100kW Gaz SED14',
+            alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'  ,
+            color: '#003DF5' // Bleue
+          },
+        { name: 'CT 49850',
+              addr : '18,rue du Breil 75018 Paris',
+              pow : '100kW Gaz SED14',
+              alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
+              color: '#CCFF33' // vert jaune
+            },
+         { name: 'CT 49650',
+                addr : '18,rue du Breil 75018 Paris',
+                pow : '100kW Gaz SED14',
+                alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
+                color: '#66FF33' //vert
+              }
+      ];
+
   })
 
   .controller('ALctrl', function($scope,socket) {
@@ -97,21 +135,48 @@ $scope.auth= 0;
    * else, select the given group
    */
 
-    $scope.toggleGroup = function(group) {
-        if ($scope.isGroupShown(group)) {
-          $scope.shownGroup = null;
+    $scope.expand_AL = function(item) {
+        if ($scope.isItemExpanded(item)) {
+          $scope.shownItem = null;
         } else {
-          $scope.shownGroup = group;
+          $scope.shownItem = item;
         }
       };
-      $scope.isGroupShown = function(group) {
-        return $scope.shownGroup === group;
+      $scope.isItemExpanded = function(item) {
+        return $scope.shownItem === item;
       };
 
-      socket.emit('ListeAL');
-      socket.on('ListeAL_rep', function(data){
-      $scope.list_AL = data ;
-    });
+      // socket.emit('ListeAL');
+      // socket.on('ListeAL_rep', function(data){
+      // $scope.list_AL = data ;
+
+      var list_AL = [
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+      color: '#003DF5' // Bleue
+  },
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    Etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+      color: '#FF6633' //orange
+  },
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    Etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+      color: '#003DF5' // Bleue
+  },
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    Etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+    color: '#CCFF33' // vert jaune
+  }
+];
+     $scope.list_AL = list_AL;
     })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
