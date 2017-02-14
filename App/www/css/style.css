@@ -129,34 +129,74 @@ vertical-align:middle;
 .AL_bar
 {
   height: auto;
+  margin : 0 0 0 0;
+    padding : 0 0 0 0 ;
+    height : 50px;
+
 }
 .AL_bar_color
 {
-  height: 150px ;
-  max-width: 10px;
+  height: 160px ;
+  max-width: 5px;
+  width : 5px;
+}
+.AL_bar_icon
+{
+  position : absolute;
+  right:8px;
 }
 .AL_row_text
 {
-  width: 50px ;
+  width: 300px ;
+  height : 50px;
+
 
 }
+#AL_Message
+{
+
+  word-wrap: break-word ;
+}
 .AL_row_state
-{}
+{
+    height : 30px;
+    font-size:15px;
+}
 
 .AL_type
 {
 
   font-size:15px;
   font-weight: bold;
+
 }
 .AL_date
 {
 
-  font-size:12px;
+  font-size:10px;
+  position : absolute;
+  right:50px;
+
 
 }
+.AL_btn
+{
+  padding : 0px;
+
+}
+.AL_row_btn .button
+  {
+    margin-right:5px;
+  }
+
 .AL_row_btn
 {
 
-
+height: 35px;
+}
+.Bib_item
+{
+  padding : 10px 0 5px 5px ;
+  height : 40px;
+  font-size:15px;
 }

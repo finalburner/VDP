@@ -23,20 +23,23 @@
 <ion-list>
     <ion-item class="row"ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'" ng-repeat="item in list_AL " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
 
-<div class="col AL_bar_color" style="background-color: {{item.color}};"></div>
+<div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div>
 <div class="col">
 <div class="row AL_bar">
 
-            <div class="col AL_type ">{{item.type}}</div>
-            <div class="col AL_date ">{{item.date}}</div>
-            <div class="col ">  <i class="icon" ng-class="isItemExpanded(item) ? 'ion-minus' : 'ion-plus'"></i></div>
+            <div class="col AL_type">{{item.type}}</div>
+            <div class="col "><p class="AL_date">{{item.date}}</p></div>
+          <div class="col "><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-minus' : 'ion-plus'"></i></div>
 </div>
-<div class="row AL_row_text">{{item.alarm}}</div>
+<div class="row AL_row_text"><p id="AL_Message">{{item.alarm}}</p></div>
 <div class="row AL_row_state">Etat : {{item.etat}}</div>
 <div class="row AL_row_btn">
-<button class="col col-33 boutton-block boutton-positive">Créer un Avis</boutton>
-  <button class="col col-33 boutton-block boutton-positive">Acquitter</boutton>
-    <button class="col col-33 boutton-block boutton-positive">Voir</boutton>
+    <div class="col "></div>
+    <div class="col col-offset-10">
+<button class="button button-small button-light" >Créer un Avis</boutton>
+  <button class="button button-small button-light" >Acquitter</boutton>
+    <button class="button button-small button-positive">Voir</boutton>
+</div>
 </div>
 </div>
 
