@@ -1,13 +1,37 @@
 
 <ion-view view-title="Synoptique">
-  <ion-content scroll= "false">
-    <div class="bar bar-header">
-          <label class="item-input">
-          <i class="icon ion-search placeholder-icon"></i>
-          <input type="text" placeholder="Recherche">
-        </label>
+<ion-content>
+  <div class="recherche col">
+  <label class="item item-input row">
+  <i class="icon ion-search placeholder-icon"></i>
+  <input type="text" placeholder="Search">
+  </label>
 
+
+  <!--Bouton CT - Intervention-->
+          <div class="item button-bar recherche row">
+            <a class="button">Centres Thermiques</a>
+            <a class="button">Les interventions</a>
+          </div>  </div>
+<!--Liste de CT-->
+    <ion-list ng-controller="CTctrl">
+        <ion-item class = "row CT_row" on-hold="N1(item.name)"ng-repeat="item in list_CT">
+          <!--div style="background-color: #C2A5A5 !important"-->
+          <div class ="col-5 CT_bar_color" style="background-color:{{item.color}};"></div>
+
+        <div class= "col-90" >
+            <div class= "row CT_tit" >
+ {{item.name}}</div>
+            <div class= "row CT_loc" >
+            {{item.addr}}</div>
+            <div class= "row CT_loc" >
+            {{item.pow}}</div>
+
+            <div class= "row CT_ala" >
+<p id="CT_ala">{{item.alarm}}   </p> </div>
     </div>
-        <div ui-view class ="row">qsdsqdqsdsq</div>
+        </ion-item>
+      </ion-list>
   </ion-content>
+
 </ion-view>

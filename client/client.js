@@ -1,4 +1,4 @@
-/*global require,console,setTimeout */
+ /*global require,console,setTimeout */
 var opcua = require("node-opcua")
 var async = require("async")
 
@@ -8,9 +8,64 @@ var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
 var the_session, the_subscription;
 
 var app = require('express')();
-var http = require('http').Server(app);
+var http = require('http').Server(app)
 var io = require('socket.io')(http);
 
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+
+var list_CT = [
+  { name: 'CT 49850',
+    addr : '18,rue du Breil 75018 Paris',
+    pow : '100kW Gaz SED14',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+  },
+{ name: 'CT 49200',
+    addr : '18,rue du Breil 75018 Paris',
+    pow : '100kW Gaz SED14',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+  },
+
+{ name: 'CT 49100',
+      addr : '18,rue du Breil 75018 Paris',
+      pow : '100kW Gaz SED14',
+      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+    },
+  { name: 'CT 49850',
+        addr : '18,rue du Breil 75018 Paris',
+        pow : '100kW Gaz SED14',
+        alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+      },
+   { name: 'CT 49650',
+          addr : '18,rue du Breil 75018 Paris',
+          pow : '100kW Gaz SED14',
+          alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
+        }
+];
+
+var list_AL = [
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
+  },
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    Etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
+  },
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    Etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
+  },
+  { type: 'AL 49850',
+    date : 'hh:mm:ss - dd/mm/yyy',
+    Etat : 'Présente',
+    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
+  }
+];
 // app.get('/', function(req, res){
 //   res.sendfile('index.html');
 // });
@@ -25,10 +80,25 @@ io.on('connection', function(socket){
 
 //demande login
   socket.on('login', function(data){
-     console.log('id: ' + data.id + ',user: ' + data.user +',pass: ' + data.pass);
-      socket.emit('login_rep' , check_id(data.user,data.pass));
+     console.log('id: ' + data.id + ',user: ' + data.user +',pass: ' + data.pass + ',auth: ' + data.auth);
+     var auths = check_id(data.user,data.pass);
+     console.log(auths);
+     socket.emit('login_rep' , {
+       auth : check_id(data.user,data.pass)
+     });
+  //    console.log( check_id(data.user,data.pass) );
       });
-});
+
+   socket.on('ListeCT', function(data){
+   console.log('Demande CT de '+ socket.id);
+    socket.emit('ListeCT_rep' , list_CT);
+    });
+
+  socket.on('ListeAL', function(data){
+    console.log('Demande AL de '+ socket.id);
+     socket.emit('ListeAL_rep' , list_AL);
+     });
+  });
 
 //---------------------------SQL----------------------------
 var mysql = require("mysql");
@@ -55,21 +125,32 @@ function check_id (user,pass){
   var sen = 'SELECT username,password FROM '+table+' WHERE username ="' + user + '" AND password="' +pass+ '"';
   con.query( sen ,  function(err,rows){
   //  console.log(sen);
-    console.log(rows[0]);
+  //  console.log(rows[0]);
     if (err) console.log("ERR");
   else
   {  if (rows[0] ){
-    console.log("SQL user ok" );
-    return 1 ;
-  } else {
+    console.log("SQL user ok");
+    return 1;
+  }else{
     console.log("SQL user fail ");
-    return  0;
+    return 0;
   }
+
 }
 });
 };
 
-check_id('admin','pass');
+function get_CT (){
+  var sen = 'SELECT * FROM liste_ct  ' ;
+  con.query( sen ,  function(err,rows){
+  //  console.log(sen);
+  //  console.log(rows[0]);
+    if (err) console.log("ERR");
+  else
+  { console.log(rows);
+}
+});
+};
 
 var ids = [
 "/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_ECHAN00000_TEMP3DEPAR",
@@ -80,9 +161,7 @@ var ids = [
 "/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_GENER00001_SYNTH00001"
 ];
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
+
 
 function update(nodeid,val) {
   console.log("new content :  " + nodeid + " >> " + val );
@@ -90,7 +169,7 @@ function update(nodeid,val) {
         nodeid : nodeid ,
         val : val
       });
-    }
+    };
 
     // con.end(function(err) {
     //   // The connection is terminated gracefully

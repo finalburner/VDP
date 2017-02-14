@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','myApp'])
+angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova'])
 
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
@@ -49,7 +49,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
     views: {
       'menuContent': {
         templateUrl: 'templates/synop.html',
-        controller: 'MyCtrl'
+        controller: 'AppCtrl'
       }
     }
   })
@@ -59,7 +59,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
     views: {
       'menuContent': {
         templateUrl: 'templates/synop/carto.html',
-        controller: 'MyCtrl'
+        controller: 'ALctrl'
       }
     }
   })
@@ -69,7 +69,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
     views: {
       'menuContent': {
         templateUrl: 'templates/synop/CT.html',
-        controller: 'MyCtrl'
+        controller: 'AppCtrl'
       }
     }
   })
@@ -80,7 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
       views: {
         'menuContent': {
           templateUrl: 'templates/alarmes.html',
-            controller: 'MyCtrl'
+            controller: 'AppCtrl'
         }
       }
     })
@@ -90,7 +90,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
       views: {
         'menuContent': {
           templateUrl: 'templates/rapport.html',
-          controller: 'MyCtrl'
+          controller: 'AppCtrl'
         }
       }
     })
@@ -100,7 +100,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
       views: {
         'menuContent': {
           templateUrl: 'templates/admin.html',
-          controller: 'MyCtrl'
+          controller: 'AppCtrl'
         }
       }
     })
@@ -111,7 +111,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','m
       views: {
         'menuContent': {
           templateUrl: 'templates/biblio.html',
-          controller: 'MyCtrl'
+          controller: 'AppCtrl'
         }
       }
     });
