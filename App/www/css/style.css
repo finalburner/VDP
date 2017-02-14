@@ -81,8 +81,9 @@ font-style: oblique;
 }
 .N1_menu
 {
+position:absolute;
+top :30%;
 
- top:30%
 }
 .N1_menu_title
 {
@@ -194,6 +195,7 @@ vertical-align:middle;
 
 height: 35px;
 }
+
 .Bib_item
 {
   padding : 10px 0 5px 5px ;

@@ -12,7 +12,8 @@ angular.module('starter.controllers', [ ])
 
 .controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket) {
 
-$scope.auth = 0 ;
+ $scope.N1_name = '';
+ $scope.auth = 0 ;
   socket.on('id', function(data){ $scope.clientid = data ; });
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -40,10 +41,17 @@ $scope.auth = 0 ;
           focusFirstInput: true
         });
 
+  // $scope.CT_N1 = function (name)
+  // {
+  //   $scope.CT_ret = name ;
+  //   $scope.go('CTview');
+  // }
+
   $scope.N1 = function(name) {
           $scope.modalCtrl.show();
           $scope.modalCtrl.name= name;
         };
+
     $scope.N1_close = function(name) {
                 $scope.modalCtrl.hide();
               };
@@ -81,6 +89,7 @@ $scope.auth = 0 ;
     }, 1000);
   };
 
+
 $scope.unLog = function() {
 $scope.auth= 0;
   };
@@ -89,9 +98,11 @@ $scope.auth= 0;
 
 .controller('CTctrl', function($scope,socket) {
 
+
     // socket.emit('ListeCT');
     // socket.on('ListeCT_rep', function(data){
     //$scope.list_CT = data ;
+
     $scope.list_CT =  [
       { name: 'CT 49850',
           addr : '18,rue du Breil 75018 Paris',
@@ -179,8 +190,7 @@ $scope.auth= 0;
      $scope.list_AL = list_AL;
     })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-})
+
 
 .controller('MyCtrl', function($scope, $cordovaNetwork, $rootScope) {
     document.addEventListener("deviceready", function () {

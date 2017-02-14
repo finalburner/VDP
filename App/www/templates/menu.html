@@ -1,16 +1,24 @@
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
     <ion-nav-bar class="bar-light">
-      <ion-nav-back-button>
+      <ion-nav-back-button class="button-clear">
+        <i class="button icon-left ion-chevron-left button-clear button-dark"></i>
+      titre
       </ion-nav-back-button>
+
 
       <ion-nav-buttons side="left">
     <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left">
     </button>
       </ion-nav-buttons>
-      <ion-nav-buttons side="right">
 
-      <!--button class="button button-icon ion-ios-location "ng-if=" 'app.synop'| includedByState">  </button>
+      <ion-nav-buttons side="right">
+        <div  ng-if=" 'app.CTview'| isState" >
+    <button on-click = "N1(N1_name)" class="button button icon-right ion-arrow-down-b">Synthèse</button>
+      </div>
+      </ion-nav-buttons>
+
+      <!--button class="button button-icon ion-ios-location "g-if=" 'app.synop'| includedByState">  </button>
       <button class="button button-icon ion-social-windows" ng-if=" 'app.synop'| includedByState" ng-click="doSomething()"-->
 
     </ion-nav-bar>
