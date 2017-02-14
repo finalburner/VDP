@@ -36,3 +36,167 @@ height: 640px;
   text-align: center ;
 
 }
+.recherche
+ {
+    border: 0px;
+    padding: 0px;
+    margin:0px;
+}
+.CT_row
+{
+height:120px ;
+
+}
+
+.CT_bar_color
+{
+
+width:7px;
+}
+.CT_tit
+{
+font-weight: bold;
+font-size:14px;
+height: 30px;
+}
+.CT_loc
+{
+font-size:12px;
+height: 25px;
+}
+.CT_ala
+{
+height: 40px;
+display:table;
+width: 50px;
+text-align: justify;
+}
+
+#CT_ala
+{
+font-size:13px;
+vertical-align:middle;
+font-style: oblique;
+
+}
+.N1_menu
+{
+
+ top:30%
+}
+.N1_menu_title
+{
+font-size:13px;
+margin: 6px 0 0 8px ;
+font-weight: bold;
+vertical-align:middle;
+}
+.N1_menu_color
+{
+  background-color: #cc0000 !important;
+  width:7px;
+}
+.N1_row
+{
+
+height: 50px;
+font-size:15px;
+font-weight: bold;
+vertical-align:middle;
+
+}
+
+.N1_bar_header
+{
+  height: 40px ;
+  margin : 0 0 0 0 ;
+  padding : 0 0 0 0 ;
+  border: 0 8px 0 0 ;
+}
+
+.expand-item{
+  position: relative;
+  width: 100%;
+  max-height: 50px;
+  transition: max-height 0.1s ease-out;
+  overflow: hidden;
+}
+
+.expand-item.active {
+  max-height: 200px;
+  transition: max-height 0.3s ease-out;
+}
+.AL_bar
+{
+  height: auto;
+  margin : 0 0 0 0;
+    padding : 0 0 0 0 ;
+    height : 50px;
+
+}
+.AL_bar_color
+{
+  height: 160px ;
+  max-width: 5px;
+  width : 5px;
+}
+.AL_bar_icon
+{
+  position : absolute;
+  right:8px;
+}
+.AL_row_text
+{
+  width: 300px ;
+  height : 50px;
+
+
+}
+#AL_Message
+{
+
+  word-wrap: break-word ;
+}
+.AL_row_state
+{
+    height : 30px;
+    font-size:15px;
+}
+
+.AL_type
+{
+
+  font-size:15px;
+  font-weight: bold;
+
+}
+.AL_date
+{
+
+  font-size:10px;
+  position : absolute;
+  right:50px;
+
+
+}
+.AL_btn
+{
+  padding : 0px;
+
+}
+.AL_row_btn .button
+  {
+    margin-right:5px;
+  }
+
+.AL_row_btn
+{
+
+height: 35px;
+}
+.Bib_item
+{
+  padding : 10px 0 5px 5px ;
+  height : 40px;
+  font-size:15px;
+}
