@@ -12,9 +12,19 @@
     </button>
       </ion-nav-buttons>
 
-      <ion-nav-buttons side="right">
-        <div  ng-if=" 'app.CTview'| isState" >
+      <!-- <ion-nav-buttons side="right">
+        <div  ng-if=" 'app.CTsyn'| includedByState " >
     <button on-click = "N1(N1_name)" class="button button icon-right ion-arrow-down-b">Synthèse</button>
+      </div>
+      </ion-nav-buttons> -->
+
+      <ion-nav-buttons side="right">
+        <div  ng-if=" 'app.CTsyn'| includedByState " >
+    <!-- <button  class="item button icon-right ion-arrow-down-b" ng-init =" menu_N1=false" ng-click="menu_N1=!menu_N1">Synthèse</button> -->
+  <a class=" item menu-N1 " ng-init =" menu_N1=false; sel = 1" ng-click="menu_N1=!menu_N1">Synthèse</a>
+<ion-list class="N1-item" ng-show="menu_N1">
+            <ion-item  ng-repeat="item in list_N1" ng-if="sel != $index" href="{{item.url}}" >{{item.name}}</ion-item>
+
       </div>
       </ion-nav-buttons>
 

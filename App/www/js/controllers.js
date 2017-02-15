@@ -10,8 +10,17 @@ angular.module('starter.controllers', [ ])
        };
     })
 
-.controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket) {
-
+.controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket, $state) {
+  $scope.list_N1 = [
+  {name : 'Synthèse', url: '#/app/biblio'},
+  {name :  'Status', url: '#/app/biblio'},
+  {name :  'Synoptique Primaire', url: '#/app/biblio'},
+  {name :  'Historique', url: '#/app/biblio'},
+  {name :  'Fiche identité', url: '#/app/biblio'},
+  {name :  'Plans des équipements', url: '#/app/biblio'},
+  {name :  'Documentation CT', url: '#/app/biblio'},
+  {name :  'Courbes' url: '#/app/biblio'},
+  ]
  $scope.N1_name = '';
  $scope.auth = 0 ;
   socket.on('id', function(data){ $scope.clientid = data ; });
@@ -41,11 +50,11 @@ angular.module('starter.controllers', [ ])
           focusFirstInput: true
         });
 
-  // $scope.CT_N1 = function (name)
-  // {
-  //   $scope.CT_ret = name ;
-  //   $scope.go('CTview');
-  // }
+   $scope.CT_N1 = function (name)
+  {
+    $scope.CT_ret = name ;
+    $state.go('app.CTsyn');
+  }
 
   $scope.N1 = function(name) {
           $scope.modalCtrl.show();

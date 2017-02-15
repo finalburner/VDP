@@ -115,16 +115,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
         }
       }
     })
-    .state('app.CTview', {
-      url: '/CTview',
-      authentificate: true,
+
+    .state('app.CTsyn', {
+      url: '/syn',
+   authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/CTview.html',
+          templateUrl: 'templates/N1/CTsyn.html',
           controller: 'CTctrl'
         }
       }
-    });
+    })
+
+
+
+
+
+    ;
   // .state('app.single', {
   //   url: '/playlists/:playlistId',
   //   views: {

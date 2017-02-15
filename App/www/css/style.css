@@ -202,3 +202,21 @@ height: 35px;
   height : 40px;
   font-size:15px;
 }
+
+.menu-N1
+{
+  padding : 5px 0 0 15px ;
+  height : 30px;
+  font-size:13px;
+  width : 120px ;
+  position : fixed;
+  right: 0 ;
+}
+.N1-item
+{
+  width : 200px;
+  position : fixed;
+  right: 0 ;
+  top: 32.5px
+
+}
