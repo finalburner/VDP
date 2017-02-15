@@ -220,3 +220,90 @@ height: 35px;
   top: 32.5px
 
 }
+
+.status
+{
+  position : absolute;
+  top : 10px;
+  right: 30px;
+}
+
+.CTA_bar
+{
+  height: auto;
+  margin : 0 0 0 0;
+    padding : 0 0 0 0 ;
+    height : 50px;
+
+}
+.CTA_bar_color
+{
+  height: 160px ;
+  max-width: 5px;
+  width : 5px;
+}
+.CTA_bar_icon
+{
+  position : absolute;
+  right:8px;
+}
+.CTA_row_text
+{
+  width: 300px ;
+  height : 50px;
+
+
+}
+#CTA_Message
+{
+
+  word-wrap: break-word ;
+}
+.CTA_row_chart
+{
+    height :150px;
+    font-size:15px;
+}
+
+.CTA_type
+{
+
+  font-size:15px;
+  font-weight: bold;
+
+}
+.CTA_date
+{
+
+  font-size:10px;
+  position : absolute;
+  right:50px;
+
+
+}
+.CTA_btn
+{
+  padding : 0px;
+
+}
+.CTA_row_btn .button
+  {
+    margin-right:5px;
+  }
+
+.CTA_row_btn
+{
+
+height: 40px;
+
+}
+.CTA_Tmp
+{
+  font-size:18px !important ;
+}
+.CTA_Tmp .icon
+{
+  position: absolute;
+  right:0;
+
+}

@@ -3,7 +3,7 @@
     <ion-nav-bar class="bar-light">
       <ion-nav-back-button class="button-clear">
         <i class="button icon-left ion-chevron-left button-clear button-dark"></i>
-      titre
+ CT XXXX
       </ion-nav-back-button>
 
 
@@ -19,12 +19,22 @@
       </ion-nav-buttons> -->
 
       <ion-nav-buttons side="right">
-        <div  ng-if=" 'app.CTsyn'| includedByState " >
+        <div  ng-if=" ('app.CTsyn'| isState)
+         || ('app.CTsta'| isState)
+            || ('app.CTsynP'| isState)
+            || ('app.CTcou'| isState)
+               || ('app.CTpla'| isState)
+                  || ('app.CTdoc'| isState)
+                     || ('app.CTfic'| isState)
+                        || ('app.CThis'| isState)
+         ">
     <!-- <button  class="item button icon-right ion-arrow-down-b" ng-init =" menu_N1=false" ng-click="menu_N1=!menu_N1">Synthèse</button> -->
-  <a class=" item menu-N1 " ng-init =" menu_N1=false; sel = 1" ng-click="menu_N1=!menu_N1">Synthèse</a>
+  <a class=" item menu-N1 " ng-init =" menu_N1=false; sel = 0" ng-click="menu_N1=!menu_N1">{{list_N1[sel].name}}</a>
 <ion-list class="N1-item" ng-show="menu_N1">
-            <ion-item  ng-repeat="item in list_N1" ng-if="sel != $index" href="{{item.url}}" >{{item.name}}</ion-item>
-
+  <div ng-repeat="item in list_N1" >
+            <ion-item  ng-if="sel != $index" ng-click="closeN1($index)" ui-sref="{{item.url}}" >{{item.name}}</ion-item>
+</div>
+</ion-list>
       </div>
       </ion-nav-buttons>
 

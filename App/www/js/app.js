@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','chart.js'])
 
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
@@ -122,11 +122,80 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTsyn.html',
+          controller: 'CTActrl'
+        }
+      }
+    })
+    .state('app.CTsta', {
+      url: '/sta',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTsta.html',
+          controller: 'AppCtrl'
+        }
+      }
+    })
+    .state('app.CTcou', {
+      url: '/cou',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTcou.html',
           controller: 'CTctrl'
         }
       }
     })
-
+    .state('app.CTdoc', {
+      url: '/doc',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTdoc.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CThis', {
+      url: '/his',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CThis.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CTfic', {
+      url: '/fic',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTfic.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CTpla', {
+      url: '/pla',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTpla.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CTsynP', {
+      url: '/synP',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTsynP.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
 
 
 

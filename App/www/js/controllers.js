@@ -12,17 +12,19 @@ angular.module('starter.controllers', [ ])
 
 .controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket, $state) {
   $scope.list_N1 = [
-  {name : 'Synthèse', url: '#/app/biblio'},
-  {name :  'Status', url: '#/app/biblio'},
-  {name :  'Synoptique Primaire', url: '#/app/biblio'},
-  {name :  'Historique', url: '#/app/biblio'},
-  {name :  'Fiche identité', url: '#/app/biblio'},
-  {name :  'Plans des équipements', url: '#/app/biblio'},
-  {name :  'Documentation CT', url: '#/app/biblio'},
-  {name :  'Courbes' url: '#/app/biblio'},
+  {name : 'Synthèse', url: 'app.CTsyn'},
+  {name :  'Status', url: 'app.CTsta'},
+  {name :  'Synoptique Primaire', url: 'app.CTsynP'},
+  {name :  'Historique', url: 'app.CThis'},
+  {name :  'Fiche identité', url: 'app.CTfic'},
+  {name :  'Plans des équipements', url: 'app.CTpla'},
+  {name :  'Documentation CT', url: 'app.CTdoc'},
+  {name :  'Courbes', url: 'app.CTcou'}
   ]
  $scope.N1_name = '';
  $scope.auth = 0 ;
+ $scope.sel = 0 ;
+
   socket.on('id', function(data){ $scope.clientid = data ; });
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -54,11 +56,17 @@ angular.module('starter.controllers', [ ])
   {
     $scope.CT_ret = name ;
     $state.go('app.CTsyn');
-  }
+  };
+
+ $scope.closeN1 = function(id) {
+sel = id ;
+menu_N1=!menu_N1;
+ };
 
   $scope.N1 = function(name) {
           $scope.modalCtrl.show();
           $scope.modalCtrl.name= name;
+          $scope.modalCtrl.animation =  "slide-left-right";
         };
 
     $scope.N1_close = function(name) {
@@ -97,7 +105,6 @@ angular.module('starter.controllers', [ ])
       $scope.closeLogin();
     }, 1000);
   };
-
 
 $scope.unLog = function() {
 $scope.auth= 0;
@@ -199,6 +206,59 @@ $scope.auth= 0;
      $scope.list_AL = list_AL;
     })
 
+
+.controller('CTActrl', function($scope,socket) {
+
+    /*
+     * if given group is the selected group, deselect it
+     * else, select the given group
+     */
+
+      $scope.expand_AL = function(item) {
+          if ($scope.isItemExpanded(item)) {
+            $scope.shownItem = null;
+          } else {
+            $scope.shownItem = item;
+          }
+        };
+        $scope.isItemExpanded = function(item) {
+          return $scope.shownItem === item;
+        };
+
+        // socket.emit('ListeAL');
+        // socket.on('ListeAL_rep', function(data){
+        // $scope.list_AL = data ;
+        $scope.hours =["06:00","07:00","08:00","09:00"];
+        $scope.data = ["13","15","14","13"];
+        var list_CTA = [
+    { type: 'Circuit CTA',
+      date : 'Optimisé',
+      etat : 'Présente',
+      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+        color: '#003DF5' // Bleue
+
+          },
+    { type: 'Circuit CTA',
+      date : 'Optimisé',
+      Etat : 'Présente',
+      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+        color: '#FF6633' //orange
+    },
+    { type: 'Circuit CTA',
+      date : 'Optimisé',
+      Etat : 'Présente',
+      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+        color: '#003DF5' // Bleue
+    },
+    { type: 'Circuit CTA',
+      date : 'Optimisé',
+      Etat : 'Présente',
+      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+      color: '#CCFF33' // vert jaune
+    }
+  ];
+       $scope.list_CTA = list_CTA;
+      })
 
 
 .controller('MyCtrl', function($scope, $cordovaNetwork, $rootScope) {

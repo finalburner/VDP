@@ -21,14 +21,8 @@
 <div class="row N1_row">Courbes</div> -->
 
 <ion-list>
-            <ion-item href="#/" ng-click="N1_close()">Synthèse</ion-item>
-            <ion-item href="#/app/biblio" ng-click="N1_close()">Status</ion-item>
-            <ion-item href="#/settings" ng-click="N1_close()">Synoptique primaire</ion-item>
-            <ion-item href="#/settings" ng-click="N1_close()">Historique</ion-item>
-            <ion-item href="#/settings" ng-click="N1_close()">Fiche d'identité</ion-item>
-            <ion-item href="#/settings" ng-click="N1_close()">Plans des équipements</ion-item>
-            <ion-item href="#/settings" ng-click="N1_close()">Documentation CT</ion-item>
-            <ion-item href="#/settings" ng-click="N1_close()">Courbes</ion-item>
+      <ion-item  ng-repeat="item in list_N1" ng-click="N1_close()" href="{{item.url}}" >{{item.name}}</ion-item>
+            
           </ion-list>
 <!-- </div> -->
 </ion-content>
