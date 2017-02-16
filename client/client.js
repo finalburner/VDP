@@ -98,6 +98,8 @@ io.on('connection', function(socket){
     console.log('Demande AL de '+ socket.id);
      socket.emit('ListeAL_rep' , list_AL);
      });
+
+
   });
 
 //---------------------------SQL----------------------------
@@ -152,23 +154,38 @@ function get_CT (){
 });
 };
 
-var ids = [
-"/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_ECHAN00000_TEMP3DEPAR",
-"/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_ECHAN00000_TEMP3RETOU",
-"/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_ECHAN00001_TEMP3DEPAR",
-"/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_ECHAN00002_TEMP3DEPAR",
-"/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_GENER00001_SYNTH00001",
-"/Application/STEGC/Paris/PT/PT108365/CVC_PT108356_GENER00001_SYNTH00001"
-];
+var ids =
+ [{ id: '1',
+   str: 'TMP1',
+    val: ''},
+    { id: '2',
+      str: 'TMP2',
+       val: ''},
+       { id: '3',
+         str: 'TMP3',
+          val: ''},
+          { id: '4',
+            str: 'TMP4',
+             val: ''},
+             { id: '5',
+               str: 'TMP5',
+                val: ''},
+                { id: '6',
+                  str: 'TMP6',
+                   val: ''},
+                   { id: '7',
+                     str: 'TMP7',
+                      val: ''},
+                      { id: '8',
+                        str: 'TMP8',
+                         val: ''}];
 
 
+function update(id,idstr,nodeid,value) {
+  id.val=value;
+  console.log("new content :  " + idstr + " >> " + value + " >> " + id.val);
 
-function update(nodeid,val) {
-  console.log("new content :  " + nodeid + " >> " + val );
-    io.emit("temp",{
-        nodeid : nodeid ,
-        val : val
-      });
+   io.sockets.emit('majtmp',ids);
     };
 
     // con.end(function(err) {
@@ -289,7 +306,7 @@ async.series([
 
        // install monitored item
           ids.forEach(function(id){
-          var nodeId = "ns=1;s="+id;
+          var nodeId = "ns=1;s="+id.str;
          var monitoredItem  = the_subscription.monitor({
            nodeId: opcua.resolveNodeId(nodeId),
            attributeId: opcua.AttributeIds.Value
@@ -309,7 +326,7 @@ async.series([
        monitoredItem.on("changed",function(dataValue){
 
            //io.sockets.emit('Event',dataValue.value.value);
-           update(nodeId,dataValue.value.value);
+           update(id,id.str,nodeId,dataValue.value.value);
         //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
 
 //client.end();

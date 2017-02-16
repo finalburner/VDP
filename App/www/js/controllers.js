@@ -209,10 +209,89 @@ $scope.auth= 0;
 
 .controller('CTActrl', function($scope,socket) {
 
+  var list_CTA = [
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222'
+
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222'
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222'
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222'
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222'
+}
+];
+
+  var ids = [
+  "TMP1",
+  "TMP2",
+  "TMP3"
+  ];
+// var tmp = [0,1,2,3];
     /*
      * if given group is the selected group, deselect it
      * else, select the given group
      */
+
+// for (j=0;j<4;j++)
+// {
+//   vartmp1 = 'TMP'+ (2*j+1);
+//     vartmp2 = 'TMP'+(2*j+2);
+//     console.log(vartmp1 + '+' + vartmp2);
+// socket.on( vartmp1, function(data){
+//         list_CTA[j].tmp1 =  data.toPrecision(4);
+//         console.log(vartmp1 + ':' + data);
+//
+//       // $scope.tmp1 =  tmp[1] ;
+//  });
+//
+//  socket.on(vartmp2 , function(data){
+//       list_CTA[j].tmp2 =  data.toPrecision(4);
+//       console.log(vartmp1 + ':'+ data);
+//
+//   // $scope.tmp2 =   tmp[2]   ;
+// });
+// }
+socket.on('majtmp', function(data)
+{
+  for (j=0;j<4;j++){
+list_CTA[j].tmp1 = data[2*j].val;
+list_CTA[j].tmp2 = data[2*j+1].val;
+}
+});
+
+console.log('tmp1 : '+   list_CTA[0].tmp1 + ' - tmp2: ' +  list_CTA[0].tmp2 );
 
       $scope.expand_AL = function(item) {
           if ($scope.isItemExpanded(item)) {
@@ -230,33 +309,7 @@ $scope.auth= 0;
         // $scope.list_AL = data ;
         $scope.hours =["06:00","07:00","08:00","09:00"];
         $scope.data = ["13","15","14","13"];
-        var list_CTA = [
-    { type: 'Circuit CTA',
-      date : 'Optimisé',
-      etat : 'Présente',
-      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-        color: '#003DF5' // Bleue
 
-          },
-    { type: 'Circuit CTA',
-      date : 'Optimisé',
-      Etat : 'Présente',
-      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-        color: '#FF6633' //orange
-    },
-    { type: 'Circuit CTA',
-      date : 'Optimisé',
-      Etat : 'Présente',
-      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-        color: '#003DF5' // Bleue
-    },
-    { type: 'Circuit CTA',
-      date : 'Optimisé',
-      Etat : 'Présente',
-      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-      color: '#CCFF33' // vert jaune
-    }
-  ];
        $scope.list_CTA = list_CTA;
       })
 

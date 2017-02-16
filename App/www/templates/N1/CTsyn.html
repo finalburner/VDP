@@ -1,4 +1,4 @@
-<ion-view view-title=""> <!-- Laisser le titre vide -->
+<ion-view view-title="" ng-controller = "CTActrl"> <!-- Laisser le titre vide -->
 
   <ion-content>
 
@@ -9,7 +9,7 @@
       </label></div>
 
       <ion-list>
-          <ion-item ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'" ng-repeat="item in list_CTA " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
+          <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive'" ng-repeat="item in list_CTA " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
 
       <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 <!-- Row 1 -->
@@ -24,7 +24,7 @@
 <div class = "col">
 <div class = "row">T° de départ</div>
 <div class = "row">
-  <p class= "CTA_Tmp">40,3°C</p><div class="icon ion-arrow-graph-up-right"> </div>
+  <p class= "CTA_Tmp" >{{item.tmp1}}</p><div class="icon ion-arrow-graph-up-right"> </div>
 </div>
 </div>
 
@@ -32,7 +32,7 @@
   <div class = "row">T° ambiante</div>
   <div class = "row">
 
-    <p class= "CTA_Tmp">41,8°C</p><div class="icon ion-arrow-graph-up-right"> </div>
+    <p class= "CTA_Tmp">{{item.tmp2}}</p><div class="icon ion-arrow-graph-up-right"> </div>
   </div>
 </div>
       </div>
