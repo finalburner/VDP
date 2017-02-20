@@ -275,7 +275,18 @@ height: 35px;
 {
     height :150px;
     font-size:15px;
+    border: 0px 0px 0px 0px;
+    padding: 0px 0 0 70px;
 }
+
+.CTA_chart
+{
+
+    font-size:15px;
+    border: 0px 0px 0px 0px;
+    padding: 0px 0 0 0px;
+}
+
 
 .CTA_type
 {
@@ -312,8 +323,8 @@ height: 40px;
 .CTA_Tmp
 {
   font-size:16px !important ;
-  width: 70px;
-  padding-left: 20px;
+  width: 80px;
+  padding-left: 10px;
 }
 .CTA_Tmp .icon
 {

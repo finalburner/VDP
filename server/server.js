@@ -33,13 +33,18 @@ function post_initialize() {
     // add some variables
 
 	// add a variable named MyVariable1 to the newly created folder "MyDevice"
-var variable= [ 0 ,40 ,32 , 5 ,8 , 7 ,6 ,8 , 11 ]
+var variable= [];
+for ( i=1;i<41;i++)
+{
+variable[i] = Math.random() * (60 - 10) + 10;
+
+}
 // emulate variable1 changing every 500 ms
 setInterval(function(){
 
-  for ( i=1;i<9;i++)
+  for ( i=1;i<41;i++)
   {
-variable[i] += Math.random() * (0.1 - 0.02) + 0.02;
+variable[i] += Math.random() * (0.1 - 0.002) + 0.002;
 
   }
 
@@ -135,8 +140,194 @@ addressSpace.addVariable({
         }
     }
 });
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP9" ,
+    nodeId: "ns=1;s=TMP9" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[9] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP10" ,
+    nodeId: "ns=1;s=TMP10" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[10] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP11" ,
+    nodeId: "ns=1;s=TMP11" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[11] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP12" ,
+    nodeId: "ns=1;s=TMP12" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[12] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP13" ,
+    nodeId: "ns=1;s=TMP13" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[13] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP14" ,
+    nodeId: "ns=1;s=TMP14" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[14] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP15" ,
+    nodeId: "ns=1;s=TMP15" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[15] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP16" ,
+    nodeId: "ns=1;s=TMP16" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[16] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP17" ,
+    nodeId: "ns=1;s=TMP17" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[18] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP19" ,
+    nodeId: "ns=1;s=TMP19" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[19] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP20" ,
+    nodeId: "ns=1;s=TMP20" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[20] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP21" ,
+    nodeId: "ns=1;s=TMP21" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[21] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP22" ,
+    nodeId: "ns=1;s=TMP22" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[22] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP23" ,
+    nodeId: "ns=1;s=TMP23" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[23] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP24" ,
+    nodeId: "ns=1;s=TMP24" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[24] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP25" ,
+    nodeId: "ns=1;s=TMP25" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[25] });
+        }
+    }
+});
+addressSpace.addVariable({
+    componentOf: device,
+    browseName: "TMP26" ,
+    nodeId: "ns=1;s=TMP26" ,
+    dataType: "Int16",
+    value: {
+        get: function () {
+            return new opcua.Variant({dataType: opcua.DataType.Double, value: variable[26] });
+        }
+    }
 
-
+});
 // add a variable named MyVariable2 to the newly created folder "MyDevice"
 var variable8 = 10.0;
 

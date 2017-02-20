@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [ ])
+angular.module('starter.controllers', ['chart.js'])
 
 .run(function($rootScope) {
 
@@ -216,8 +216,8 @@ etat : 'Présente',
 alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
   color: '#003DF5', // Bleue
   tmp1 : '1111',
-    tmp2 : '2222'
-
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
     },
 { type: 'Circuit CTA',
 date : 'Optimisé',
@@ -225,7 +225,8 @@ Etat : 'Présente',
 alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
   color: '#FF6633', //orange
   tmp1 : '1111',
-    tmp2 : '2222'
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
 },
 { type: 'Circuit CTA',
 date : 'Optimisé',
@@ -233,7 +234,8 @@ Etat : 'Présente',
 alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
 color: '#FF6633', //orange
 tmp1 : '1111',
-  tmp2 : '2222'
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
 },
 { type: 'Circuit CTA',
 date : 'Optimisé',
@@ -241,7 +243,8 @@ Etat : 'Présente',
 alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
 color: '#FF6633', //orange
 tmp1 : '1111',
-  tmp2 : '2222'
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
 },
 { type: 'Circuit CTA',
 date : 'Optimisé',
@@ -249,7 +252,143 @@ Etat : 'Présente',
 alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
 color: '#FF6633', //orange
 tmp1 : '1111',
-  tmp2 : '2222'
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
 }
 ];
 
@@ -285,13 +424,17 @@ tmp1 : '1111',
 // }
 socket.on('majtmp', function(data)
 {
-  for (j=0;j<4;j++){
+  for (j=0;j<13;j++){
 list_CTA[j].tmp1 = data[2*j].val;
+// list_CTA[j].chart.push(data[2*j+1].val);
 list_CTA[j].tmp2 = data[2*j+1].val;
+
 }
 });
 
-console.log('tmp1 : '+   list_CTA[0].tmp1 + ' - tmp2: ' +  list_CTA[0].tmp2 );
+
+
+//console.log('tmp1 : '+   list_CTA[0].tmp1 + ' - tmp2: ' +  list_CTA[0].tmp2 );
 
       $scope.expand_AL = function(item) {
           if ($scope.isItemExpanded(item)) {
@@ -307,10 +450,37 @@ console.log('tmp1 : '+   list_CTA[0].tmp1 + ' - tmp2: ' +  list_CTA[0].tmp2 );
         // socket.emit('ListeAL');
         // socket.on('ListeAL_rep', function(data){
         // $scope.list_AL = data ;
-        $scope.hours =["06:00","07:00","08:00","09:00"];
-        $scope.data = ["13","15","14","13"];
+        $scope.labels =["1","2","3","4","5","6"];
 
+
+        setInterval(function(){
+
+          for ( i=1;i<13;i++)
+          {
+
+        list_CTA[i].chart.push(list_CTA[i].tmp2);
+        list_CTA[i].chart.shift();
+
+          }
+
+
+        }, 2000);
+
+        $scope.options = {
+            scales: {
+              yAxes: [
+                {
+                  id: 'y-axis-1',
+                  type: 'linear',
+                  display: true,
+                  position: 'left'
+                }
+              ]
+            }
+          };
        $scope.list_CTA = list_CTA;
+
+
       })
 
 

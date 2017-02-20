@@ -155,30 +155,34 @@ function get_CT (){
 };
 
 var ids =
- [{ id: '1',
-   str: 'TMP1',
-    val: ''},
-    { id: '2',
-      str: 'TMP2',
-       val: ''},
-       { id: '3',
-         str: 'TMP3',
-          val: ''},
-          { id: '4',
-            str: 'TMP4',
-             val: ''},
-             { id: '5',
-               str: 'TMP5',
-                val: ''},
-                { id: '6',
-                  str: 'TMP6',
-                   val: ''},
-                   { id: '7',
-                     str: 'TMP7',
-                      val: ''},
-                      { id: '8',
-                        str: 'TMP8',
-                         val: ''}];
+ [{ id: '1',   str: 'TMP1',    val: ''},
+    { id: '2',      str: 'TMP2',       val: ''},
+       { id: '3',         str: 'TMP3',   val: ''},
+             { id: '4',      str: 'TMP4',             val: ''},
+              { id: '5',               str: 'TMP5',                val: ''},
+                { id: '6',                  str: 'TMP6',                   val: ''},
+                   { id: '7',                     str: 'TMP7',                      val: ''},
+                      { id: '8',                        str: 'TMP8',                         val: ''},
+{ id: '9',   str: 'TMP9',    val: ''},
+{ id: '10',   str: 'TMP10',    val: ''},
+{ id: '11',   str: 'TMP11',    val: ''},
+{ id: '12',   str: 'TMP12',    val: ''},
+{ id: '13',   str: 'TMP13',    val: ''},
+{ id: '14',   str: 'TMP14',    val: ''},
+{ id: '15',   str: 'TMP15',    val: ''},
+{ id: '16',   str: 'TMP16',    val: ''},
+{ id: '17',   str: 'TMP17',    val: ''},
+{ id: '18',   str: 'TMP18',    val: ''},
+{ id: '19',   str: 'TMP19',    val: ''},
+{ id: '20',   str: 'TMP20',    val: ''},
+{ id: '21',   str: 'TMP21',    val: ''},
+{ id: '22',   str: 'TMP22',    val: ''},
+{ id: '23',   str: 'TMP23',    val: ''},
+{ id: '24',   str: 'TMP24',    val: ''},
+{ id: '25',   str: 'TMP25',    val: ''},
+{ id: '26',   str: 'TMP26',    val: ''}];
+
+
 
 
 function update(id,idstr,nodeid,value) {
@@ -284,7 +288,7 @@ async.series([
     function(callback) {
 
        the_subscription=new opcua.ClientSubscription(the_session,{
-           requestedPublishingInterval: 1000,
+           requestedPublishingInterval: 2000,
         //   requestedLifetimeCount: 10,
         //   requestedMaxKeepAliveCount: 2,
            maxNotificationsPerPublish: 1,

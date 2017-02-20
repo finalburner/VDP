@@ -37,17 +37,16 @@
 </div>
       </div>
 <!-- Row 3 : Chart -->
-      <!-- <div class="row CTA_row_state"> -->
-
-        <div class="row card">
-              <div class="item item-text-wrap">
-                  <canvas id="line" class="chart chart-line" height= "50" width = "100" data="data" labels="labels" legend="true" series="series" options="{showTooltips: false}"></canvas>
-              </div>
+  <div class="row CTA_row_chart">
+        <div class="CTA_chart">
+ <!-- item item-text-wrap -->
+<canvas id="line" class="chart chart-line ng-isolate-scope" chart-data=item.chart chart-labels="labels" chart-options="options" width="200" height="130" style="display: block; width: 200px; height: 130px;" chart-dataset-override="datasetOverride" ></canvas>
           </div>
+        </div>
 
 <!-- Row 4 : Btn-->
 
-      <div class="row CTA_row_btn">
+      <div class="row CTA_row_btn" >
 
       <button class="col button button-small button-light" >Fiche identité</boutton>
         <button class="col button button-small button-light" >Synoptique</boutton>
