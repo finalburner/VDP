@@ -1,4 +1,4 @@
-<ion-view view-title=""> <!-- Laisser le titre vide -->
+<ion-view view-title="" ng-controller = "CTActrl"> <!-- Laisser le titre vide -->
 
   <ion-content>
 
@@ -8,8 +8,54 @@
       <input type="text" placeholder="Search">
       </label></div>
 
-synthèse content
+      <ion-list>
+          <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive'" ng-repeat="item in list_CTA " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
+
+      <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
+<!-- Row 1 -->
+      <div class="row CTA_bar">
+
+                  <div class="col CTA_type">{{item.type}}</div>
+                  <div class="col "><p class="CTA_date">{{item.date}}</p></div>
+      </div>
+<!-- Row 2 -->
+      <div class="row CTA_row_Tmp">
+
+<div class = "col">
+<div class = "row">T° de départ</div>
+<div class = "row">
+  <p class= "CTA_Tmp" >{{item.tmp1}}</p><div class="icon ion-arrow-graph-up-right"> </div>
+</div>
+</div>
+
+<div class = "col">
+  <div class = "row">T° ambiante</div>
+  <div class = "row">
+
+    <p class= "CTA_Tmp">{{item.tmp2}}</p><div class="icon ion-arrow-graph-up-right"> </div>
+  </div>
+</div>
+      </div>
+<!-- Row 3 : Chart -->
+  <div class="row CTA_row_chart">
+        <div class="CTA_chart">
+ <!-- item item-text-wrap -->
+<canvas id="line" class="chart chart-line ng-isolate-scope" chart-data=item.chart chart-labels="labels" chart-options="options" width="200" height="130" style="display: block; width: 200px; height: 130px;" chart-dataset-override="datasetOverride" ></canvas>
+          </div>
+        </div>
+
+<!-- Row 4 : Btn-->
+
+      <div class="row CTA_row_btn" >
+
+      <button class="col button button-small button-light" >Fiche identité</boutton>
+        <button class="col button button-small button-light" >Synoptique</boutton>
+          <button class="col button button-small button-positive">Consignes</boutton>
+      </div>
+
+
+                </ion-item>
+      </ion-list>
   </ion-content>
 
 </ion-view>
-cd

@@ -9,6 +9,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
+    // ioSocket: io.connect('80.14.220.219:3000')
     ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
@@ -122,11 +123,80 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTsyn.html',
+          controller: 'CTActrl'
+        }
+      }
+    })
+    .state('app.CTsta', {
+      url: '/sta',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTsta.html',
+          controller: 'AppCtrl'
+        }
+      }
+    })
+    .state('app.CTcou', {
+      url: '/cou',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTcou.html',
           controller: 'CTctrl'
         }
       }
     })
-
+    .state('app.CTdoc', {
+      url: '/doc',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTdoc.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CThis', {
+      url: '/his',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CThis.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CTfic', {
+      url: '/fic',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTfic.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CTpla', {
+      url: '/pla',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTpla.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+    .state('app.CTsynP', {
+      url: '/synP',
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTsynP.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
 
 
 

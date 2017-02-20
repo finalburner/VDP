@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [ ])
+angular.module('starter.controllers', ['chart.js'])
 
 .run(function($rootScope) {
 
@@ -12,17 +12,19 @@ angular.module('starter.controllers', [ ])
 
 .controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket, $state) {
   $scope.list_N1 = [
-  {name : 'Synthèse', url: '#/app/biblio'},
-  {name :  'Status', url: '#/app/biblio'},
-  {name :  'Synoptique Primaire', url: '#/app/biblio'},
-  {name :  'Historique', url: '#/app/biblio'},
-  {name :  'Fiche identité', url: '#/app/biblio'},
-  {name :  'Plans des équipements', url: '#/app/biblio'},
-  {name :  'Documentation CT', url: '#/app/biblio'},
-  {name :  'Courbes' url: '#/app/biblio'},
+  {name : 'Synthèse', url: 'app.CTsyn'},
+  {name :  'Status', url: 'app.CTsta'},
+  {name :  'Synoptique Primaire', url: 'app.CTsynP'},
+  {name :  'Historique', url: 'app.CThis'},
+  {name :  'Fiche identité', url: 'app.CTfic'},
+  {name :  'Plans des équipements', url: 'app.CTpla'},
+  {name :  'Documentation CT', url: 'app.CTdoc'},
+  {name :  'Courbes', url: 'app.CTcou'}
   ]
  $scope.N1_name = '';
  $scope.auth = 0 ;
+ $scope.sel = 0 ;
+
   socket.on('id', function(data){ $scope.clientid = data ; });
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -54,11 +56,17 @@ angular.module('starter.controllers', [ ])
   {
     $scope.CT_ret = name ;
     $state.go('app.CTsyn');
-  }
+  };
+
+ $scope.closeN1 = function(id) {
+sel = id ;
+menu_N1=!menu_N1;
+ };
 
   $scope.N1 = function(name) {
           $scope.modalCtrl.show();
           $scope.modalCtrl.name= name;
+          $scope.modalCtrl.animation =  "slide-left-right";
         };
 
     $scope.N1_close = function(name) {
@@ -97,7 +105,6 @@ angular.module('starter.controllers', [ ])
       $scope.closeLogin();
     }, 1000);
   };
-
 
 $scope.unLog = function() {
 $scope.auth= 0;
@@ -199,6 +206,282 @@ $scope.auth= 0;
      $scope.list_AL = list_AL;
     })
 
+
+.controller('CTActrl', function($scope,socket) {
+
+  var list_CTA = [
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#003DF5', // Bleue
+  tmp1 : '1111',
+    tmp2 : '2222',
+  chart : ['1','2','3','4','5','6']
+    },
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+  color: '#FF6633', //orange
+  tmp1 : '1111',
+    tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+},
+{ type: 'Circuit CTA',
+date : 'Optimisé',
+Etat : 'Présente',
+alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+color: '#FF6633', //orange
+tmp1 : '1111',
+  tmp2 : '2222',
+    chart : ['1','2','3','4','5','6']
+}
+];
+
+  var ids = [
+  "TMP1",
+  "TMP2",
+  "TMP3"
+  ];
+// var tmp = [0,1,2,3];
+    /*
+     * if given group is the selected group, deselect it
+     * else, select the given group
+     */
+
+// for (j=0;j<4;j++)
+// {
+//   vartmp1 = 'TMP'+ (2*j+1);
+//     vartmp2 = 'TMP'+(2*j+2);
+//     console.log(vartmp1 + '+' + vartmp2);
+// socket.on( vartmp1, function(data){
+//         list_CTA[j].tmp1 =  data.toPrecision(4);
+//         console.log(vartmp1 + ':' + data);
+//
+//       // $scope.tmp1 =  tmp[1] ;
+//  });
+//
+//  socket.on(vartmp2 , function(data){
+//       list_CTA[j].tmp2 =  data.toPrecision(4);
+//       console.log(vartmp1 + ':'+ data);
+//
+//   // $scope.tmp2 =   tmp[2]   ;
+// });
+// }
+socket.on('majtmp', function(data)
+{
+  for (j=0;j<13;j++){
+list_CTA[j].tmp1 = data[2*j].val;
+// list_CTA[j].chart.push(data[2*j+1].val);
+list_CTA[j].tmp2 = data[2*j+1].val;
+
+}
+});
+
+
+
+//console.log('tmp1 : '+   list_CTA[0].tmp1 + ' - tmp2: ' +  list_CTA[0].tmp2 );
+
+      $scope.expand_AL = function(item) {
+          if ($scope.isItemExpanded(item)) {
+            $scope.shownItem = null;
+          } else {
+            $scope.shownItem = item;
+          }
+        };
+        $scope.isItemExpanded = function(item) {
+          return $scope.shownItem === item;
+        };
+
+        // socket.emit('ListeAL');
+        // socket.on('ListeAL_rep', function(data){
+        // $scope.list_AL = data ;
+        $scope.labels =["1","2","3","4","5","6"];
+
+
+        setInterval(function(){
+
+          for ( i=1;i<13;i++)
+          {
+
+        list_CTA[i].chart.push(list_CTA[i].tmp2);
+        list_CTA[i].chart.shift();
+
+          }
+
+
+        }, 2000);
+
+        $scope.options = {
+            scales: {
+              yAxes: [
+                {
+                  id: 'y-axis-1',
+                  type: 'linear',
+                  display: true,
+                  position: 'left'
+                }
+              ]
+            }
+          };
+       $scope.list_CTA = list_CTA;
+
+
+      })
 
 
 .controller('MyCtrl', function($scope, $cordovaNetwork, $rootScope) {
