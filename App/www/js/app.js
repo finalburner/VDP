@@ -9,8 +9,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    // ioSocket: io.connect('80.14.220.219:3000')
-    ioSocket: io.connect('localhost:3000')
+    ioSocket: io.connect('80.14.220.219:3000')
+    // ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
   return mySocket
@@ -55,6 +55,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       }
     }
   })
+
+    .state('app.CTi', {
+      url: '/CTi',
+        authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N0/CTi.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
 
   .state('app.carto', {
     url: '/carto',

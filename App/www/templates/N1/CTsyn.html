@@ -1,8 +1,15 @@
-<ion-view view-title="" ng-controller = "CTActrl"> <!-- Laisser le titre vide -->
+<ion-view view-title="" > <!-- Laisser le titre vide -->
+
+    <ion-nav-bar class="bar-light">
+            <ion-nav-buttons side="left">
+                    <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
+            </ion-nav-buttons>
+
+    </ion-nav-bar>
 
   <ion-content>
 
-      <div class="recherche col">
+      <div class="recherche">
       <label class="item item-input row">
       <i class="icon ion-search placeholder-icon"></i>
       <input type="text" placeholder="Search">

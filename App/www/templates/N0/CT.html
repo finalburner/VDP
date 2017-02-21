@@ -12,32 +12,22 @@
 
 <ion-content>
 
-  <div class="recherche col">
-   <label class="item item-input row ">
+  <div class="recherche">
+   <label class="item item-input search-row ">
    <i class="icon ion-search placeholder-icon"></i>
    <input type="text" placeholder="Search" ng-model="search">
  </label></div>
 
- <ion-tabs class="tabs-striped tabs-top tabs-background-dark tabs-color-energized">
 
-        <ion-tab title="Centres Thermiques" ui-sref="help">
-           <ion-nav-view name="help"></ion-nav-view>
-        </ion-tab>
-
-        <ion-tab title="Les interventions" ui-sref="home">
-            <ion-nav-view name="home"></ion-nav-view>
-        </ion-tab>
-
-    </ion-tabs>
   <!--Bouton CT - Intervention-->
-          <div class="item button-bar recherche row">
-            <a class="button">Centres Thermiques</a>
-            <a class="button">Les interventions</a>
+          <div class="item button-bar row">
+            <a class="button" nav-transition="none" ui-sref="app.CT" >Centres Thermiques</a>
+            <a class="button" nav-transition="none" ui-sref="app.CTi" >Les interventions</a>
           </div>
 <!--Liste de CT-->
     <ion-list >
         <!-- <a class = "item row CT_row" on-hold="N1(item.name)"  ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" > -->
-     <a class = "item row CT_row" on-hold="N1(item.name)" ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" >
+    <ion-item> <a class = "item row CT_row" on-hold="N1(item.name)" ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" >
 
             <!--div style="background-color: #C2A5A5 !important"-->
           <div class ="col-5 CT_bar_color" style="background-color:{{item.color}};"></div>
@@ -53,7 +43,7 @@
             <div class= "row CT_ala" >
 <p id="CT_ala">{{item.alarm}}   </p> </div>
     </div>
-  </a>
+  </a></ion-item>
       </ion-list>
 </ion-content>
 </ion-view>
