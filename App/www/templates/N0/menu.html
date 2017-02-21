@@ -1,0 +1,69 @@
+<ion-side-menus enable-menu-with-back-views="true">
+  <ion-side-menu-content>
+
+    <ion-nav-view name="menuContent"></ion-nav-view>
+
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left" width = "360">
+<div class="Bandeau row">
+</div>
+<div class="Menu" >
+  <div class="row ">
+     <p class="titre">
+       Supervision STEGC
+     </p></div>
+
+  <a ion-button menu-close nav-transition="none" ui-sref="app.CT" class="button button-dark button-clear row">
+    Synoptiques
+  </a >
+  <a  ion-button menu-close nav-transition="none" ui-sref="app.biblio"class="button button-dark button-clear row " >
+    Bibliothèque
+  </a >
+  <a  ion-button menu-close ui-sref="app.rapport"class="button button-dark button-clear row">
+     Rapport
+  </a >
+  <a  ion-button menu-close ui-sref="app.alarmes" class="button button-dark button-clear row">
+    Journal des alarmes
+  </a >
+  <a  ion-button menu-close ui-sref="app.admin" class="button button-dark button-clear row">
+    Administration
+  </a >
+  <div class="row" >
+  <h5> {{clientid}} - {{auth}} </h5>
+  </div>
+  <div class="row">
+    <button class="button button-light button-block" ng-hide='auth' ng-click="login()">
+  Connexion
+</button>
+ <button class="button button-light button-block" ng-show='auth' ng-click="unlog()">
+  Déconnexion
+</button>
+{{isOnline}}
+  </div>
+  <div class="row">
+  </div>
+</div>
+    <!--ion-content>
+      <ion-list>
+        <ion-header-bar class="Bandeau">
+
+          <p>PARIS</p>
+        </ion-header-bar>
+        <ion-item menu-close ng-click="login()">
+          Login
+        </ion-item>
+        <ion-item menu-close href="#/app/search">
+          Search
+        </ion-item>
+        <ion-item menu-close href="#/app/browse">
+          Browse
+        </ion-item>
+        <ion-item menu-close href="#/app/playlists">
+          Playlists
+        </ion-item>
+      </ion-list>
+    </ion-content-->
+  </ion-side-menu>
+
+</ion-side-menus>

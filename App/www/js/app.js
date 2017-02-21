@@ -40,36 +40,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
     url: '/app',
     abstract: true,
     authentificate: true,
-    templateUrl: 'templates/menu.html',
+    templateUrl: 'templates/N0/menu.html',
     controller: 'AppCtrl'
   })
 
-  .state('app.synop', {
-    url: '/synop',
-      authentificate: true,
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/synop.html',
-        controller: 'AppCtrl'
-      }
-    }
-  })
-  .state('app.synop.carto', {
-    url: '/carto',
-      authentificate: true,
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/synop/carto.html',
-        controller: 'ALctrl'
-      }
-    }
-  })
-  .state('app.synop.CT', {
+
+  .state('app.CT', {
     url: '/CT',
       authentificate: true,
     views: {
       'menuContent': {
-        templateUrl: 'templates/synop/CT.html',
+        templateUrl: 'templates/N0/CT.html',
+        controller: 'CTctrl'
+      }
+    }
+  })
+
+  .state('app.carto', {
+    url: '/carto',
+      authentificate: true,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/N0/carto.html',
         controller: 'AppCtrl'
       }
     }
@@ -80,8 +72,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/alarmes.html',
-            controller: 'AppCtrl'
+          templateUrl: 'templates/N0/alarmes.html',
+            controller: 'ALctrl'
         }
       }
     })
@@ -90,7 +82,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/rapport.html',
+          templateUrl: 'templates/N0/rapport.html',
           controller: 'AppCtrl'
         }
       }
@@ -100,7 +92,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/admin.html',
+          templateUrl: 'templates/N0/admin.html',
           controller: 'AppCtrl'
         }
       }
@@ -111,7 +103,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/biblio.html',
+          templateUrl: 'templates/N0/biblio.html',
           controller: 'AppCtrl'
         }
       }
@@ -212,5 +204,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
   //   }
   // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/synop');
+  $urlRouterProvider.otherwise('/app/CT');
 });

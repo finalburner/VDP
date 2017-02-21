@@ -1,0 +1,13 @@
+<ion-view >
+  <ion-nav-bar class="bar-light">
+          <ion-nav-buttons side="left">
+                  <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
+          </ion-nav-buttons>
+          <ion-nav-buttons side="right">
+                   <a  ion-button ng-if=" 'app.synop'| includedByState" ui-sref="app.synop.carto" class="button button-icon ion-ios-location" >  </a >
+                   <a  ion-button ng-if=" 'app.synop'| includedByState" ui-sref="app.synop.CT" class="button button-icon ion-social-windows" >  </a >
+          </ion-nav-buttons>
+  </ion-nav-bar>
+
+
+</ion-view >

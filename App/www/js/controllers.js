@@ -36,7 +36,7 @@ angular.module('starter.controllers', ['chart.js'])
   // Form data for the login modal
 
   // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html',function(modal){
+  $ionicModal.fromTemplateUrl('templates/N0/login.html',function(modal){
           $scope.modalCnx = modal;
         }, {
           scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
@@ -44,7 +44,7 @@ angular.module('starter.controllers', ['chart.js'])
           focusFirstInput: true
         });
 
-    $ionicModal.fromTemplateUrl('templates/modalN1.html', function(modal) {
+    $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
           $scope.modalCtrl = modal;
         }, {
           scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
