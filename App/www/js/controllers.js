@@ -44,7 +44,7 @@ angular.module('starter.controllers', ['chart.js'])
           focusFirstInput: true
         });
 
-    $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
+  $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
           $scope.modalCtrl = modal;
         }, {
           scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
@@ -54,8 +54,8 @@ angular.module('starter.controllers', ['chart.js'])
 
    $scope.CT_N1 = function (name)
   {
-    $scope.CT_ret = name ;
-    $state.go('app.CTsyn');
+
+    $state.go('app.CTsyn' , {CTname : name });
   };
 
  $scope.closeN1 = function(id) {
@@ -154,6 +154,12 @@ $scope.auth= 0;
       ];
 
   })
+  .controller('MapCtrl', function($scope,NgMap) {
+    $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3QWWdY2M8JtbDSSrVriG9lIwD5anCRHo";
+
+
+  })
+
 
   .controller('ALctrl', function($scope,socket) {
 
@@ -206,11 +212,36 @@ $scope.auth= 0;
      $scope.list_AL = list_AL;
     })
 
+.controller('QrCtrl', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
+           var vm = this;
 
-.controller('CTActrl', function($scope,socket) {
+           vm.scan = function(){
+               $ionicPlatform.ready(function() {
+                   $cordovaBarcodeScanner
+                       .scan()
+                       .then(function(result) {
+                           // Success! Barcode data is here
+                           vm.scanResults = "We got a barcode\n" +
+                           "Result: " + result.text + "\n" +
+                           "Format: " + result.format + "\n" +
+                           "Cancelled: " + result.cancelled;
+                       }, function(error) {
+                           // An error occurred
+                           vm.scanResults = 'Error: ' + error;
+                       });
+               });
+           };
+
+           vm.scanResults = '';
+       })
+
+.controller('CTActrl', function($scope,socket,$stateParams) {
+
+$scope.CTname = $stateParams.CTname;
 
   var list_CTA = [
-{ type: 'Circuit CTA',
+{
+type: 'Circuit CTA',
 date : 'Optimisé',
 etat : 'Présente',
 alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
@@ -316,78 +347,6 @@ alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long m
   color: '#FF6633', //orange
   tmp1 : '1111',
     tmp2 : '2222',
-    chart : ['1','2','3','4','5','6']
-},
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-Etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-color: '#FF6633', //orange
-tmp1 : '1111',
-  tmp2 : '2222',
-    chart : ['1','2','3','4','5','6']
-},
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-Etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-color: '#FF6633', //orange
-tmp1 : '1111',
-  tmp2 : '2222',
-    chart : ['1','2','3','4','5','6']
-},
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-Etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-color: '#FF6633', //orange
-tmp1 : '1111',
-  tmp2 : '2222',
-    chart : ['1','2','3','4','5','6']
-},
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-  color: '#003DF5', // Bleue
-  tmp1 : '1111',
-    tmp2 : '2222',
-  chart : ['1','2','3','4','5','6']
-    },
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-Etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-  color: '#FF6633', //orange
-  tmp1 : '1111',
-    tmp2 : '2222',
-    chart : ['1','2','3','4','5','6']
-},
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-Etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-color: '#FF6633', //orange
-tmp1 : '1111',
-  tmp2 : '2222',
-    chart : ['1','2','3','4','5','6']
-},
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-Etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-color: '#FF6633', //orange
-tmp1 : '1111',
-  tmp2 : '2222',
-    chart : ['1','2','3','4','5','6']
-},
-{ type: 'Circuit CTA',
-date : 'Optimisé',
-Etat : 'Présente',
-alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-color: '#FF6633', //orange
-tmp1 : '1111',
-  tmp2 : '2222',
     chart : ['1','2','3','4','5','6']
 }
 ];
@@ -424,7 +383,7 @@ tmp1 : '1111',
 // }
 socket.on('majtmp', function(data)
 {
-  for (j=0;j<13;j++){
+  for (j=0;j<12;j++){
 list_CTA[j].tmp1 = data[2*j].val;
 // list_CTA[j].chart.push(data[2*j+1].val);
 list_CTA[j].tmp2 = data[2*j+1].val;
@@ -455,7 +414,7 @@ list_CTA[j].tmp2 = data[2*j+1].val;
 
         setInterval(function(){
 
-          for ( i=1;i<13;i++)
+          for ( i=0;i<12;i++)
           {
 
         list_CTA[i].chart.push(list_CTA[i].tmp2);
@@ -464,7 +423,7 @@ list_CTA[j].tmp2 = data[2*j+1].val;
           }
 
 
-        }, 2000);
+        }, 3000);
 
         $scope.options = {
             scales: {

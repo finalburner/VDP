@@ -1,11 +1,12 @@
-<ion-view view-title="" > <!-- Laisser le titre vide -->
+<ion-view view-title="{{CTname}}" > <!-- Laisser le titre vide -->
 
-    <ion-nav-bar class="bar-light">
-            <ion-nav-buttons side="left">
-                    <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
-            </ion-nav-buttons>
+  <ion-nav-bar class="bar-light">
+    <ion-nav-back-button class="button-clear">
+      <i class="button icon-left ion-chevron-left button-clear button-dark"></i>
 
-    </ion-nav-bar>
+    </ion-nav-back-button>
+
+</ion-nav-bar>
 
   <ion-content>
 
@@ -14,9 +15,13 @@
       <i class="icon ion-search placeholder-icon"></i>
       <input type="text" placeholder="Search">
       </label></div>
-
+<!-- Infinite SCROLL Directive Injected HERE - No remarqble performance -->
+      <!-- <ion-list infinite-scroll="addMoreItems()" infinite-scroll-distance="2" > -->
       <ion-list>
-          <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive'" ng-repeat="item in list_CTA " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
+          <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive'"
+           ng-repeat="item in list_CTA track by $index"
+
+         class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
 
       <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 <!-- Row 1 -->
@@ -59,8 +64,6 @@
         <button class="col button button-small button-light" >Synoptique</boutton>
           <button class="col button button-small button-positive">Consignes</boutton>
       </div>
-
-
                 </ion-item>
       </ion-list>
   </ion-content>

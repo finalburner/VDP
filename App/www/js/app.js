@@ -4,13 +4,13 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap'])
 
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    ioSocket: io.connect('80.14.220.219:3000')
-    // ioSocket: io.connect('localhost:3000')
+    // ioSocket: io.connect('80.14.220.219:3000')
+    ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
   return mySocket
@@ -73,7 +73,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
     views: {
       'menuContent': {
         templateUrl: 'templates/N0/carto.html',
-        controller: 'AppCtrl'
+        controller: 'MapCtrl'
       }
     }
   })
@@ -94,7 +94,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/N0/rapport.html',
-          controller: 'AppCtrl'
+          controller: 'QrCtrl'
         }
       }
     })
@@ -121,7 +121,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
     })
 
     .state('app.CTsyn', {
-      url: '/syn',
+      url: '/syn/:CTname',
    authentificate: true,
       views: {
         'menuContent': {
