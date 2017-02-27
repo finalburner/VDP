@@ -1,0 +1,49 @@
+<ion-view view-title="Synoptique">
+
+  <ion-nav-bar class="bar-light">
+          <ion-nav-buttons side="left">
+                  <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
+          </ion-nav-buttons>
+          <ion-nav-buttons side="right">
+                   <a ion-button nav-transition="none" ui-sref="app.carto" class="button button-icon ion-ios-location" >  </a >
+                   <a ion-button nav-transition="none" ui-sref="app.CT" class="button button-icon ion-social-windows" >  </a >
+          </ion-nav-buttons>
+  </ion-nav-bar>
+
+<ion-content>
+
+  <div class="recherche">
+   <label class="item item-input search-row ">
+   <i class="icon ion-search placeholder-icon"></i>
+   <input type="text" placeholder="Search" ng-model="search">
+ </label></div>
+
+
+  <!--Bouton CT - Intervention-->
+          <div class="item button-bar row">
+            <a class="button" nav-transition="none" ui-sref="app.CT" >Centres Thermiques</a>
+            <a class="button" nav-transition="none" ui-sref="app.CTi" >Les interventions</a>
+          </div>
+<!--Liste de CT-->
+    <ion-list >
+        <!-- <a class = "item row CT_row" on-hold="N1(item.name)"  ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" > -->
+         <a class = "item row CT_row" on-hold="N1(item.name)" ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" >
+
+            <!--div style="background-color: #C2A5A5 !important"-->
+          <div class ="col-5 CT_bar_color" style="background-color:{{item.color}};"></div>
+
+        <div class= "col-90" >
+            <div class= "row CT_tit" >
+ {{item.name}}</div>
+            <div class= "row CT_loc" >
+            {{item.addr}}</div>
+            <div class= "row CT_loc" >
+            {{item.pow}}</div>
+
+            <div class= "row CT_ala" >
+<p id="CT_ala">{{item.alarm}}   </p> </div>
+    </div>
+  </a>
+      </ion-list>
+</ion-content>
+</ion-view>

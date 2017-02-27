@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap'])
 
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
@@ -40,37 +40,40 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
     url: '/app',
     abstract: true,
     authentificate: true,
-    templateUrl: 'templates/menu.html',
+    templateUrl: 'templates/N0/menu.html',
     controller: 'AppCtrl'
   })
 
-  .state('app.synop', {
-    url: '/synop',
-      authentificate: true,
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/synop.html',
-        controller: 'AppCtrl'
-      }
-    }
-  })
-  .state('app.synop.carto', {
-    url: '/carto',
-      authentificate: true,
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/synop/carto.html',
-        controller: 'ALctrl'
-      }
-    }
-  })
-  .state('app.synop.CT', {
+
+  .state('app.CT', {
     url: '/CT',
       authentificate: true,
     views: {
       'menuContent': {
-        templateUrl: 'templates/synop/CT.html',
-        controller: 'AppCtrl'
+        templateUrl: 'templates/N0/CT.html',
+        controller: 'CTctrl'
+      }
+    }
+  })
+
+    .state('app.CTi', {
+      url: '/CTi',
+        authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N0/CTi.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
+
+  .state('app.carto', {
+    url: '/carto',
+      authentificate: true,
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/N0/carto.html',
+        controller: 'MapCtrl'
       }
     }
   })
@@ -80,8 +83,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/alarmes.html',
-            controller: 'AppCtrl'
+          templateUrl: 'templates/N0/alarmes.html',
+            controller: 'ALctrl'
         }
       }
     })
@@ -90,8 +93,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/rapport.html',
-          controller: 'AppCtrl'
+          templateUrl: 'templates/N0/rapport.html',
+          controller: 'QrCtrl'
         }
       }
     })
@@ -100,7 +103,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/admin.html',
+          templateUrl: 'templates/N0/admin.html',
           controller: 'AppCtrl'
         }
       }
@@ -111,14 +114,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       authentificate: true,
       views: {
         'menuContent': {
-          templateUrl: 'templates/biblio.html',
+          templateUrl: 'templates/N0/biblio.html',
           controller: 'AppCtrl'
         }
       }
     })
 
     .state('app.CTsyn', {
-      url: '/syn',
+      url: '/syn/:CTname',
    authentificate: true,
       views: {
         'menuContent': {
@@ -212,5 +215,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
   //   }
   // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/synop');
+  $urlRouterProvider.otherwise('/app/CT');
 });

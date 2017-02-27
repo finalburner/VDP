@@ -1,0 +1,22 @@
+<ion-view view-title="Synoptique">
+
+  <ion-nav-bar class="bar-light">
+        <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+                 <a  ion-button nav-transition="none" ui-sref="app.carto" class="button button-icon ion-ios-location" >  </a >
+                 <a  ion-button nav-transition="none" ui-sref="app.CT" class="button button-icon ion-social-windows" >  </a >
+        </ion-nav-buttons>
+</ion-nav-bar>
+<ion-content scroll = "false">
+  <div class="recherche">
+     <label class="item item-input row ">
+     <i class="icon ion-search placeholder-icon"></i>
+     <input type="text" placeholder="Search" ng-model="search">
+   </label></div>
+
+    <ng-map center="[48.914955, 2.355827]"  default-style="false" style="height:100%;width:100%;"></ng-map>
+
+</ion-content>>
+</ion-view>
