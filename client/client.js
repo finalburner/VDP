@@ -1,7 +1,7 @@
  /*global require,console,setTimeout */
 var opcua = require("node-opcua")
 var async = require("async")
-
+var sql = require('mssql');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
 // var endpointUrl = "opc.tcp://localhost:9080/CODRA/ComposerUAServer";
@@ -10,6 +10,46 @@ var the_session, the_subscription;
 var app = require('express')();
 var http = require('http').Server(app)
 var io = require('socket.io')(http);
+
+// SQL Srv
+var config = {
+    user: 'BdConnectClient',
+    password: '340$Uuxwp7Mcxo7Khy',
+    // user : 'root',
+    // password:'P@ssw0rd',
+    server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
+    database: 'VDP',
+
+    options: {
+        encrypt: true // Use this if you're on Windows Azure
+    }
+}
+
+sql.connect(config).then(function() {
+    // Query
+console.log('MS SQL connected success');
+    new sql.Request()
+//    .input('input_parameter', sql.Int, value)
+  //  .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
+   .query('select TOP 5 * from SUPERVISION ').then(function(recordset) {
+        console.dir(recordset);
+    }).catch(function(err) {
+         console.log('Request error : ' + err);
+    });
+////////////////// STORED SQL PROCEDURE ///////////////////////////////////
+        // new sql.Request()
+        // .input('input_parameter', sql.Int, value)
+        // .output('output_parameter', sql.VarChar(50))
+        // .execute('procedure_name').then(function(recordsets) {
+        //     console.dir(recordsets);
+        // }).catch(function(err) {
+        //     // ... error checks
+        // });
+    }).catch(function(err) {
+        console.log('MS SQL error : ' + err);
+    });
+
+
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
@@ -116,7 +156,7 @@ var con = mysql.createConnection({
 
 con.connect(function(err){
   if(err){
-    console.log('Error connecting to Db');
+    console.log('Error connecting to MySql Db');
     return;
   }
   console.log('Connection SQL established');
