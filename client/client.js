@@ -3,13 +3,15 @@ var opcua = require("node-opcua")
 var async = require("async")
 var sql = require('mssql');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
-var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
-// var endpointUrl = "opc.tcp://localhost:9080/CODRA/ComposerUAServer";
+// var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
+var endpointUrl = "opc.tcp://10.18.10.20:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 
 var app = require('express')();
 var http = require('http').Server(app)
 var io = require('socket.io')(http);
+
+var ids ;
 
 // SQL Srv
 var config = {
@@ -24,6 +26,7 @@ var config = {
         encrypt: true // Use this if you're on Windows Azure
     }
 }
+var ids ;
 
 sql.connect(config).then(function() {
     // Query
@@ -31,8 +34,10 @@ console.log('MS SQL connected success');
     new sql.Request()
 //    .input('input_parameter', sql.Int, value)
   //  .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
-   .query('select TOP 5 * from SUPERVISION ').then(function(recordset) {
-        console.dir(recordset);
+   .query('select TOP 1000  * from SUPERVISION ').then(function(recordset) {
+      //  console.dir(recordset);
+      ids=recordset;
+
     }).catch(function(err) {
          console.log('Request error : ' + err);
     });
@@ -49,63 +54,17 @@ console.log('MS SQL connected success');
         console.log('MS SQL error : ' + err);
     });
 
-
+    process.on('uncaughtException', function(err) {
+        if(err.errno === 'EADDRINUSE')
+             console.log('Port 3000 already in use');
+             http.close();
+    });
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
 
-var list_CT = [
-  { name: 'CT 49850',
-    addr : '18,rue du Breil 75018 Paris',
-    pow : '100kW Gaz SED14',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
-  },
-{ name: 'CT 49200',
-    addr : '18,rue du Breil 75018 Paris',
-    pow : '100kW Gaz SED14',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
-  },
 
-{ name: 'CT 49100',
-      addr : '18,rue du Breil 75018 Paris',
-      pow : '100kW Gaz SED14',
-      alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
-    },
-  { name: 'CT 49850',
-        addr : '18,rue du Breil 75018 Paris',
-        pow : '100kW Gaz SED14',
-        alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
-      },
-   { name: 'CT 49650',
-          addr : '18,rue du Breil 75018 Paris',
-          pow : '100kW Gaz SED14',
-          alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'
-        }
-];
-
-var list_AL = [
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
-  },
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    Etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
-  },
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    Etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
-  },
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    Etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message'
-  }
-];
 // app.get('/', function(req, res){
 //   res.sendfile('index.html');
 // });
@@ -142,26 +101,26 @@ io.on('connection', function(socket){
 
   });
 
-//---------------------------SQL----------------------------
-var mysql = require("mysql");
-var table = "users" ;
-// First you need to create a connection to the db
-var con = mysql.createConnection({
-  host: "localhost",
-  port : "3306",
-  user: "root",
-  password: "",
-  database : "bdd"
-});
-
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to MySql Db');
-    return;
-  }
-  console.log('Connection SQL established');
-
-});
+//---------------------------MySQL----------------------------
+// var mysql = require("mysql");
+// var table = "users" ;
+// // First you need to create a connection to the db
+// var con = mysql.createConnection({
+//   host: "localhost",
+//   port : "3306",
+//   user: "root",
+//   password: "",
+//   database : "bdd"
+// });
+//
+// con.connect(function(err){
+//   if(err){
+//     console.log('Error connecting to MySql Db');
+//     return;
+//   }
+//   console.log('Connection SQL established');
+//
+// });
 
 function check_id (user,pass){
   var sen = 'SELECT username,password FROM '+table+' WHERE username ="' + user + '" AND password="' +pass+ '"';
@@ -194,40 +153,10 @@ function get_CT (){
 });
 };
 
-var ids =
- [{ id: '1',   str: 'TMP1',    val: ''},
-    { id: '2',      str: 'TMP2',       val: ''},
-       { id: '3',         str: 'TMP3',   val: ''},
-             { id: '4',      str: 'TMP4',             val: ''},
-              { id: '5',               str: 'TMP5',                val: ''},
-                { id: '6',                  str: 'TMP6',                   val: ''},
-                   { id: '7',                     str: 'TMP7',                      val: ''},
-                      { id: '8',                        str: 'TMP8',                         val: ''},
-{ id: '9',   str: 'TMP9',    val: ''},
-{ id: '10',   str: 'TMP10',    val: ''},
-{ id: '11',   str: 'TMP11',    val: ''},
-{ id: '12',   str: 'TMP12',    val: ''},
-{ id: '13',   str: 'TMP13',    val: ''},
-{ id: '14',   str: 'TMP14',    val: ''},
-{ id: '15',   str: 'TMP15',    val: ''},
-{ id: '16',   str: 'TMP16',    val: ''},
-{ id: '17',   str: 'TMP17',    val: ''},
-{ id: '18',   str: 'TMP18',    val: ''},
-{ id: '19',   str: 'TMP19',    val: ''},
-{ id: '20',   str: 'TMP20',    val: ''},
-{ id: '21',   str: 'TMP21',    val: ''},
-{ id: '22',   str: 'TMP22',    val: ''},
-{ id: '23',   str: 'TMP23',    val: ''},
-{ id: '24',   str: 'TMP24',    val: ''},
-{ id: '25',   str: 'TMP25',    val: ''},
-{ id: '26',   str: 'TMP26',    val: ''}];
 
 
-
-
-function update(id,idstr,nodeid,value) {
-  id.val=value;
-  console.log("new content :  " + idstr + " >> " + value + " >> " + id.val);
+function update(id,nodeid,value) {
+  console.log(nodeid + " >> " + value);
 
    io.sockets.emit('majtmp',ids);
     };
@@ -328,7 +257,7 @@ async.series([
     function(callback) {
 
        the_subscription=new opcua.ClientSubscription(the_session,{
-           requestedPublishingInterval: 2000,
+           requestedPublishingInterval: 500,
         //   requestedLifetimeCount: 10,
         //   requestedMaxKeepAliveCount: 2,
            maxNotificationsPerPublish: 1,
@@ -350,13 +279,18 @@ async.series([
 
        // install monitored item
           ids.forEach(function(id){
-          var nodeId = "ns=1;s="+id.str;
+            adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique ;
+            adr += '/Acquisition/' + id.Metier + '_' + id.Installation_technique ;
+            adr +=  '_' + id.NomGroupeFonctionnel + id.DesignGroupeFonctionnel  ;
+            adr +=  '_' + id.NomObjetFonctionnel + id.DesignObjetFonctionnel ;
+            adr +=  '_' + id.Information + '.Valeur';
+                 var nodeId = "ns=2;s=" + adr;
          var monitoredItem  = the_subscription.monitor({
            nodeId: opcua.resolveNodeId(nodeId),
            attributeId: opcua.AttributeIds.Value
        },
        {
-           samplingInterval: 10, // rate at which the server checks th data source for changes
+           samplingInterval: 100, // rate at which the server checks th data source for changes
            // note : the samplingInterval can be much faster than the notification to the client, thus
            // the server queue the samples and publish the compte queue.
            discardOldest: true,
@@ -365,17 +299,16 @@ async.series([
        opcua.read_service.TimestampsToReturn.Both
        );
 
-       console.log("-------------------------------------");
-
        monitoredItem.on("changed",function(dataValue){
 
            //io.sockets.emit('Event',dataValue.value.value);
-           update(id,id.str,nodeId,dataValue.value.value);
+           update(id,nodeId,dataValue.value.value);
         //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
 
 //client.end();
        });
     });
+    console.log('Subscription Finished');
   },
 
     // close session
