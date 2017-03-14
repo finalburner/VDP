@@ -11,7 +11,82 @@ var app = require('express')();
 var http = require('http').Server(app)
 var io = require('socket.io')(http);
 
-var ids ;
+var ids =[
+  { Metier: 'CVC',
+     Installation_technique: 'PT108406',
+     NomGroupeFonctionnel: 'GENER',
+     DesignGroupeFonctionnel: '00001',
+     NomObjetFonctionnel: 'TEMP1',
+     DesignObjetFonctionnel: 'EXTER',
+     Information: 'R05',
+     Libelle_groupe: 'GENERALITES',
+     Libelle_information: 'TEMPOPRISEENCOMPTETNCAVANTARRETOUREDEMARRAGE',
+     Localisation: 'CT06001',
+     Type: 'TR',
+     TOR_CodeEtat0: null,
+     TOR_CodeEtat1: null,
+     TOR_CriticiteAlarme: null,
+     TOR_CategorieAlarme: null,
+     ANA_Unite: 'h',
+     ANA_ValeurMini: '1',
+     ANA_ValeurMaxi: '168',
+     ACQ_Protocole: 'OPCUA',
+     ACQ_Equipement: 'PT108406_1',
+     ACQ_Adresse: 'K2',
+     PLC_Type: null,
+     PLC_Adresse: null,
+     PLC_Groupe: 'Generalites',
+     PLC_Objet: 'General' },
+   { Metier: 'CVC',
+     Installation_technique: 'PT108406',
+     NomGroupeFonctionnel: 'GENER',
+     DesignGroupeFonctionnel: '00001',
+     NomObjetFonctionnel: 'TEMP1',
+     DesignObjetFonctionnel: 'EXTER',
+     Information: 'E02',
+     Libelle_groupe: 'GENERALITES',
+     Libelle_information: 'AUTORISATIONPARTNC',
+     Localisation: 'CT06001',
+     Type: 'TS',
+     TOR_CodeEtat0: 'NON',
+     TOR_CodeEtat1: 'OUI',
+     TOR_CriticiteAlarme: null,
+     TOR_CategorieAlarme: null,
+     ANA_Unite: null,
+     ANA_ValeurMini: null,
+     ANA_ValeurMaxi: null,
+     ACQ_Protocole: 'OPCUA',
+     ACQ_Equipement: 'PT108406_1',
+     ACQ_Adresse: 'I51',
+     PLC_Type: null,
+     PLC_Adresse: null,
+     PLC_Groupe: 'Generalites',
+     PLC_Objet: 'General' },
+   { Metier: 'MFL',
+     Installation_technique: 'PT108406',
+     NomGroupeFonctionnel: 'GENER',
+     DesignGroupeFonctionnel: '00001',
+     NomObjetFonctionnel: 'CPTEN',
+     DesignObjetFonctionnel: 'EAU01',
+     Information: 'S01',
+     Libelle_groupe: 'GENERALITES',
+     Libelle_information: 'COMPTEUREAUFROIDERESET',
+     Localisation: 'CT06001',
+     Type: 'TC',
+     TOR_CodeEtat0: 'ARRET',
+     TOR_CodeEtat1: 'MARCHE',
+     TOR_CriticiteAlarme: null,
+     TOR_CategorieAlarme: null,
+     ANA_Unite: null,
+     ANA_ValeurMini: null,
+     ANA_ValeurMaxi: null,
+     ACQ_Protocole: 'OPCUA',
+     ACQ_Equipement: 'PT108406_1',
+     ACQ_Adresse: 'W31',
+     PLC_Type: null,
+     PLC_Adresse: null,
+     PLC_Groupe: 'Generalites',
+     PLC_Objet: 'GeneralCompt' } ]
 
 // SQL Srv
 var config = {
@@ -26,6 +101,39 @@ var config = {
         encrypt: true // Use this if you're on Windows Azure
     }
 }
+
+// sql.connect(config).then(function() {
+//     // Query
+// console.log('MS SQL connected success');
+//     new sql.Request()
+//
+// //    .input('input_parameter', sql.Int, value)
+//   //  .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
+//    .query('select TOP(40) * from VDP.dbo.SUPERVISION ').then(function(recordset) {
+//       //  console.dir(recordset);
+//       // ids=JSON.stringify(recordset);
+//       // ids=ids.replace(/\s/g, "") ;
+//       // ids=JSON.parse(ids);
+// //
+// console.log(ids);
+//     }).catch(function(err) {
+//          console.log('Request error : ' + err);
+//
+//     });
+// ////////////////// STORED SQL PROCEDURE ///////////////////////////////////
+//         // new sql.Request()
+//         // .input('input_parameter', sql.Int, value)
+//         // .output('output_parameter', sql.VarChar(50))
+//         // .execute('procedure_name').then(function(recordsets) {
+//         //     console.dir(recordsets);
+//         // }).catch(function(err) {
+//         //     // ... error checks
+//         // });
+//     }).catch(function(err) {
+//         console.log('MS SQL error : ' + err);
+//
+//     });
+
     process.on('uncaughtException', function(err) {
         if(err.errno === 'EADDRINUSE')
              console.log('Port 3000 already in use');
@@ -125,8 +233,6 @@ function get_CT (){
 });
 };
 
-
-
 function update(id,nodeid,value) {
   console.log(nodeid + " >> " + value);
 
@@ -140,38 +246,7 @@ function update(id,nodeid,value) {
     // });
     // //---------------------------------------------------------
 async.series([
-function(callback)  {
-  sql.connect(config).then(function() {
-      // Query
-  console.log('MS SQL connected success');
-      new sql.Request()
-  //    .input('input_parameter', sql.Int, value)
-    //  .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
-     .query('select * from VDP.dbo.SUPERVISION ').then(function(recordset) {
-        //  console.dir(recordset);
-        ids=JSON.stringify(recordset);
-        ids=ids.replace(/\s/g, "") ;
-        // ids=JSON.parse(ids);
 
-console.log(ids);
-      }).catch(function(err) {
-           console.log('Request error : ' + err);
-           callback(err);
-      });
-  ////////////////// STORED SQL PROCEDURE ///////////////////////////////////
-          // new sql.Request()
-          // .input('input_parameter', sql.Int, value)
-          // .output('output_parameter', sql.VarChar(50))
-          // .execute('procedure_name').then(function(recordsets) {
-          //     console.dir(recordsets);
-          // }).catch(function(err) {
-          //     // ... error checks
-          // });
-      }).catch(function(err) {
-          console.log('MS SQL error : ' + err);
-         callback(err);
-      });
-},
     // step 1 : connect to
     function(callback)  {
         client.connect(endpointUrl,function (err) {
