@@ -61,6 +61,7 @@ angular.module('starter.controllers', ['chart.js'])
  $scope.closeN1 = function(id) {
 sel = id ;
 menu_N1=!menu_N1;
+
  };
 
   $scope.N1 = function(name) {
@@ -109,6 +110,10 @@ menu_N1=!menu_N1;
 $scope.unLog = function() {
 $scope.auth= 0;
   };
+
+})
+
+.controller('CTfic', function($scope,socket) {
 
 })
 

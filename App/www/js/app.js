@@ -9,8 +9,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    ioSocket: io.connect('80.14.220.219:3000')
-  //  ioSocket: io.connect('localhost:3000')
+    // ioSocket: io.connect('80.14.220.219:3000')
+   ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
   return mySocket
@@ -176,7 +176,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTfic.html',
-          controller: 'CTctrl'
+          controller: 'CTfic'
         }
       }
     })
@@ -215,5 +215,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
   //   }
   // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/CT');
+  $urlRouterProvider.otherwise('/app/fic');
 });

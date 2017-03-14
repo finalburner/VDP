@@ -1,0 +1,22 @@
+<ion-view view-title="Status">
+  <ion-content>
+    <div class="recherche col">
+    <label class="item item-input row ">
+    <i class="icon ion-search placeholder-icon"></i>
+    <input type="text" placeholder="Search" ng-model="search">
+  </label></div>
+
+  <div class="list">
+    <ion-list>
+        <ion-item ng-repeat="item in items"  item="item" href="#{{item.id}}">
+            Item {{item.id}}
+        </ion-item>
+    <ion-infinite-scroll distance="2"
+                         on-infinite="loadMoreData()"
+                         ng-if="!moredata"
+                         ></ion-infinite-scroll>
+    </ion-list>
+
+  </div>
+  </ion-content>
+</ion-view>

@@ -4,7 +4,7 @@ var async = require("async")
 var sql = require('mssql');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
-var endpointUrl = "opc.tcp://10.18.10.20:9080/CODRA/ComposerUAServer";
+var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 
 var app = require('express')();
@@ -26,34 +26,6 @@ var config = {
         encrypt: true // Use this if you're on Windows Azure
     }
 }
-var ids ;
-
-sql.connect(config).then(function() {
-    // Query
-console.log('MS SQL connected success');
-    new sql.Request()
-//    .input('input_parameter', sql.Int, value)
-  //  .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
-   .query('select TOP 1000  * from SUPERVISION ').then(function(recordset) {
-      //  console.dir(recordset);
-      ids=recordset;
-
-    }).catch(function(err) {
-         console.log('Request error : ' + err);
-    });
-////////////////// STORED SQL PROCEDURE ///////////////////////////////////
-        // new sql.Request()
-        // .input('input_parameter', sql.Int, value)
-        // .output('output_parameter', sql.VarChar(50))
-        // .execute('procedure_name').then(function(recordsets) {
-        //     console.dir(recordsets);
-        // }).catch(function(err) {
-        //     // ... error checks
-        // });
-    }).catch(function(err) {
-        console.log('MS SQL error : ' + err);
-    });
-
     process.on('uncaughtException', function(err) {
         if(err.errno === 'EADDRINUSE')
              console.log('Port 3000 already in use');
@@ -168,7 +140,38 @@ function update(id,nodeid,value) {
     // });
     // //---------------------------------------------------------
 async.series([
+function(callback)  {
+  sql.connect(config).then(function() {
+      // Query
+  console.log('MS SQL connected success');
+      new sql.Request()
+  //    .input('input_parameter', sql.Int, value)
+    //  .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
+     .query('select * from VDP.dbo.SUPERVISION ').then(function(recordset) {
+        //  console.dir(recordset);
+        ids=JSON.stringify(recordset);
+        ids=ids.replace(/\s/g, "") ;
+        // ids=JSON.parse(ids);
 
+console.log(ids);
+      }).catch(function(err) {
+           console.log('Request error : ' + err);
+           callback(err);
+      });
+  ////////////////// STORED SQL PROCEDURE ///////////////////////////////////
+          // new sql.Request()
+          // .input('input_parameter', sql.Int, value)
+          // .output('output_parameter', sql.VarChar(50))
+          // .execute('procedure_name').then(function(recordsets) {
+          //     console.dir(recordsets);
+          // }).catch(function(err) {
+          //     // ... error checks
+          // });
+      }).catch(function(err) {
+          console.log('MS SQL error : ' + err);
+         callback(err);
+      });
+},
     // step 1 : connect to
     function(callback)  {
         client.connect(endpointUrl,function (err) {
@@ -280,10 +283,10 @@ async.series([
        // install monitored item
           ids.forEach(function(id){
             adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique ;
-            adr += '/Acquisition/' + id.Metier + '_' + id.Installation_technique ;
-            adr +=  '_' + id.NomGroupeFonctionnel + id.DesignGroupeFonctionnel  ;
-            adr +=  '_' + id.NomObjetFonctionnel + id.DesignObjetFonctionnel ;
-            adr +=  '_' + id.Information + '.Valeur';
+              adr += '/Acquisition/' + id.Metier + '_' + id.Installation_technique ;
+              adr +=  '_' + id.NomGroupeFonctionnel + id.DesignGroupeFonctionnel  ;
+              adr +=  '_' + id.NomObjetFonctionnel + id.DesignObjetFonctionnel ;
+              adr +=  '_' + id.Information + '.Valeur';
                  var nodeId = "ns=2;s=" + adr;
          var monitoredItem  = the_subscription.monitor({
            nodeId: opcua.resolveNodeId(nodeId),
