@@ -8,13 +8,16 @@
 
   <div class="list">
     <ion-list>
-        <ion-item ng-repeat="item in items"  item="item" href="#{{item.id}}">
-            Item {{item.id}}
+        <ion-item ng-repeat="item in Live_Update"  item="item" href="#{{item.id}}">
+        <div class ="col">
+          <div class="row OPC">{{item.id}}</div>
+          <div class="row "> {{item.value}}</div>
+        </div>
         </ion-item>
-    <ion-infinite-scroll distance="2"
+    <ion-infinite-scroll distance="20"
                          on-infinite="loadMoreData()"
                          ng-if="!moredata"
-                         ></ion-infinite-scroll>
+                         > </ion-infinite-scroll>
     </ion-list>
 
   </div>

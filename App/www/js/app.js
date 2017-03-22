@@ -4,13 +4,14 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap'])
+// angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap','ngMaterial'])
+angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMaterial','ngAnimate'])
 
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    // ioSocket: io.connect('80.14.220.219:3000')
-   ioSocket: io.connect('localhost:3000')
+    ioSocket: io.connect('80.14.220.219:3000')
+  //  ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
   return mySocket
@@ -215,5 +216,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
   //   }
   // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/fic');
+  $urlRouterProvider.otherwise('/app/CT');
 });

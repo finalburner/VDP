@@ -1,14 +1,28 @@
-angular.module('starter.controllers', ['chart.js'])
+angular.module('starter.controllers', ['chart.js','angularUUID2'])
 
-.run(function($rootScope) {
+// .run(function($rootScope) {
+//
+//       $rootScope.user = {
+//         clientid: '',
+//          username: '',
+//           password: '',
+//            auth: ''
+//        };
+//     })
 
-      $rootScope.user = {
-        clientid: '',
-         username: '',
-          password: '',
-           auth: ''
-       };
-    })
+.service('sql_request',function(uuid2,$q){
+  var hash = uuid2.newguid();
+  var data = undefined;
+  this.get_data = function (query,socket)
+  {  var promise = new Promise(function(resolve, reject) {
+     socket.emit('sql_query',{hash : hash , query : query, socket: socket.id });
+     socket.on('sql_answer', function(data){
+     resolve(data);
+});
+});
+return promise;
+};
+})
 
 .controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket, $state) {
   $scope.list_N1 = [
@@ -25,7 +39,7 @@ angular.module('starter.controllers', ['chart.js'])
  $scope.auth = 0 ;
  $scope.sel = 0 ;
 
-  socket.on('id', function(data){ $scope.clientid = data ; });
+  // socket.on('id', function(data){ $scope.clientid = data ; });
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -89,14 +103,14 @@ menu_N1=!menu_N1;
  $scope.username = $scope.modalCnx.username;
  $scope.password = $scope.modalCnx.password ;
 
-    socket.emit('login',{
-    id : $scope.clientid,
-    user : $scope.username,
-    pass : $scope.password,
-    auth : $scope.auth
-    });
+    // socket.emit('login',{
+    // id : $scope.clientid,
+    // user : $scope.username,
+    // pass : $scope.password,
+    // auth : $scope.auth
+    // });
 
-    socket.on('login_rep',function(data){
+socket.on('login_rep',function(data){
  $scope.auth = data.auth;
  $scope.closeLogin();
 
@@ -114,49 +128,57 @@ $scope.auth= 0;
 })
 
 .controller('CTfic', function($scope,socket) {
+$scope.Live_Update = [];
 
+socket.on('update',function(data){
+$scope.Live_Update.push({ id : data.id , value : data.value });
+// console.log(data.id + ">>>>" + data.value )
+// console.log(Live_Update);
+});
 })
 
-.controller('CTctrl', function($scope,socket) {
 
-
+.controller('CTctrl', function($scope,socket,$ionicLoading,sql_request) {
+  $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true,
+    maxWidth: 200,
+    showDelay: 0
+  });
     // socket.emit('ListeCT');
     // socket.on('ListeCT_rep', function(data){
     //$scope.list_CT = data ;
+    // $scope.list_CT =  [
+    //   { localisation: 'CT 49850',
+    //       addr : '18,rue du Breil 75018 Paris',
+    //       pow : '100kW Gaz SED14',
+    //       alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
+    //       color: '#FF6633' //orange
+    //     },
+    //   { localisation: 'CT 49200',
+    //       addr : '18,rue du Breil 75018 Paris',
+    //       pow : '100kW Gaz SED14',
+    //       alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
+    //       color: '#6633FF' //violet
+    //     },
+    //
+    //   { localisation: 'CT 49100',
+    //         addr : '18,rue du Breil 75018 Paris',
+    //         pow : '100kW Gaz SED14',
+    //         alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'  ,
+    //         color: '#003DF5' // Bleue
+    //       }
+    //   ];
+     sql_request.get_data('Select distinct localisation from VDP.dbo.SUPERVISION',socket)
+     .then( function(data){
+       $scope.list_CT= data.reply ;
+       $ionicLoading.hide();
+      //  console.dir(data.reply);
+     });
 
-    $scope.list_CT =  [
-      { name: 'CT 49850',
-          addr : '18,rue du Breil 75018 Paris',
-          pow : '100kW Gaz SED14',
-          alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
-          color: '#FF6633' //orange
-        },
-      { name: 'CT 49200',
-          addr : '18,rue du Breil 75018 Paris',
-          pow : '100kW Gaz SED14',
-          alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
-          color: '#6633FF' //violet
-        },
 
-      { name: 'CT 49100',
-            addr : '18,rue du Breil 75018 Paris',
-            pow : '100kW Gaz SED14',
-            alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long'  ,
-            color: '#003DF5' // Bleue
-          },
-        { name: 'CT 49850',
-              addr : '18,rue du Breil 75018 Paris',
-              pow : '100kW Gaz SED14',
-              alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
-              color: '#CCFF33' // vert jaune
-            },
-         { name: 'CT 49650',
-                addr : '18,rue du Breil 75018 Paris',
-                pow : '100kW Gaz SED14',
-                alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
-                color: '#66FF33' //vert
-              }
-      ];
+
 
   })
   .controller('MapCtrl', function($scope,NgMap) {
@@ -166,12 +188,33 @@ $scope.auth= 0;
   })
 
 
-  .controller('ALctrl', function($scope,socket) {
-
-  /*
-   * if given group is the selected group, deselect it
-   * else, select the given group
-   */
+  .controller('ALctrl', function($scope,socket,$ionicLoading) {
+  //  $ionicLoading.show({
+  //    content: 'Loading',
+  //    animation: 'fade-in',
+  //    showBackdrop: true,
+  //    maxWidth: 200,
+  //    showDelay: 0
+  //  });
+   /*
+    * if given group is the selected group, deselect it
+    * else, select the given group
+    */
+    // var list_AL = [
+    // { type: 'AL 49850',
+    //   date : 'hh:mm:ss - dd/mm/yyy',
+    //   etat : 'Présente',
+    //   alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+    //     color: '#003DF5' // Bleue
+    // },
+    // { type: 'AL 49850',
+    //   date : 'hh:mm:ss - dd/mm/yyy',
+    //   Etat : 'Présente',
+    //   alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+    //     color: '#FF6633' //orange
+    // }];
+    // $scope.list_AL = list_AL;
+ var list_AL = [];
 
     $scope.expand_AL = function(item) {
         if ($scope.isItemExpanded(item)) {
@@ -184,37 +227,22 @@ $scope.auth= 0;
         return $scope.shownItem === item;
       };
 
-      // socket.emit('ListeAL');
-      // socket.on('ListeAL_rep', function(data){
-      // $scope.list_AL = data ;
+    // socket.emit('ListeAL');
+    socket.on('connect ', function(socket){
+  //  $ionicLoading.hide();
+   console.log("Connected : " + socket.id );
+     });
 
-      var list_AL = [
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-      color: '#003DF5' // Bleue
-  },
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    Etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-      color: '#FF6633' //orange
-  },
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    Etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-      color: '#003DF5' // Bleue
-  },
-  { type: 'AL 49850',
-    date : 'hh:mm:ss - dd/mm/yyy',
-    Etat : 'Présente',
-    alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-    color: '#CCFF33' // vert jaune
-  }
-];
-     $scope.list_AL = list_AL;
+    socket.on('OPC_Update', function(data){
+  //  $ionicLoading.hide();
+  var i = Object.keys(list_AL).length ;
+   data['id']= i ;
+   list_AL[i]= data ;
+   $scope.list_AL = list_AL ;
+  //  console.log(list_AL);
+  //  console.log(data)
+     });
+    //  $scope.list_AL = list_AL;
     })
 
 .controller('QrCtrl', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
