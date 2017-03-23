@@ -143,6 +143,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     content: 'Loading',
     animation: 'fade-in',
     showBackdrop: true,
+    duration: 1000,
     maxWidth: 200,
     showDelay: 0
   });
@@ -187,15 +188,34 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 
   })
 
+  .controller('AdminCtrl', function($scope,socket,$ionicLoading) {
+     $ionicLoading.show({
+       content: 'Loading',
+       animation: 'fade-in',
+       showBackdrop: true,
+       maxWidth: 200,
+       showDelay: 0
+     });
+    $scope.list = [];
+    socket.on('OPC_Update', function(data){
+      $ionicLoading.hide();
+      data.date = new Date().toLocaleString();
+      console.log($scope.list)
+      $scope.list.splice(0, 0, data);
+          });
 
+   })
   .controller('ALctrl', function($scope,socket,$ionicLoading) {
-  //  $ionicLoading.show({
-  //    content: 'Loading',
-  //    animation: 'fade-in',
-  //    showBackdrop: true,
-  //    maxWidth: 200,
-  //    showDelay: 0
-  //  });
+   $ionicLoading.show({
+     content: 'Loading',
+     animation: 'fade-in',
+     showBackdrop: true,
+     maxWidth: 200,
+     showDelay: 0
+   });
+
+   $scope.list_AL = [];
+
    /*
     * if given group is the selected group, deselect it
     * else, select the given group
@@ -214,7 +234,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     //     color: '#FF6633' //orange
     // }];
     // $scope.list_AL = list_AL;
- var list_AL = [];
+    $scope.list_AL = [];
 
     $scope.expand_AL = function(item) {
         if ($scope.isItemExpanded(item)) {
@@ -229,16 +249,17 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 
     // socket.emit('ListeAL');
     socket.on('connect ', function(socket){
-  //  $ionicLoading.hide();
+
    console.log("Connected : " + socket.id );
      });
 
     socket.on('OPC_Update', function(data){
+      $ionicLoading.hide();
   //  $ionicLoading.hide();
-  var i = Object.keys(list_AL).length ;
+  var i = Object.keys($scope.list_AL).length ;
    data['id']= i ;
-   list_AL[i]= data ;
-   $scope.list_AL = list_AL ;
+  //  list_AL[i]= data ;
+   $scope.list_AL[i] = data ;
   //  console.log(list_AL);
   //  console.log(data)
      });

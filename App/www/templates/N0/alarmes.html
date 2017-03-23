@@ -29,7 +29,7 @@
 
 <ion-list>
     <ion-item class="row animate-repeat" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
-    ng-animate="'animate'" ng-repeat="item in list_AL |filter: search track by $index  " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
+    ng-animate="'animate'" ng-repeat="item in list_AL | filter: search track by $index  " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
 <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 <div class="col-5 AL_bar_color" style="background-color: #003DF5;"></div>
 <div class="col">

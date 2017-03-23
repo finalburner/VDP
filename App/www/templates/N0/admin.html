@@ -5,8 +5,33 @@
                   <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
           </ion-nav-buttons>
   </ion-nav-bar>
-  
+
   <ion-content>
-    <h1>admin</h1>
+    <!--Barre de recherche-->
+      <div class="recherche col">
+    <label class="item item-input row ">
+    <i class="icon ion-search placeholder-icon"></i>
+    <input type="text" placeholder="Search" ng-model="search">
+    </label>
+    <ion-list>
+        <ion-item class="col animate-repeat"
+        ng-animate="'animate'}" collection-repeat="item in list | filter: search | orderBy:'-item.date':reverse track by $index  " class="item col" >
+    <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
+            
+            <div class="row ">   {{item.Installation_technique}}     </div>
+            <div class="row ">   {{item.Libelle_information}}     </div>
+            <div class="row ">   {{item.date}}    </div>
+            <div class="row ">   {{item.Value}}    </div>
+
+
+
+          <!-- <div class="row ">    {{item.date}}</div> -->
+
+    <!-- <div class="row "><p id="AL_Message">{{item.Libelle_information}}</p></div> -->
+    <!-- <div class="row ">Valeur : {{item.Value}}</div> -->
+    <!-- </div> -->
+
+              </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

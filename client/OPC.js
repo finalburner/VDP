@@ -11,7 +11,7 @@ var ids ;
 var i = 0 ;
 var BATCH_MONITORING = 50 ;
 var WAIT = 1000;
-var SELECT = 100 ;
+var SELECT = 3000 ;
 var Mnemo ;
 var list_AL;
 var io = require('socket.io-client');
@@ -61,7 +61,7 @@ async.series([
          //    .input('input_parameter', sql.Int, value)
           // .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
         //  .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TA\' ').then(function(recordset) {
-        .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION ').then(function(recordset) {
+        .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
         //  ids= recordset;
 
             // console.dir(recordset);

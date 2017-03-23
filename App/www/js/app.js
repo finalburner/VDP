@@ -5,12 +5,23 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 // angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap','ngMaterial'])
-angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMaterial','ngAnimate'])
+angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngMaterial','ngAnimate','ngMap'])
+
+// .run(function($ionicPlatform, $ionicPopup, $cordovaNetwork) {
+//    $ionicPlatform.ready(function() {
+//       if ($cordovaNetwork.isOffline()) {
+//          $ionicPopup.confirm({
+//             title: "Internet is not working",
+//             content: "Internet is not working on your device."
+//          });
+//       }
+//    });
+// })
 
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    ioSocket: io.connect('80.14.220.219:3000')
+    ioSocket: io.connect('http://80.14.220.219:3000')
   //  ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
@@ -105,7 +116,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
       views: {
         'menuContent': {
           templateUrl: 'templates/N0/admin.html',
-          controller: 'AppCtrl'
+          controller: 'AdminCtrl'
         }
       }
     })
