@@ -145,7 +145,6 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     content: 'Loading',
     animation: 'fade-in',
     showBackdrop: true,
-    duration: 1000,
     maxWidth: 200,
     showDelay: 0
   });
@@ -190,6 +189,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 
   })
 
+<<<<<<< HEAD
   .controller('AdminCtrl', function($scope,socket,$ionicLoading) {
      $ionicLoading.show({
        content: 'Loading',
@@ -244,6 +244,17 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     }
 
     })
+=======
+
+  .controller('ALctrl', function($scope,socket,$ionicLoading) {
+  //  $ionicLoading.show({
+  //    content: 'Loading',
+  //    animation: 'fade-in',
+  //    showBackdrop: true,
+  //    maxWidth: 200,
+  //    showDelay: 0
+  //  });
+>>>>>>> parent of 64f7ba1... Update 23 March
    /*
     * if given group is the selected group, deselect it
     * else, select the given group
@@ -262,6 +273,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     //     color: '#FF6633' //orange
     // }];
     // $scope.list_AL = list_AL;
+<<<<<<< HEAD
 
 
     // $scope.expand_AL = function(item) {
@@ -293,6 +305,38 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
   //    });
   //   //  $scope.list_AL = list_AL;
 
+=======
+ var list_AL = [];
+
+    $scope.expand_AL = function(item) {
+        if ($scope.isItemExpanded(item)) {
+          $scope.shownItem = null;
+        } else {
+          $scope.shownItem = item;
+        }
+      };
+      $scope.isItemExpanded = function(item) {
+        return $scope.shownItem === item;
+      };
+
+    // socket.emit('ListeAL');
+    socket.on('connect ', function(socket){
+  //  $ionicLoading.hide();
+   console.log("Connected : " + socket.id );
+     });
+
+    socket.on('OPC_Update', function(data){
+  //  $ionicLoading.hide();
+  var i = Object.keys(list_AL).length ;
+   data['id']= i ;
+   list_AL[i]= data ;
+   $scope.list_AL = list_AL ;
+  //  console.log(list_AL);
+  //  console.log(data)
+     });
+    //  $scope.list_AL = list_AL;
+    })
+>>>>>>> parent of 64f7ba1... Update 23 March
 
 .controller('QrCtrl', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
            var vm = this;
