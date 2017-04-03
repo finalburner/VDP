@@ -3,7 +3,8 @@ var sql = require('mssql');
 var app = require('express')();
 var http = require('http').Server(app)
 var io = require('socket.io')(http);
-
+process.setMaxListeners(0);
+var OPC_Socket_ID ;
 var list_AL = [
 { type: 'AL 49850',
   date : 'hh:mm:ss - dd/mm/yyy',
@@ -22,11 +23,11 @@ var list_AL = [
 var config = {
     user: 'BdConnectClient',
     password: '340$Uuxwp7Mcxo7Khy',
-    // user : 'root',
-    // password:'P@ssw0rd',
+    // user: 'SQL_CLIENT',
+    // password: 'VdP2016!',
     server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
+    // server: '10.18.10.3',
     database: 'VDP',
-
     options: {
         encrypt: true // Use this if you're on Windows Azure
     }
@@ -51,11 +52,23 @@ process.on('uncaughtException', function(err) {
 // app.get('/', function(req, res){
 //   res.sendfile('index.html');
 // });
+function SQL_QUERY(query){
+sql.connect(config).then(function() {
+new sql.Request().query(query).then(function(recordset) {
+return recordset;
+}).catch(function(err) {
+console.log('SQL QUERY EROOR :'+ err + ':' + query)
+}); }); }
 
-
-io.on('connect', function(socket){
+io.on('connect', function(socket,$rootScope){
   console.log('Socket connected :  '+ socket.id);
-  // socket.emit('id', socket.id );
+  socket.emit('id', socket.id );
+  socket.on('ID_socket', function(){
+  $rootScope.OPC_Socket_ID = socket.id ;
+    });
+  socket.on('App_Info_Query', function(){
+  socket.emit('id', { OPC_Socket_ID : $rootScope.OPC_Socket_ID} );
+    });
   socket.on('disconnect', function(){
   console.log('user disconnected');
     });
@@ -78,7 +91,7 @@ io.on('connect', function(socket){
     socket.emit('ListeCT_rep' , list_CT);
     });
 
-  socket.on('ListeAL', function(data){
+   socket.on('ListeAL', function(data){
     console.log('Demande AL de '+ socket.id);
      socket.emit('ListeAL_rep' , list_AL);
      });
@@ -91,20 +104,62 @@ io.on('connect', function(socket){
      socket.broadcast.emit('OPC_Update',data);
    });
 
-    socket.on('sql_query', function(data){
-    console.log(data);
-    sql.connect(config).then(function() {
-    new sql.Request().query(data.query).then(function(recordset) {
+
+ //   socket.on('AL_CT_Query', function(data){ //Socket query on SQL Database and Read from OPC
+ //   //data comming from App = { Socket_id: 'null', CT : 'null' }
+ //   //supposing data = { Socket_id: 'null', CT : 'null', Answer : 'null', Error : ''  }
+ //   console.log(data);
+ //   var query = "Select * from VDP.dbo.SUPERVISION Where localisation = \'" + data.Socket_id +  "' and Type= 'TA'" ;
+ //   sql.connect(config).then(function() {
+ //   new sql.Request().query(query).then(function(recordset) {
+ //   var OPC_promise = new Promise(function(resolve, reject) {
+ //   socket.emit('OPC_Read_Query', { Socket_id: data.Socket_id, var:{ id: recordset , value:'null' }});
+ //   socket.emit('AL_CT_Query', data);
+ //
+ //   }).catch(function(err) {
+ //     data.Error = err ;
+ //   socket.emit('AL_CT_Answer', data);
+ //   });
+ // });
+ //  });
+ //   });
+    socket.on('sql_query', function(data){  //Socket query on SQL Database based on hash UUID
+    var recordset = SQL_QUERY(data.query) ;
     socket.emit('sql_answer', {hash : data.hash , reply : recordset });
-  }).catch(function(err) {
-    socket.emit('sql_answer', {hash : data.hash , reply : err.message });
-});
-});
-});
+  });
+
+
+    socket.on('AL_Query',function(data)
+    {
+    var AlmToRead = [] ;
+    var query = "Select top 10 * from VDP.dbo.SUPERVISION WHERE Type = 'TA' and TOR_CriticiteAlarme = '3'"
+    sql.connect(config).then(function() {
+    new sql.Request().query(query).then(function(recordset) {
+    // console.log(recordset)
+    recordset.forEach(function(id){
+      var adr;
+                Mnemo = id.Metier.trim() + '_' + id.Installation_technique.trim();
+                Mnemo +=  '_' + id.NomGroupeFonctionnel.trim() + id.DesignGroupeFonctionnel.trim();
+                Mnemo +=  '_' + id.NomObjetFonctionnel.trim() + id.DesignObjetFonctionnel.trim() ;
+                Mnemo +=  '_' + id.Information.trim() ;
+                adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique.trim() ;
+                adr += '/Acquisition/' + Mnemo ;
+                var nodeId = "ns=2;s=" + adr;
+                AlmToRead.push({ nodeId : nodeId , Mnemo : Mnemo , Libelle: id.Libelle_information.trim()});
+              });
+    //  console.log(AlmToRead)
+     socket.broadcast.to(OPC_Socket_ID).emit('OPC_Read_Query',AlmToRead);
+
+
+    }).catch(function(err) {
+    console.log('SQL QUERY EROOR :'+ err + ':' + query)
+    });
+  });
+  });
+
 
 
   });
-
 //---------------------------MySQL----------------------------
 // var mysql = require("mysql");
 // var table = "users" ;

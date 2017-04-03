@@ -12,26 +12,20 @@
     <label class="item item-input row ">
     <i class="icon ion-search placeholder-icon"></i>
     <input type="text" placeholder="Search" ng-model="search">
-    </label>
-    <ion-list>
+  </label></div>
+    <!-- <ion-list>
         <ion-item class="col animate-repeat"
-        ng-animate="'animate'}" collection-repeat="item in list | filter: search | orderBy:'-item.date':reverse track by $index  " class="item col" >
+        ng-animate="'animate'}" collection-repeat="item in list | filter: search | orderBy:'-item.date':reverse track by $index  " class="item col" > -->
     <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
-            
+<tr sly-repeat="item in list" >
             <div class="row ">   {{item.Installation_technique}}     </div>
             <div class="row ">   {{item.Libelle_information}}     </div>
             <div class="row ">   {{item.date}}    </div>
             <div class="row ">   {{item.Value}}    </div>
+          <tr>
+              <!-- </ion-item>
+    </ion-list> -->
 
 
-
-          <!-- <div class="row ">    {{item.date}}</div> -->
-
-    <!-- <div class="row "><p id="AL_Message">{{item.Libelle_information}}</p></div> -->
-    <!-- <div class="row ">Valeur : {{item.Value}}</div> -->
-    <!-- </div> -->
-
-              </ion-item>
-    </ion-list>
   </ion-content>
 </ion-view>

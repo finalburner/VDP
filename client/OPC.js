@@ -10,19 +10,53 @@ var the_session, the_subscription;
 var ids ;
 var i = 0 ;
 var BATCH_MONITORING = 50 ;
-var WAIT = 1000;
-var SELECT = 3000 ;
+var WAIT = 1000; // Waiting Time (in ms) for the next batch subscription
+var SELECT = 0 ; // Nbr of Top row
 var Mnemo ;
 var list_AL;
 var io = require('socket.io-client');
-var socket = io.connect('http://localhost:3000', {reconnect: true, "connect timeout" : 2000});
+var socket = io.connect('http://localhost:4000', {reconnect: true, "connect timeout" : 2000});
+
+
+//Fonction de lecture d'une variable(s) OPC
+function OPC_Read(ToRead){ //ToRead = [{ nodeId , Mnemo , Libelle , Active }]
+ToRead.forEach(function(id){
+alm_state = id.nodeId + '.valeur';
+// console.log(alm_state);
+the_session.readVariableValue(alm_state, function(err,dataValue) {
+         if (!err) { id.Value = dataValue.value.value;
+// console.log(id.Mnemo + 'est active');
+alm_ack = id.nodeId + '/Alm/Acknowledged';
+the_session.readVariableValue(alm_ack, function(err,ack) {
+  if (!err) {  id.Ack =  ack.value.value;
+    socket.emit('AL_Reply', id )
+            }});
+          }
+       });
+     });
+// return ToRead ;
+}
+
+
 
 if (io.connected === false && io.connecting === false)
 {io.connect('http://localhost:4000');
 console.log('Connected to client on 4000');}
-else ( console.log('Connected to client on 3000'))
-socket.on('connect', function () { console.log("Socket connected <<>> Id :" + socket.id); });
-socket.emit('join', "OPC UPDATE joined");
+else console.log('Connected to client on 3000');
+
+socket.on('connect', function () {
+  console.log("Socket connected <<>> Id :" + socket.id);
+  socket.emit("ID_socket");
+
+  //Socket OPC_Read
+  socket.on('OPC_Read_Query', function (data) {
+  // console.log("done")
+  // console.log(data);
+  OPC_Read(data) ;
+  // socket.emit('OPC_Read_Answer', data );
+  });
+
+});
 
 var config = {
     user: 'BdConnectClient',
@@ -37,20 +71,16 @@ var config = {
     }
 }
 
-
-  function update(id,Mnemo,value) {
+function update(id,Mnemo,value) {
 
     id.Value = value;
     id.Mnemo = Mnemo;
     //  var data = { var: row , id : Mnemo ,value : value }
     socket.emit('OPC_Update',id);
-    console.log(id);
+    // console.log(id);
       };
 
-
 async.series([
-
-
 
   function(callback)  {
     sql.connect(config).then(function() {
@@ -61,7 +91,7 @@ async.series([
          //    .input('input_parameter', sql.Int, value)
           // .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
         //  .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TA\' ').then(function(recordset) {
-        .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
+        .query('select TOP ' + SELECT + ' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
         //  ids= recordset;
 
             // console.dir(recordset);

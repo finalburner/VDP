@@ -10,12 +10,12 @@ angular.module('starter.controllers', ['chart.js','angularUUID2'])
 //        };
 //     })
 
-.service('sql_request',function(uuid2,$q){
+.service('sql_request',function(uuid2,$q,socket){
   var hash = uuid2.newguid();
   var data = undefined;
-  this.get_data = function (query,socket)
+  this.get_data = function (query)
   {  var promise = new Promise(function(resolve, reject) {
-     socket.emit('sql_query',{hash : hash , query : query, socket: socket.id });
+     socket.emit('sql_query',{hash : hash , query : query, socketid: socket.sessionid});
      socket.on('sql_answer', function(data){
      resolve(data);
 });
@@ -24,12 +24,15 @@ return promise;
 };
 })
 
-.controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket, $state) {
+.controller('AppCtrl', function( $rootScope, $scope, $ionicModal, $timeout, socket, $state,$ionicPopup,App_Info) {
+
+
   $scope.list_N1 = [
   {name : 'Synthèse', url: 'app.CTsyn'},
   {name :  'Status', url: 'app.CTsta'},
   {name :  'Synoptique Primaire', url: 'app.CTsynP'},
   {name :  'Historique', url: 'app.CThis'},
+  {name :  'Alarmes du CT', url: 'app.alarmes'},
   {name :  'Fiche identité', url: 'app.CTfic'},
   {name :  'Plans des équipements', url: 'app.CTpla'},
   {name :  'Documentation CT', url: 'app.CTdoc'},
@@ -39,7 +42,6 @@ return promise;
  $scope.auth = 0 ;
  $scope.sel = 0 ;
 
-  // socket.on('id', function(data){ $scope.clientid = data ; });
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -65,35 +67,34 @@ return promise;
           animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
           focusFirstInput: true
         });
-
-   $scope.CT_N1 = function (name)
+//Acces à la synthèse
+$scope.CT_N1 = function (name)
   {
-
     $state.go('app.CTsyn' , {CTname : name });
   };
-
- $scope.closeN1 = function(id) {
+$scope.closeN1 = function(id) {
 sel = id ;
 menu_N1=!menu_N1;
+   };
 
- };
-
-  $scope.N1 = function(name) {
+//Acces Modal Niveau1
+$scope.N1 = function(name) {
+          $rootScope.CT_selected = name;
           $scope.modalCtrl.show();
-          $scope.modalCtrl.name= name;
           $scope.modalCtrl.animation =  "slide-left-right";
-        };
+};
 
-    $scope.N1_close = function(name) {
-                $scope.modalCtrl.hide();
-              };
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
+$scope.N1_close = function(name) {
+$scope.modalCtrl.hide();
+};
+
+// Triggered in the login modal to close it
+$scope.closeLogin = function() {
     $scope.modalCnx.hide();
   };
 
-  // Open the login modal
-  $scope.login = function() {
+// Open the login modal
+$scope.login = function() {
     $scope.modalCnx.show();
   };
 
@@ -138,7 +139,8 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 })
 
 
-.controller('CTctrl', function($scope,socket,$ionicLoading,sql_request) {
+.controller('CTctrl', function($rootScope,$scope,socket,$ionicLoading,sql_request) {
+
   $ionicLoading.show({
     content: 'Loading',
     animation: 'fade-in',
@@ -171,7 +173,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     //         color: '#003DF5' // Bleue
     //       }
     //   ];
-     sql_request.get_data('Select distinct localisation from VDP.dbo.SUPERVISION',socket)
+     sql_request.get_data('Select distinct localisation from VDP.dbo.SUPERVISION')
      .then( function(data){
        $scope.list_CT= data.reply ;
        $ionicLoading.hide();
@@ -193,6 +195,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
        content: 'Loading',
        animation: 'fade-in',
        showBackdrop: true,
+       duration: 1000,
        maxWidth: 200,
        showDelay: 0
      });
@@ -205,17 +208,42 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
           });
 
    })
-  .controller('ALctrl', function($scope,socket,$ionicLoading) {
-   $ionicLoading.show({
-     content: 'Loading',
-     animation: 'fade-in',
-     showBackdrop: true,
-     maxWidth: 200,
-     showDelay: 0
-   });
 
-   $scope.list_AL = [];
+.controller('ALctrl', function($rootScope, $scope,socket,$ionicLoading) {
+     $ionicLoading.show({
+       content: 'Loading',
+       animation: 'fade-in',
+       showBackdrop: true,
+       duration: 1000,
+       maxWidth: 200,
+       showDelay: 0
+     });
+     if($rootScope.CT_selected == undefined) // Alarmes de tous les CTS
+     {
+       socket.emit('AL_Query','Data');
+       socket.on('AL_reply', function(data){
+        //  $scope.list_AL= data.reply ;
+         $ionicLoading.hide();
+        console.dir(data);
+       });
+     }
+     else
+     {
+        console.log('path2')
+     var request = {
+       Socket_id : $rootScope.Socket_id,
+       Query : $rootScope.CT_selected
+     }
 
+     socket.emit('AL_CT_Query',request);
+     socket.on('AL_CT_Answer', function(data){
+      //  $scope.list_AL= data.reply ;
+       $ionicLoading.hide();
+      console.dir(data);
+     })
+    }
+
+    })
    /*
     * if given group is the selected group, deselect it
     * else, select the given group
@@ -234,37 +262,37 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     //     color: '#FF6633' //orange
     // }];
     // $scope.list_AL = list_AL;
-    $scope.list_AL = [];
 
-    $scope.expand_AL = function(item) {
-        if ($scope.isItemExpanded(item)) {
-          $scope.shownItem = null;
-        } else {
-          $scope.shownItem = item;
-        }
-      };
-      $scope.isItemExpanded = function(item) {
-        return $scope.shownItem === item;
-      };
+
+    // $scope.expand_AL = function(item) {
+    //     if ($scope.isItemExpanded(item)) {
+    //       $scope.shownItem = null;
+    //     } else {
+    //       $scope.shownItem = item;
+    //     }
+    //   };
+    //   $scope.isItemExpanded = function(item) {
+    //     return $scope.shownItem === item;
+    //   };
 
     // socket.emit('ListeAL');
-    socket.on('connect ', function(socket){
+  //   socket.on('connect ', function(socket){
+  //
+  //  console.log("Connected : " + socket.id );
+  //    });
+  //
+  //   socket.on('OPC_Update', function(data){
+  // $ionicLoading.hide();
+  // //  $ionicLoading.hide();
+  // var i = Object.keys($scope.list_AL).length ;
+  //  data['id']= i ;
+  // //  list_AL[i]= data ;
+  //  $scope.list_AL[i] = data ;
+  // //  console.log(list_AL);
+  // //  console.log(data)
+  //    });
+  //   //  $scope.list_AL = list_AL;
 
-   console.log("Connected : " + socket.id );
-     });
-
-    socket.on('OPC_Update', function(data){
-      $ionicLoading.hide();
-  //  $ionicLoading.hide();
-  var i = Object.keys($scope.list_AL).length ;
-   data['id']= i ;
-  //  list_AL[i]= data ;
-   $scope.list_AL[i] = data ;
-  //  console.log(list_AL);
-  //  console.log(data)
-     });
-    //  $scope.list_AL = list_AL;
-    })
 
 .controller('QrCtrl', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
            var vm = this;

@@ -3,7 +3,7 @@
 <ion-content>
 <div class="row N1_bar_header">
 <div class="N1_menu_color "></div>
-<h1 class="N1_menu_title col col-80 ">{{modalCtrl.name}}</h1>
+<h1 class="N1_menu_title col col-80 ">{{CT_selected}}</h1>
 <i class="icon ion-close-round col col-offset-10" ng-click="N1_close()"></i>
 <!-- <a ion-button ng-click="N1_close()" class="button button-clear col col-offset-10 ion-clouse-round"> -->
 </a >
@@ -21,7 +21,7 @@
 <div class="row N1_row">Courbes</div> -->
 
 <ion-list>
-      <ion-item  ng-repeat="item in list_N1" ng-click="N1_close()" ui-sref="{{item.url}}" >{{item.name}}</ion-item>
+      <ion-item  ng-repeat="item in ::list_N1" ng-click="N1_close()" ui-sref="{{item.url}}" >{{item.name}}</ion-item>
 
           </ion-list>
 <!-- </div> -->

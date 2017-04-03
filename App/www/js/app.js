@@ -21,13 +21,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    ioSocket: io.connect('http://80.14.220.219:3000')
-  //  ioSocket: io.connect('localhost:3000')
+    // ioSocket: io.connect('http://80.14.220.219:3000')
+   ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
   return mySocket
     })
 
+.service('App_Info',function(socket,$ionicPopup){
+socket.emit('App_Info_Query');
+console.log( 'App_Info_Query')
+socket.on('App_Info_Answer', function(data){
+console.log('App_Info_Answer : ' +  data.OPC_Socket_ID)
+
+return {
+OPC_id : data.OPC_Socket_ID
+}
+  });
+})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -100,6 +111,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
         }
       }
     })
+
     .state('app.rapport', {
       url: '/rapport',
       authentificate: true,
