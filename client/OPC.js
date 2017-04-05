@@ -3,6 +3,7 @@ var async = require("async");
 var sql = require('mssql');
 var sleep = require('system-sleep');
 var opcua = require("node-opcua");
+var io = require('socket.io-client');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
 var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
@@ -10,53 +11,97 @@ var the_session, the_subscription;
 var ids ;
 var i = 0 ;
 var BATCH_MONITORING = 50 ;
-var WAIT = 1000; // Waiting Time (in ms) for the next batch subscription
-var SELECT = 0 ; // Nbr of Top row
+var WAIT = 1000;
+var SELECT = 100 ;
 var Mnemo ;
 var list_AL;
-var io = require('socket.io-client');
-var socket = io.connect('http://localhost:4000', {reconnect: true, "connect timeout" : 2000});
-
-
-//Fonction de lecture d'une variable(s) OPC
-function OPC_Read(ToRead){ //ToRead = [{ nodeId , Mnemo , Libelle , Active }]
-ToRead.forEach(function(id){
-alm_state = id.nodeId + '.valeur';
-// console.log(alm_state);
-the_session.readVariableValue(alm_state, function(err,dataValue) {
-         if (!err) { id.Value = dataValue.value.value;
-// console.log(id.Mnemo + 'est active');
-alm_ack = id.nodeId + '/Alm/Acknowledged';
-the_session.readVariableValue(alm_ack, function(err,ack) {
-  if (!err) {  id.Ack =  ack.value.value;
-    socket.emit('AL_Reply', id )
-            }});
-          }
-       });
-     });
-// return ToRead ;
-}
-
-
+var socket = io.connect('http://localhost:3000', {reconnect: true, "connect timeout" : 2000});
 
 if (io.connected === false && io.connecting === false)
 {io.connect('http://localhost:4000');
 console.log('Connected to client on 4000');}
-else console.log('Connected to client on 3000');
+else ( console.log('Connected to client on 3000'))
+
+// Fonction de lecture d'une variable(s) OPC
+// function OPC_Read(ToRead,socket){ //ToRead = [{ nodeId , Mnemo , Libelle , Active , Ack }]
+// ToRead.forEach(function(id){
+// alm_active = id.nodeId + '.valeur';
+// alm_ack = id.nodeId + '/Alm/Acknowledged';
+// // console.log(alm_state);
+// the_session.readVariableValue([alm_active, alm_ack], function(err,dataValue) {
+//          if (!err) {
+// id.Active = dataValue[0].value.value ;
+// id.Ack = dataValue[1].value.value ;
+// socket.emit('AL_Answer', id);
+// // id.Value = dataValue.value.value;
+// // console.log(id.Mnemo + 'est active');
+// console.log(id)
+//   }
+// });
+//      });
+//     //  console.log(ToReturn)
+//
+// // return ToRead ;
+// }
 
 socket.on('connect', function () {
   console.log("Socket connected <<>> Id :" + socket.id);
-  socket.emit("ID_socket");
-
-  //Socket OPC_Read
-  socket.on('OPC_Read_Query', function (data) {
-  // console.log("done")
-  // console.log(data);
-  OPC_Read(data) ;
-  // socket.emit('OPC_Read_Answer', data );
-  });
-
+socket.emit('OPC_Socket_Connected');
 });
+
+socket.on('AL_Query', function (data){
+  console.log('AL_Query : ' + data.Socket_ID) ;
+  var AlmToRead = [] ;
+  var query = "Select TOP 200 * from VDP.dbo.SUPERVISION WHERE Type = 'TA'  " ;
+  sql.connect(config).then(function() {
+  new sql.Request().query(query).then(function(recordset) {
+  // console.log(recordset)
+  recordset.forEach(function(id){
+  // var adr;
+                  Mnemo = id.Metier.trim() + '_' + id.Installation_technique.trim();
+                  Mnemo +=  '_' + id.NomGroupeFonctionnel.trim() + id.DesignGroupeFonctionnel.trim();
+                  Mnemo +=  '_' + id.NomObjetFonctionnel.trim() + id.DesignObjetFonctionnel.trim() ;
+                  Mnemo +=  '_' + id.Information.trim() ;
+                  adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique.trim() ;
+                  adr += '/Acquisition/' + Mnemo ;
+                  var NodeId = "ns=2;s=" + adr;
+                  AlmToRead.push({ NodeId : NodeId , Mnemo : Mnemo , Libelle: id.Libelle_information.trim() , Criticite : id.TOR_CriticiteAlarme.trim() , Active : '' , Ack : ''});
+          });
+      //  console.log(AlmToRead)
+      //  socket.broadcast.to(OPC_Socket_ID).emit('OPC_Read_Query',AlmToRead);
+      AlmToRead.forEach(function(id){
+      alm_active = id.NodeId + '.valeur';
+      alm_ack = id.NodeId + '/Alm/Acknowledged';
+      // console.log(alm_state);
+      the_session.readVariableValue([alm_active, alm_ack], function(err,dataValue,diagnostics) {
+                if (err) {
+					    	console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err ); }
+					      else {
+
+//Gestion d'erreur OPC lecture attribut Actif
+if (dataValue[0].statusCode && dataValue[0].statusCode._base.name == 'Good')
+id.Actif = dataValue[0].value.value
+else
+console.log(id.Mnemo + " > Actif Error > " + dataValue[0].statusCode._base.name) ;
+
+//Gestion d'erreur OPC lecture attribut ACK
+if (dataValue[1].statusCode && dataValue[1].statusCode['name'] == 'Good')
+id.Ack = dataValue[1].value.value
+else console.dir(id.Mnemo + " > Ack Error > " + dataValue[1].statusCode['name']) ;
+
+//Renvoi de l'alarme unitaire vers le client
+var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID },id);
+socket.emit('AL_Answer', Retour);
+    }
+      });
+           });
+
+      }).catch(function(err) { //Gestion globale des erreurs SQL
+      console.log('SQL QUERY ERROR :'+ err )
+      });
+    });
+    });
+
 
 var config = {
     user: 'BdConnectClient',
@@ -77,10 +122,20 @@ function update(id,Mnemo,value) {
     id.Mnemo = Mnemo;
     //  var data = { var: row , id : Mnemo ,value : value }
     socket.emit('OPC_Update',id);
-    // console.log(id);
+    console.log(id);
       };
 
+
+
+function update_sub_param(id) { //Mise à jour OPC paramètres globaux (Compteurs d'alarmes ... )
+ // { id , adr , value}
+    socket.emit('OPC_General_Update',id);
+      };
+
+
 async.series([
+
+
 
   function(callback)  {
     sql.connect(config).then(function() {
@@ -91,7 +146,7 @@ async.series([
          //    .input('input_parameter', sql.Int, value)
           // .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
         //  .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TA\' ').then(function(recordset) {
-        .query('select TOP ' + SELECT + ' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
+        .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
         //  ids= recordset;
 
             // console.dir(recordset);
@@ -145,7 +200,49 @@ async.series([
             callback(err);
         });
     },
+    function(callback) {
 
+    //subscription to general OPC parameters ( Alarms Nbr , ....)
+var sub_param = [
+  { id : 'Synthese.PresentCount', adr : '/Application/STEGC/Paris/_Entite/Synthese.PresentCount'
+  },
+  { id : 'SyntheseMajeure.PresentCount', adr : '/Application/STEGC/Paris/_Entite/SyntheseMajeure.PresentCount'
+  },
+  { id : 'SyntheseMineure.PresentCount', adr : '/Application/STEGC/Paris/_Entite/SyntheseMineure.PresentCount'
+  },
+  { id : 'SyntheseDefCom.PresentCount', adr : '/Application/STEGC/Paris/_Entite/SyntheseDefCom.PresentCount'
+  },
+  { id : 'SyntheseCritique.PresentCount', adr : '/Application/STEGC/Paris/_Entite/SyntheseCritique.PresentCount'
+  }
+];
+       init_OPC_sub=new opcua.ClientSubscription(the_session,{
+           requestedPublishingInterval: 1000,
+        //   requestedLifetimeCount: 10,
+        //   requestedMaxKeepAliveCount: 2,
+           maxNotificationsPerPublish: 1,
+           publishingEnabled: true,
+           priority: 8
+       });
+
+  sub_param.forEach(function(id){
+              var nodeId = "ns=2;s=" + id.adr;
+              var monitoredItem  = init_OPC_sub.monitor({
+                 nodeId: opcua.resolveNodeId(nodeId),
+                 attributeId: opcua.AttributeIds.Value
+               },   {samplingInterval: 1000,discardOldest: false,queueSize: 1 },
+                 opcua.read_service.TimestampsToReturn.Both
+                 );
+
+              monitoredItem.on("changed",function(dataValue){
+              //io.sockets.emit('Event',dataValue.value.value);
+              if (dataValue.value != null )
+              {id.value = dataValue.value.value;
+              update_sub_param(id) }
+              //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
+              });
+
+    });
+  },
     // step 3 : browse
   //   function(callback) {
   //      the_session.browse("ObjectsFolder", function(err,browse_result){
@@ -209,7 +306,7 @@ async.series([
 
     // step 5: install a subscription and install a monitored item for 10 seconds
     function(callback) {
-
+// souscription à toutes les variables OPC
        the_subscription=new opcua.ClientSubscription(the_session,{
            requestedPublishingInterval: 1000,
         //   requestedLifetimeCount: 10,

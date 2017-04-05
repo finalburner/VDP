@@ -36,17 +36,18 @@ var config = {
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
+
 });
 
-process.on('uncaughtException', function(err) {
-        if(err.errno === 'EADDRINUSE' && err.port === '3000')
-             console.log('Port 3000 already in use. Using Port 4000');
-             http.close();
-             http.listen(4000, function(){
-               console.log('listening on *:4000');
-             });
-
-    });
+// process.on('uncaughtException', function(err) {
+//         if(err.errno === 'EADDRINUSE' && err.port === '3000')
+//              console.log('Port 3000 already in use. Using Port 4000');
+//              http.close();
+//              http.listen(4000, function(){
+//                console.log('listening on *:4000');
+//              });
+//
+//     });
 
 
 // app.get('/', function(req, res){
@@ -57,34 +58,42 @@ sql.connect(config).then(function() {
 new sql.Request().query(query).then(function(recordset) {
 return recordset;
 }).catch(function(err) {
-console.log('SQL QUERY EROOR :'+ err + ':' + query)
+console.log('SQL QUERY ERROR :'+ err + ':' + query)
 }); }); }
 
 io.on('connect', function(socket,$rootScope){
-  console.log('Socket connected :  '+ socket.id);
-  socket.emit('id', socket.id );
-  socket.on('ID_socket', function(){
-  $rootScope.OPC_Socket_ID = socket.id ;
-    });
-  socket.on('App_Info_Query', function(){
-  socket.emit('id', { OPC_Socket_ID : $rootScope.OPC_Socket_ID} );
-    });
-  socket.on('disconnect', function(){
-  console.log('user disconnected');
-    });
-  socket.on('join', function(data){
-  console.log(data)
+
+  //Identification du client OPC
+  socket.on('OPC_Socket_Connected', function(){
+  console.log('OPC_Socket_Connected : ' +  socket.id);
+  OPC_Socket_ID = socket.id ;
+  });
+
+  //Identification du client Mobile + mise en room "Clients_Room"
+  socket.on('Client_Connected', function() {
+  console.log('Client_Connected : ' +  socket.id);
+  socket.join('Clients_Room');
    });
+
+  // socket.on('App_Info_Query', function(){
+  // socket.emit('App_Info_Answer', { OPC_Socket_ID : OPC_Socket_ID} );
+  //   });
+  // socket.on('disconnect', function(){
+  // console.log('user disconnected');
+  //   });
+  // socket.on('join', function(data){
+  // console.log(data)
+  //  });
    //demande login
-  socket.on('login', function(data){
-     console.log('id: ' + data.id + ',user: ' + data.user +',pass: ' + data.pass + ',auth: ' + data.auth);
-     var auths = check_id(data.user,data.pass);
-     console.log(auths);
-     socket.emit('login_rep' , {
-       auth : check_id(data.user,data.pass)
-     });
-  //    console.log( check_id(data.user,data.pass) );
-      });
+  // socket.on('login', function(data){
+  //    console.log('id: ' + data.id + ',user: ' + data.user +',pass: ' + data.pass + ',auth: ' + data.auth);
+  //    var auths = check_id(data.user,data.pass);
+  //    console.log(auths);
+  //    socket.emit('login_rep' , {
+  //      auth : check_id(data.user,data.pass)
+  //    });
+  // //    console.log( check_id(data.user,data.pass) );
+  //     });
 
    socket.on('ListeCT', function(data){
    console.log('Demande CT de '+ socket.id);
@@ -96,66 +105,61 @@ io.on('connect', function(socket,$rootScope){
      socket.emit('ListeAL_rep' , list_AL);
      });
 
-     io.sockets.on('connection', function (socket) {
-     });
+    //  io.sockets.on('connection', function (socket) {
+    //
+    //  });
 
     socket.on('OPC_Update', function(data){
      console.log(data);
-     socket.broadcast.emit('OPC_Update',data);
+    //  socket.broadcast.emit('OPC_Update',data);
    });
 
+//Socket query on SQL Database and Read from OPC
+   socket.on('AL_CT_Query', function(data){
+   //data comming from App = { Socket_id: 'null', CT : 'null' }
+   //supposing data = { Socket_id: 'null', CT : 'null', Answer : 'null', Error : ''  }
+   console.log(data);
+   var query = "Select * from VDP.dbo.SUPERVISION Where localisation = \'" + data.Socket_id +  "' and Type= 'TA'" ;
+   sql.connect(config).then(function() {
+   new sql.Request().query(query).then(function(recordset) {
+   var OPC_promise = new Promise(function(resolve, reject) {
+   socket.emit('OPC_Read_Query', { Socket_id: data.Socket_id, var:{ id: recordset , value:'null' }});
+   socket.emit('AL_CT_Query', data);
 
- //   socket.on('AL_CT_Query', function(data){ //Socket query on SQL Database and Read from OPC
- //   //data comming from App = { Socket_id: 'null', CT : 'null' }
- //   //supposing data = { Socket_id: 'null', CT : 'null', Answer : 'null', Error : ''  }
- //   console.log(data);
- //   var query = "Select * from VDP.dbo.SUPERVISION Where localisation = \'" + data.Socket_id +  "' and Type= 'TA'" ;
- //   sql.connect(config).then(function() {
- //   new sql.Request().query(query).then(function(recordset) {
- //   var OPC_promise = new Promise(function(resolve, reject) {
- //   socket.emit('OPC_Read_Query', { Socket_id: data.Socket_id, var:{ id: recordset , value:'null' }});
- //   socket.emit('AL_CT_Query', data);
- //
- //   }).catch(function(err) {
- //     data.Error = err ;
- //   socket.emit('AL_CT_Answer', data);
- //   });
- // });
- //  });
- //   });
-    socket.on('sql_query', function(data){  //Socket query on SQL Database based on hash UUID
+   }).catch(function(err) {
+     data.Error = err ;
+   socket.emit('AL_CT_Answer', data);
+   });
+ });
+  });
+   });
+
+//Socket query on SQL Database based on hash UUID
+    socket.on('Sql_Query', function(data){
+      console.log(data)
     var recordset = SQL_QUERY(data.query) ;
-    socket.emit('sql_answer', {hash : data.hash , reply : recordset });
+    console.log(recordset)
+    socket.emit('Sql_Answer', { hash : data.hash , reply : recordset });
   });
 
-
-    socket.on('AL_Query',function(data)
-    {
-    var AlmToRead = [] ;
-    var query = "Select top 10 * from VDP.dbo.SUPERVISION WHERE Type = 'TA' and TOR_CriticiteAlarme = '3'"
-    sql.connect(config).then(function() {
-    new sql.Request().query(query).then(function(recordset) {
-    // console.log(recordset)
-    recordset.forEach(function(id){
-      var adr;
-                Mnemo = id.Metier.trim() + '_' + id.Installation_technique.trim();
-                Mnemo +=  '_' + id.NomGroupeFonctionnel.trim() + id.DesignGroupeFonctionnel.trim();
-                Mnemo +=  '_' + id.NomObjetFonctionnel.trim() + id.DesignObjetFonctionnel.trim() ;
-                Mnemo +=  '_' + id.Information.trim() ;
-                adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique.trim() ;
-                adr += '/Acquisition/' + Mnemo ;
-                var nodeId = "ns=2;s=" + adr;
-                AlmToRead.push({ nodeId : nodeId , Mnemo : Mnemo , Libelle: id.Libelle_information.trim()});
-              });
-    //  console.log(AlmToRead)
-     socket.broadcast.to(OPC_Socket_ID).emit('OPC_Read_Query',AlmToRead);
-
-
-    }).catch(function(err) {
-    console.log('SQL QUERY EROOR :'+ err + ':' + query)
-    });
+//Requete d'un client donné de la liste des alarmes
+socket.on('AL_Query',function(data)
+{
+    socket.to(OPC_Socket_ID).emit('AL_Query',{ Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID})
+    console.log('Al_query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
   });
-  });
+
+//Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
+socket.on('AL_Answer',function(data) {
+  socket.to(data.Socket_ID).emit('AL_Answer', data) ;
+});
+
+//Redirige les MAJ des KPI OPC vers Clients_Room
+socket.on('OPC_General_Update',function(data) {
+  // socket.to(data.Socket_ID).emit('AL_Answer', data) ;
+  console.log(data);
+  socket.to('Clients_Room').emit('OPC_General_Update',data);
+});
 
 
 

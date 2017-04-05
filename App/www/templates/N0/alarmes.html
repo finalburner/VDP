@@ -1,4 +1,4 @@
-<ion-view view-title="Journal des alarmes {{CT_selected}}">
+<ion-view view-title="Journal des alarmes">
 
   <ion-nav-bar class="bar-light">
           <ion-nav-buttons side="left">
@@ -11,36 +11,37 @@
   <div class="recherche col">
 <label class="item item-input row ">
 <i class="icon ion-search placeholder-icon"></i>
-<input type="text" placeholder="Search" ng-model="search">
+<input type="text" placeholder="Recherche" ng-model="search">
 </label>
 
 <!--Bouton CT - Intervention-->
         <div class="item button-bar recherche row">
-     <a class="button">En cours</a>
+     <a class="button" ng-click="Filter_Alm = { Actif : 'true' } ">En cours</a>
       <!-- <select class="button" >
             <option>Blue</option>
             <option selected>Green</option>
             <option>Red</option>
     </select> -->
-          <a class="button">Toutes</a>
+          <a class="button" ng-click="Filter_Alm = '' ">Toutes</a>
         </div>
   </div>
 <!--Liste de AL-->
 
 <ion-list>
-    <ion-item class="row animate-repeat" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
-    ng-animate="'animate'" ng-repeat="item in list_AL | filter: search track by $index  " class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
+    <ion-item class="row " ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
+    ng-animate="'animate'" ng-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
 <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 <div class="col-5 AL_bar_color" style="background-color: #003DF5;"></div>
 <div class="col">
 <div class="row AL_bar">
 
-            <div class="col AL_type" >{{::item.Installation_technique}}</div>
+            <div class="col AL_type" >{{::item.Mnemo}}</div>
             <div class="col "><p class="AL_date">{{::item.date}}</p></div>
           <div class="col "><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-minus' : 'ion-plus'"></i></div>
 </div>
-<div class="row AL_row_text"><p id="AL_Message">{{::item.Libelle_information}}</p></div>
-<div class="row AL_row_state">Etat : {{::item.Value}}</div>
+<div class="row AL_row_text"><p id="AL_Message">{{::item.Libelle}}</p></div>
+<div class="row AL_row_state">Etat : {{::item.Actif}}</div>
+<div class="row AL_row_state">Ack : {{::item.Ack}}</div>
 <div class="row AL_row_btn">
     <div class="col "></div>
     <div class="col col-offset-10">

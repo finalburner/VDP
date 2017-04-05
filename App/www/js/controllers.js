@@ -13,10 +13,13 @@ angular.module('starter.controllers', ['chart.js','angularUUID2'])
 .service('sql_request',function(uuid2,$q,socket){
   var hash = uuid2.newguid();
   var data = undefined;
+
   this.get_data = function (query)
-  {  var promise = new Promise(function(resolve, reject) {
-     socket.emit('sql_query',{hash : hash , query : query, socketid: socket.sessionid});
-     socket.on('sql_answer', function(data){
+  {
+   var promise = new Promise(function(resolve, reject) {
+     socket.emit('Sql_Query',{hash : hash , query : query });
+     socket.on('Sql_Answer', function(data){
+      //  console.log(data)
      resolve(data);
 });
 });
@@ -24,15 +27,15 @@ return promise;
 };
 })
 
-.controller('AppCtrl', function( $rootScope, $scope, $ionicModal, $timeout, socket, $state,$ionicPopup,App_Info) {
-
-
+.controller('AppCtrl', function( $scope, $ionicModal, $timeout, socket, $state,App_Info) {
+socket.on('connect', function () {
+socket.emit('Client_Connected');
+});
   $scope.list_N1 = [
   {name : 'Synthèse', url: 'app.CTsyn'},
   {name :  'Status', url: 'app.CTsta'},
   {name :  'Synoptique Primaire', url: 'app.CTsynP'},
   {name :  'Historique', url: 'app.CThis'},
-  {name :  'Alarmes du CT', url: 'app.alarmes'},
   {name :  'Fiche identité', url: 'app.CTfic'},
   {name :  'Plans des équipements', url: 'app.CTpla'},
   {name :  'Documentation CT', url: 'app.CTdoc'},
@@ -42,6 +45,7 @@ return promise;
  $scope.auth = 0 ;
  $scope.sel = 0 ;
 
+  // socket.on('id', function(data){ $scope.clientid = data ; });
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -67,34 +71,35 @@ return promise;
           animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
           focusFirstInput: true
         });
-//Acces à la synthèse
-$scope.CT_N1 = function (name)
+
+   $scope.CT_N1 = function (name)
   {
+
     $state.go('app.CTsyn' , {CTname : name });
   };
-$scope.closeN1 = function(id) {
+
+ $scope.closeN1 = function(id) {
 sel = id ;
 menu_N1=!menu_N1;
-   };
 
-//Acces Modal Niveau1
-$scope.N1 = function(name) {
-          $rootScope.CT_selected = name;
+ };
+
+  $scope.N1 = function(name) {
           $scope.modalCtrl.show();
+          $scope.modalCtrl.name= name;
           $scope.modalCtrl.animation =  "slide-left-right";
-};
+        };
 
-$scope.N1_close = function(name) {
-$scope.modalCtrl.hide();
-};
-
-// Triggered in the login modal to close it
-$scope.closeLogin = function() {
+    $scope.N1_close = function(name) {
+                $scope.modalCtrl.hide();
+              };
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
     $scope.modalCnx.hide();
   };
 
-// Open the login modal
-$scope.login = function() {
+  // Open the login modal
+  $scope.login = function() {
     $scope.modalCnx.show();
   };
 
@@ -139,12 +144,12 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 })
 
 
-.controller('CTctrl', function($rootScope,$scope,socket,$ionicLoading,sql_request) {
-
+.controller('CTctrl', function($scope,socket,$ionicLoading,sql_request) {
   $ionicLoading.show({
     content: 'Loading',
     animation: 'fade-in',
     showBackdrop: true,
+    duration: 500,
     maxWidth: 200,
     showDelay: 0
   });
@@ -172,9 +177,10 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     //         color: '#003DF5' // Bleue
     //       }
     //   ];
-     sql_request.get_data('Select distinct localisation from VDP.dbo.SUPERVISION')
+     sql_request.get_data('Select * distinct localisation from VDP.dbo.SUPERVISION')
      .then( function(data){
        $scope.list_CT= data.reply ;
+       console.log(data)
        $ionicLoading.hide();
       //  console.dir(data.reply);
      });
@@ -189,13 +195,12 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 
   })
 
-<<<<<<< HEAD
   .controller('AdminCtrl', function($scope,socket,$ionicLoading) {
      $ionicLoading.show({
        content: 'Loading',
        animation: 'fade-in',
        showBackdrop: true,
-       duration: 1000,
+       duration : 1000,
        maxWidth: 200,
        showDelay: 0
      });
@@ -208,107 +213,12 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
           });
 
    })
-
-.controller('ALctrl', function($rootScope, $scope,socket,$ionicLoading) {
-     $ionicLoading.show({
-       content: 'Loading',
-       animation: 'fade-in',
-       showBackdrop: true,
-       duration: 1000,
-       maxWidth: 200,
-       showDelay: 0
-     });
-     if($rootScope.CT_selected == undefined) // Alarmes de tous les CTS
-     {
-       socket.emit('AL_Query','Data');
-       socket.on('AL_reply', function(data){
-        //  $scope.list_AL= data.reply ;
-         $ionicLoading.hide();
-        console.dir(data);
-       });
-     }
-     else
-     {
-        console.log('path2')
-     var request = {
-       Socket_id : $rootScope.Socket_id,
-       Query : $rootScope.CT_selected
-     }
-
-     socket.emit('AL_CT_Query',request);
-     socket.on('AL_CT_Answer', function(data){
-      //  $scope.list_AL= data.reply ;
-       $ionicLoading.hide();
-      console.dir(data);
-     })
-    }
-
-    })
-=======
-
-  .controller('ALctrl', function($scope,socket,$ionicLoading) {
-  //  $ionicLoading.show({
-  //    content: 'Loading',
-  //    animation: 'fade-in',
-  //    showBackdrop: true,
-  //    maxWidth: 200,
-  //    showDelay: 0
-  //  });
->>>>>>> parent of 64f7ba1... Update 23 March
-   /*
-    * if given group is the selected group, deselect it
-    * else, select the given group
-    */
-    // var list_AL = [
-    // { type: 'AL 49850',
-    //   date : 'hh:mm:ss - dd/mm/yyy',
-    //   etat : 'Présente',
-    //   alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-    //     color: '#003DF5' // Bleue
-    // },
-    // { type: 'AL 49850',
-    //   date : 'hh:mm:ss - dd/mm/yyy',
-    //   Etat : 'Présente',
-    //   alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-    //     color: '#FF6633' //orange
-    // }];
-    // $scope.list_AL = list_AL;
-<<<<<<< HEAD
-
-
-    // $scope.expand_AL = function(item) {
-    //     if ($scope.isItemExpanded(item)) {
-    //       $scope.shownItem = null;
-    //     } else {
-    //       $scope.shownItem = item;
-    //     }
-    //   };
-    //   $scope.isItemExpanded = function(item) {
-    //     return $scope.shownItem === item;
-    //   };
-
-    // socket.emit('ListeAL');
-  //   socket.on('connect ', function(socket){
-  //
-  //  console.log("Connected : " + socket.id );
-  //    });
-  //
-  //   socket.on('OPC_Update', function(data){
-  // $ionicLoading.hide();
-  // //  $ionicLoading.hide();
-  // var i = Object.keys($scope.list_AL).length ;
-  //  data['id']= i ;
-  // //  list_AL[i]= data ;
-  //  $scope.list_AL[i] = data ;
-  // //  console.log(list_AL);
-  // //  console.log(data)
-  //    });
-  //   //  $scope.list_AL = list_AL;
-
-=======
- var list_AL = [];
-
-    $scope.expand_AL = function(item) {
+.controller('ALctrl', function($scope,socket,$ionicLoading,App_Info,$state) {
+var list_AL_Track = [];
+$scope.list_AL = []
+$scope.Synthese_PresentCount= 0
+$scope.Filter_Alm ;
+$scope.expand_AL = function(item) {
         if ($scope.isItemExpanded(item)) {
           $scope.shownItem = null;
         } else {
@@ -319,24 +229,79 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
         return $scope.shownItem === item;
       };
 
-    // socket.emit('ListeAL');
-    socket.on('connect ', function(socket){
-  //  $ionicLoading.hide();
-   console.log("Connected : " + socket.id );
-     });
+socket.on('OPC_General_Update', function(data){
+  console.log(data)
+  if (data.id == 'Synthese.PresentCount')
+  $scope.Synthese_PresentCount = data.value;
+});
 
-    socket.on('OPC_Update', function(data){
-  //  $ionicLoading.hide();
-  var i = Object.keys(list_AL).length ;
-   data['id']= i ;
-   list_AL[i]= data ;
-   $scope.list_AL = list_AL ;
-  //  console.log(list_AL);
-  //  console.log(data)
-     });
+//Changement du Nbr d'alarmes présentes
+$scope.$watch('Synthese_PresentCount', function(newValue, oldValue) {
+  //Demande mise à jour listes Alarmes
+socket.emit('AL_Query');
+
+$ionicLoading.show({
+content: 'Loading', animation: 'fade-in', showBackdrop: true,
+duration: 700, maxWidth: 200,  showDelay: 0
+});
+});
+// $ionicLoading.show({
+//      content: 'Loading', animation: 'fade-in', showBackdrop: false,
+//      duration: 500, maxWidth: 200,  showDelay: 0
+//    });
+    // var list_AL = [
+    // { type: 'AL 49850',
+    //   date : 'hh:mm:ss - dd/mm/yyy',
+    //   etat : 'Présente',
+    //   alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
+    //     color: '#003DF5' // Bleue
+    // },
+
+
+//Reception des Alarmes unitaires depuis OPC
+socket.on('AL_Answer',function(data){
+  if (list_AL_Track.length =='0')  // liste encore vide
+  {
+    console.log(data.Mnemo)
+    list_AL_Track.push(data.Mnemo);
+    $scope.list_AL.push(data);
+    console.log(list_AL_Track)
+ }
+ else
+ { console.log('path(2)')
+   var idx = list_AL_Track.indexOf(data.Mnemo); //Récupére la position de l'alarme depuis le trackeur du tableau (meme position pour le tableau des alarmes)
+  //  console.dir(data)
+  //  console.log(idx)
+  //  console.log(list_AL_Track)
+   if (idx != -1) { // si l'element existe, on peut connaitre sa position dans les deux tableaux
+    console.log(idx) ; // Log position tableau
+    list_AL_Track.splice(idx,1,data.Mnemo);
+    $scope.list_AL.splice(idx,1,data);
+    }
+    else
+{console.log('path(3)')
+  list_AL_Track.push(data.Mnemo);
+  $scope.list_AL.push(data);
+}
+ }
+
+  });
+
+
+    // socket.emit('ListeAL');
+  //
+  //   socket.on('OPC_Update', function(data){
+  //     $ionicLoading.hide();
+  // //  $ionicLoading.hide();
+  // var i = Object.keys($scope.list_AL).length ;
+  //  data['id']= i ;
+  // //  list_AL[i]= data ;
+  //  $scope.list_AL[i] = data ;
+  // //  console.log(list_AL);
+  // //  console.log(data)
+  //    });
     //  $scope.list_AL = list_AL;
     })
->>>>>>> parent of 64f7ba1... Update 23 March
 
 .controller('QrCtrl', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
            var vm = this;
