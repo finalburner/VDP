@@ -14,7 +14,7 @@
        Supervision STEGC
      </p></div>
 
-  <a ion-button menu-close nav-transition="none" ui-sref="app.CT" class="button button-dark button-clear row">
+  <a ion-button menu-close nav-transition="none" ui-sref="app.CT" ui-sref-opts="{reload: true}" class="button button-dark button-clear row">
     Synoptiques
   </a >
   <a  ion-button menu-close nav-transition="none" ui-sref="app.biblio"class="button button-dark button-clear row " >
@@ -23,7 +23,7 @@
   <a  ion-button menu-close ui-sref="app.rapport"class="button button-dark button-clear row">
      Qr Code
   </a >
-  <a  ion-button menu-close ui-sref="app.alarmes" ui-sref-opts="{ reload: true }" class="button button-dark button-clear row">
+  <a  ion-button menu-close ui-sref="app.alarmes" ng-click="JAL()" class="button button-dark button-clear row">
     Journal des alarmes
   </a >
   <a  ion-button menu-close ui-sref="app.admin" class="button button-dark button-clear row">

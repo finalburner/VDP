@@ -10,8 +10,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    // ioSocket: io.connect('http://80.14.220.219:3000')
-   ioSocket: io.connect('localhost:3000')
+    ioSocket: io.connect('http://80.14.220.219:3000')
+  //  ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
   return mySocket
@@ -19,17 +19,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
 
 .value('App_Info', {
 ID : 'null',
-OPC_Socket_ID : 'null'
+AL_10_Color : '#D500F9', //AL DefCom
+AL_3_Color : '#F44336', //AL Critique
+AL_2_Color : '#FF8F00', //AL Majeure
+AL_1_Color : '#2196F3', //AL Mineure
+AL_0_Color : '#07F900' //Aucune Alarme Présente
 })
 
-.service('App_Info_Ask' , function(socket, App_Info){
-  socket.emit('App_Info_Query');
-  console.log('App_Info_Query');
-
-  socket.on('App_Info_Answer',function(data){
-    App_Info.OPC_Socket_ID = data.OPC_Socket_ID ;
-  });
-})
+// .service('App_Info_Ask' , function(socket, App_Info){
+//   socket.emit('App_Info_Query');
+//   console.log('App_Info_Query');
+//
+//   socket.on('App_Info_Answer',function(data){
+//     App_Info.OPC_Socket_ID = data.OPC_Socket_ID ;
+//   });
+// })
 // .run(function($ionicPlatform, $ionicPopup, $cordovaNetwork) {
 //    $ionicPlatform.ready(function() {
 //       if ($cordovaNetwork.isOffline()) {
@@ -41,7 +45,17 @@ OPC_Socket_ID : 'null'
 //    });
 // })
 
-
+.config(function($provide) {
+  $provide.decorator('$state', function($delegate) {
+    var originalTransitionTo = $delegate.transitionTo;
+    $delegate.transitionTo = function(to, toParams, options) {
+      return originalTransitionTo(to, toParams, angular.extend({
+        reload: true
+      }, options));
+    };
+    return $delegate;
+  });
+})
 
 
 .run(function($ionicPlatform) {
@@ -61,8 +75,7 @@ OPC_Socket_ID : 'null'
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
-  $stateProvider
-
+$stateProvider
     .state('app', {
     url: '/app',
     abstract: true,
@@ -75,6 +88,7 @@ OPC_Socket_ID : 'null'
   .state('app.CT', {
     url: '/CT',
       authentificate: true,
+      cache:false,
     views: {
       'menuContent': {
         templateUrl: 'templates/N0/CT.html',
@@ -100,18 +114,23 @@ OPC_Socket_ID : 'null'
     views: {
       'menuContent': {
         templateUrl: 'templates/N0/carto.html',
-        controller: 'MapCtrl'
+        controller: 'CTctrl'
       }
     }
   })
 
   .state('app.alarmes', {
+      cache : false,
       url: '/alarmes',
       authentificate: true,
       views: {
         'menuContent': {
           templateUrl: 'templates/N0/alarmes.html',
-            controller: 'ALctrl'
+          controller: 'ALctrl'
+        //   onEnter: function(){
+        //   console.log('on Enter : ' + $rootScope.Selected_CT)
+        //   socket.emit('AL_Query', { Selected_CT : $rootScope.Selected_CT});
+        // }
         }
       }
     })
@@ -127,6 +146,7 @@ OPC_Socket_ID : 'null'
     })
     .state('app.admin', {
       url: '/admin',
+      cache:false,
       authentificate: true,
       views: {
         'menuContent': {
@@ -148,7 +168,8 @@ OPC_Socket_ID : 'null'
     })
 
     .state('app.CTsyn', {
-      url: '/syn/:CTname',
+      url: '/syn',
+      cache:false,
    authentificate: true,
       views: {
         'menuContent': {

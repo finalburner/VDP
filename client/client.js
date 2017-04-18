@@ -53,13 +53,7 @@ http.listen(3000, function(){
 // app.get('/', function(req, res){
 //   res.sendfile('index.html');
 // });
-function SQL_QUERY(query){
-sql.connect(config).then(function() {
-new sql.Request().query(query).then(function(recordset) {
-return recordset;
-}).catch(function(err) {
-console.log('SQL QUERY ERROR :'+ err + ':' + query)
-}); }); }
+
 
 io.on('connect', function(socket,$rootScope){
 
@@ -119,7 +113,7 @@ io.on('connect', function(socket,$rootScope){
    //data comming from App = { Socket_id: 'null', CT : 'null' }
    //supposing data = { Socket_id: 'null', CT : 'null', Answer : 'null', Error : ''  }
    console.log(data);
-   var query = "Select * from VDP.dbo.SUPERVISION Where localisation = \'" + data.Socket_id +  "' and Type= 'TA'" ;
+   var query = "Select * from VDP.dbo.SUPERVISION Where localisation = \'" + data.CT +  "' and Type= 'TA'" ;
    sql.connect(config).then(function() {
    new sql.Request().query(query).then(function(recordset) {
    var OPC_promise = new Promise(function(resolve, reject) {
@@ -135,19 +129,31 @@ io.on('connect', function(socket,$rootScope){
    });
 
 //Socket query on SQL Database based on hash UUID
-    socket.on('Sql_Query', function(data){
-      console.log(data)
-    var recordset = SQL_QUERY(data.query) ;
-    console.log(recordset)
-    socket.emit('Sql_Answer', { hash : data.hash , reply : recordset });
-  });
+// socket.on('Sql_Query', function(data){
+//     SQL_QUERY(data,socket) ;
+//   });
+
+//Requete d'un client donné de la liste des CT
+socket.on('CT_Query', function(){
+socket.to(OPC_Socket_ID).emit('CT_Query', {Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID })
+console.log('CT_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
+      });
+
+//Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
+socket.on('CT_Answer',function(data) {
+socket.to(data.Socket_ID).emit('CT_Answer', data) ;
+
+});
 
 //Requete d'un client donné de la liste des alarmes
 socket.on('AL_Query',function(data)
 {
-    socket.to(OPC_Socket_ID).emit('AL_Query',{ Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID})
-    console.log('Al_query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
+  var fdata = Object.assign({ OPC_Socket_ID : OPC_Socket_ID, Socket_ID: socket.id }, data);
+    socket.to(OPC_Socket_ID).emit('AL_Query', fdata )
+    console.log('Al_query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID + ' - Mode : ' + data.Mode)
   });
+
+
 
 //Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
 socket.on('AL_Answer',function(data) {
@@ -161,6 +167,38 @@ socket.on('OPC_General_Update',function(data) {
   socket.to('Clients_Room').emit('OPC_General_Update',data);
 });
 
+//Requete d'un client donné de la liste des circuits d'un CT
+socket.on('CTA_Query', function(data){
+socket.to(OPC_Socket_ID).emit('CTA_Query', {Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID , Selected_CT : data.Selected_CT })
+console.log('CTA_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
+      });
+
+// Réponse du client OPC en circuit CTA
+socket.on('CTA_Answer', function(data){
+socket.to(data.Socket_ID).emit('CTA_Answer', data )
+console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+  });
+
+//Mise à jour OPC des températures ambiantes
+  socket.on('CTA_Answer_Update', function(data){
+  socket.to(data.Socket_ID).emit('CTA_Answer_Update', data )
+  console.log('CTA_Answer_Update redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+    });
+
+//Requete des consignes d'un Grp fonctionnel d'un CT
+   socket.on('Cons_Query', function(data){
+   data.Socket_ID = socket.id ;
+   data.OPC_Socket_ID = OPC_Socket_ID;
+   socket.to(OPC_Socket_ID).emit('Cons_Query',  data )
+   console.log('Consigne Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
+   });
+ //Reponse OPC pour les consignes
+  socket.on('Cons_Answer', function(data){
+    // console.log(data)
+    // console.log(data.Socket_ID)
+    socket.to(data.Socket_ID).emit('Cons_Answer', data )
+   console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+      });
 
 
   });

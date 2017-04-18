@@ -6,10 +6,10 @@
           </ion-nav-buttons>
   </ion-nav-bar>
 
-  <ion-content style="background: #e8ebf1;" class="padding">
+  <ion-content style="background: #e8ebf1;" class="padding" >
           <div class="card">
               <div class="item">
-                  <button class="button button-block button-positive" ng-click="vm.scan()">
+                  <button class="button button-block button-positive" ng-click="scan()">
                       <i class="icon ion-qr-scanner"></i>
                       Scan Now
                   </button>
@@ -21,7 +21,7 @@
                   Scan Results
               </div>
               <div class="item item-text-wrap">
-                  {{vm.scanResults}}
+                  {{scanResults}}
               </div>
           </div>
       </ion-content>

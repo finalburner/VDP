@@ -15,7 +15,7 @@
   <div class="recherche">
    <label class="item item-input search-row ">
    <i class="icon ion-search placeholder-icon"></i>
-   <input type="text" placeholder="Search" ng-model="search">
+   <input type="text" placeholder="Recherche" ng-model="search">
  </label></div>
 
 
@@ -27,21 +27,21 @@
 <!--Liste de CT-->
     <ion-list >
         <!-- <a class = "item row CT_row" on-hold="N1(item.name)"  ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" > -->
-         <a class = "item row CT_row" on-hold="N1(item.name)" ng-click="CT_N1(item.name)" ng-repeat="item in list_CT | filter:searchText track by item.name+$index "  ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
+         <a class = "item row CT_row" on-hold="N1_open(item.CT,item.AL_Color)" ng-click="CT_N1(item.CT)" ng-repeat="item in list_CT | filter: search track by item.CT+$index"  ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
 
             <!--div style="background-color: #C2A5A5 !important"-->
-          <div class ="col-5 CT_bar_color" style="background-color:{{item.color}};"></div>
+          <div class ="col-5 CT_bar_color" style="background-color:{{::item.AL_Color}};"></div>
 
         <div class= "col-90" >
             <div class= "row CT_tit" >
- {{::item.localisation}}</div>
+ {{::item.CT}}</div>
             <div class= "row CT_loc" >
-            {{::item.addr}}</div>
+            {{::item.ADR}}</div>
             <div class= "row CT_loc" >
-            {{::item.pow}}</div>
+            {{::CT_pow}}</div>
 
             <div class= "row CT_ala" >
-<p id="CT_ala">{{::item.alarm}}   </p> </div>
+<p id="CT_ala">{{::CT_alm}}   </p> </div>
     </div>
   </a>
       </ion-list>

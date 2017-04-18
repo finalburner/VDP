@@ -95,7 +95,7 @@ vertical-align:middle;
 }
 .N1_menu_color
 {
-  background-color: #cc0000 !important;
+  /*background-color: #cc0000 !important;*/
   width:7px;
 }
 .N1_row
@@ -158,7 +158,7 @@ vertical-align:middle;
 }
 .AL_bar_color
 {
-  height: 160px ;
+  height: 190px ;
   max-width: 5px;
   width : 5px;
 }

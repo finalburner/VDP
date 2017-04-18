@@ -1,4 +1,4 @@
-<ion-view view-title="{{CTname}}" > <!-- Laisser le titre vide -->
+<ion-view view-title="" > <!-- Laisser le titre vide -->
 
   <ion-nav-bar class="bar-light">
     <ion-nav-back-button class="button-clear">
@@ -13,13 +13,14 @@
       <div class="recherche">
       <label class="item item-input row">
       <i class="icon ion-search placeholder-icon"></i>
-      <input type="text" placeholder="Search">
+      <input type="text" placeholder="Search" ng-model="search">
       </label></div>
+      <p ng-if="List_CTA.length == 0" style="text-align: center;margin-top:100px;font-size:18px">Pas de Circuit pour l'instant </p>
 <!-- Infinite SCROLL Directive Injected HERE - No remarqble performance -->
       <!-- <ion-list infinite-scroll="addMoreItems()" infinite-scroll-distance="2" > -->
       <ion-list>
           <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive'"
-           ng-repeat="item in list_CTA track by $index"
+           ng-repeat="item in List_CTA | filter: search "
 
          class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
 
@@ -27,34 +28,34 @@
 <!-- Row 1 -->
       <div class="row CTA_bar">
 
-                  <div class="col CTA_type">{{item.type}}</div>
-                  <div class="col "><p class="CTA_date">{{item.date}}</p></div>
+                  <div class="col CTA_type">{{::item.Libelle_groupe}}</div>
+                  <div class="col "><p class="CTA_date">{{::item.date}}</p></div>
       </div>
 <!-- Row 2 -->
-      <div class="row CTA_row_Tmp">
+      <div class="row CTA_row_Tmp" >
 
-<div class = "col">
+<div class = "col" ng-if="item.TEMP3_DEPAR" >
 <div class = "row">T° de départ</div>
 <div class = "row">
-  <p class= "CTA_Tmp" >{{item.tmp1}}</p><div class="icon ion-arrow-graph-up-right"> </div>
+  <p class= "CTA_Tmp" >{{item.TEMP3_DEPAR}}</p><div class="icon ion-arrow-graph-up-right"> </div>
 </div>
 </div>
 
-<div class = "col">
+<div class = "col" ng-if="item.TEMP3_AMBIA">
   <div class = "row">T° ambiante</div>
   <div class = "row">
 
-    <p class= "CTA_Tmp">{{item.tmp2}}</p><div class="icon ion-arrow-graph-up-right"> </div>
+    <p class= "CTA_Tmp">{{item.TEMP3_AMBIA}}</p><div class="icon ion-arrow-graph-up-right"> </div>
   </div>
 </div>
       </div>
 <!-- Row 3 : Chart -->
-  <div class="row CTA_row_chart">
-        <div class="CTA_chart">
+  <!-- <div class="row CTA_row_chart">
+        <div class="CTA_chart"> -->
  <!-- item item-text-wrap -->
-<canvas id="line" class="chart chart-line ng-isolate-scope" chart-data=item.chart chart-labels="labels" chart-options="options" width="200" height="130" style="display: block; width: 200px; height: 130px;" chart-dataset-override="datasetOverride" ></canvas>
+<!-- <canvas id="line" class="chart chart-line ng-isolate-scope" chart-data=item.chart chart-labels="labels" chart-options="options" width="200" height="130" style="display: block; width: 200px; height: 130px;" chart-dataset-override="datasetOverride" ></canvas>
           </div>
-        </div>
+        </div> -->
 
 <!-- Row 4 : Btn-->
 
