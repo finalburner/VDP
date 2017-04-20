@@ -28,11 +28,13 @@
 <!--Liste de AL-->
 
 <ion-list>
-    <ion-item class="row " ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
-    ng-animate="'animate'" ng-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
-<!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
+    <!-- <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
+    ng-animate="'animate'" collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}"> -->
+    <ion-item class="row AL_Item" ng-class="isItemExpanded(item.Mnemo) ? 'expand-item active' : 'expand-item inactive'"
+  collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item.Mnemo)"   >
+
 <div class="col-5 AL_bar_color" style="background-color: {{::item.AL_Color}}"></div>
-<div class="col">
+<div class="col AL_col">
 <div class="row AL_bar">
 
             <div class="col AL_type" >{{::item.Mnemo}}</div>
@@ -40,18 +42,14 @@
           <div class="col "><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-minus' : 'ion-plus'"></i></div>
 </div>
 <div class="row AL_row_text"><p id="AL_Message">{{::item.Libelle}}</p></div>
-<div class="row AL_row_state">Etat : {{item.Actif}}</div>
-<div class="row AL_row_state">Ack : {{item.Ack}}</div>
+<div class="row AL_row_state"><p>Etat : {{::item.Actif}}</p></div>
+<div class="row AL_row_state"><p>Ack : {{::item.Ack}}</p></div>
 <div class="row AL_row_btn">
-    <div class="col "></div>
-    <div class="col col-offset-10">
-<button class="button button-small button-light" >Créer un Avis</boutton>
-  <button class="button button-small button-light" ng-click ="ACK(item)">Acquitter</boutton>
-    <button class="button button-small button-positive" >Voir</boutton>
+<button class="button button-avis" ><p>Créer un Avis</p></button>
+  <button class="button button-light" ng-click ="ACK(item)"><p>Acquitter</p></button>
+    <button class="button button-balanced" ><p>Voir</p></button>
 </div>
 </div>
-</div>
-
           </ion-item>
 </ion-list>
 

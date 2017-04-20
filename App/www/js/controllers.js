@@ -29,7 +29,7 @@ angular.module('starter.controllers', ['chart.js','angularUUID2','ngCordova'])
 $scope.list_Cons = []
 socket.emit('Cons_Query', { Mode : "Read"});
 socket.on('Cons_Answer', function(data) {
-console.log(data)
+// console.log(data)
 if(data.Type == "TC")
 {
 if (data.Value) // true data
@@ -255,15 +255,17 @@ $scope.ACK = function(item)
   console.log({ Mode : 'Write' , Type : 'ACK', NodeId : item.NodeId })
 }
 
-$scope.expand_AL = function(item) {
-        if ($scope.isItemExpanded(item)) {
+$scope.expand_AL = function(Mnemo) {
+        if ($scope.isItemExpanded(Mnemo)) {
           $scope.shownItem = null;
         } else {
-          $scope.shownItem = item;
+          $scope.shownItem = Mnemo;
         }
       };
-      $scope.isItemExpanded = function(item) {
-        return $scope.shownItem === item;
+
+$scope.isItemExpanded = function(Mnemo) {
+  console.log("shownitem : " + $scope.shownItem)
+        return $scope.shownItem === Mnemo;
       };
 
 socket.on('OPC_General_Update', function(data){
@@ -297,11 +299,12 @@ console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
     // },
 
 //Reception des Alarmes unitaires depuis OPC
-socket.on('AL_Answer',function(data){
-if (!data.Mode)
+socket.on('AL_Answer', function(data){
+    console.log(data)
+if (!data.Mode) // Existence propriété Mode
   { // Arrivé des infos d'une alarmes
 
-  console.log(data)
+
   data.AL_Color = App_Info.AL_0_Color ; //applique la couleur CT de base
   if (data.Criticite == '1')  data.AL_Color = App_Info.AL_1_Color ; //applique la couleur CT mineure
   if (data.Criticite == '2')  data.AL_Color = App_Info.AL_2_Color ; //applique la couleur CT majeure
@@ -311,6 +314,8 @@ if (!data.Mode)
   if (data.Actif == false) data.Actif = "Disparue"
   if (data.Ack == true) data.Ack = "Acquittée"
   if (data.Ack == false) data.Ack = "Non Acquitée"
+
+
 //   if (list_AL_Track.length =='0')  // liste encore vide
 //   {
 //     list_AL_Track.push(data.Mnemo);
@@ -335,7 +340,6 @@ if (!data.Mode)
 //  }
 
 almIndex = $scope.list_AL.findIndex((obj => obj.Mnemo == data.Mnemo));
-console.log(almIndex)
 if (almIndex == -1 )  // -1
 $scope.list_AL.push(data);
 else
@@ -411,6 +415,9 @@ socket.emit('CTA_Query', { Selected_CT : $scope.Selected_CT} );
 
 socket.on('CTA_Answer',function(data){
 console.log(data)
+
+ctaIndex = $scope.list_CTA.findIndex((obj => obj.NodeId == data.NodeId));
+$scope.list_AL[almIndex].Ack = "Acquitée"
 $scope.List_CTA.push(data)  ;
 
 // console.log($scope.CTA_list[0].Libelle_groupe)

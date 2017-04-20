@@ -6,13 +6,13 @@ var opcua = require("node-opcua");
 var io = require('socket.io-client');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
-var endpointUrl = "opc.tcp://10.18.10.21:9080/CODRA/ComposerUAServer";
+var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 var ids ;
 var i = 0 ;
-var BATCH_MONITORING = 50 ;
+var BATCH_MONITORING = 1000 ;
 var WAIT = 100;
-var SELECT = 0;
+var SELECT = 3000;
 var Mnemo ;
 var list_AL;
 var socket = io.connect('http://localhost:3000', {reconnect: true, "connect timeout" : 2000});
@@ -126,11 +126,9 @@ if (data.Selected_CT == 'null' )
 console.log('No CT Selected')
 else {
 query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from VDP.dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
-// query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from VDP.dbo.SUPERVISION WHERE localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
   sql.connect(config).then(function() {
   new sql.Request().query(query).then(function(recordset) {
   recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
-  // console.log(recordset)
   if (recordset) {
     recordset.forEach(function(id){
     PT = id.Installation_technique;
@@ -148,7 +146,10 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
 
                 if (dataValue[0])
                  { // console.log(dataValue[0])
-                   if (dataValue[0].value)  id.TEMP3_AMBIA = dataValue[0].value.value
+                   if (dataValue[0].value)  {
+                     id.TEMP3_AMBIA = dataValue[0].value.value
+                     id.TEMP3_AMBIA_SRC = TEMP3_AMBIA
+                   }
 
  //Monitor TEMP3_AMBI
 // var monitem = the_subscription.monitor({
@@ -169,7 +170,10 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
 
                 if (dataValue[1])
                 { //console.log(dataValue[1])
-                  if (dataValue[1].value)    id.TEMP3_DEPAR = dataValue[1].value.value}
+                  if (dataValue[1].value)
+                  { id.TEMP3_DEPAR = dataValue[1].value.value}
+                    id.TEMP3_DEPAR_SRC = TEMP3_DEPAR
+                }
 
 // console.log(id)
 var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
@@ -218,12 +222,12 @@ console.log(new Date());
 socket.on('AL_Query', function (data){
 
  if(data.Mode == "Read") {
-  console.log('AL_Query : ' + data.Socket_ID) ;
+  // console.log('AL_Query : ' + data.Socket_ID) ;
   var AlmToRead = [] ;
   var query ;
-  console.dir(data)
+  // console.dir(data)
   if (data.Selected_CT == 'null' )
-  query = "Select TOP 300 * from VDP.dbo.SUPERVISION WHERE Type = 'TA'  "
+  query = "Select TOP 10 * from VDP.dbo.SUPERVISION WHERE Type = 'TA' and Metier = 'CVC' "
   else
   query = "Select * from VDP.dbo.SUPERVISION WHERE Type = 'TA' and localisation =\'" + data.Selected_CT +"\'"
 
@@ -460,22 +464,6 @@ var config = {
     }
 }
 
-function update(id,Mnemo,value) {
-
-    id.Value = value;
-    id.Mnemo = Mnemo;
-    //  var data = { var: row , id : Mnemo ,value : value }
-    socket.emit('OPC_Update',id);
-    // console.log(id);
-      };
-
-
-
-function update_sub_param(id) { //Mise à jour OPC paramètres globaux (Compteurs d'alarmes ... )
- // { id , adr , value}
-    socket.emit('OPC_General_Update',id);
-      };
-
 
 async.series([
 
@@ -490,7 +478,8 @@ async.series([
          //    .input('input_parameter', sql.Int, value)
           // .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
         //  .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TA\' ').then(function(recordset) {
-        .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
+        // .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
+          .query('select TOP '+ SELECT + ' * from VDP.dbo.SUPERVISION  ').then(function(recordset) {
         // .query('select * from VDP.dbo.SUPERVISION ').then(function(recordset) {
         //  ids= recordset;
 
@@ -571,7 +560,9 @@ async.series([
               //io.sockets.emit('Event',dataValue.value.value);
               if (dataValue.value != null )
               {id.value = dataValue.value.value;
-              update_sub_param(id) }
+              socket.emit('OPC_General_Update',id);
+
+             }
               //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
               });
 
@@ -668,24 +659,26 @@ async.series([
   ids.forEach(function(id){
   if  (i< BATCH_MONITORING) {
     var adr;
-              Mnemo = id.Metier.trim() + '_' + id.Installation_technique.trim();
-              Mnemo +=  '_' + id.NomGroupeFonctionnel.trim() + id.DesignGroupeFonctionnel.trim();
-              Mnemo +=  '_' + id.NomObjetFonctionnel.trim() + id.DesignObjetFonctionnel.trim() ;
-              Mnemo +=  '_' + id.Information.trim() ;
-              adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique.trim() ;
+              Mnemo = id.Metier + '_' + id.Installation_technique;
+              Mnemo +=  '_' + id.NomGroupeFonctionnel + id.DesignGroupeFonctionnel;
+              Mnemo +=  '_' + id.NomObjetFonctionnel + id.DesignObjetFonctionne ;
+              Mnemo +=  '_' + id.Information ;
+              adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique ;
               adr += '/Acquisition/' + Mnemo + '.Valeur';
+              // id.Mnemo = Mnemo;
               var nodeId = "ns=2;s=" + adr;
               var monitoredItem  = the_subscription.monitor({
                  nodeId: opcua.resolveNodeId(nodeId),
                  attributeId: opcua.AttributeIds.Value
-               },   {samplingInterval: 100,discardOldest: false,queueSize: 1 },
+               },   {samplingInterval: 1000, discardOldest: false,queueSize: 10 },
                  opcua.read_service.TimestampsToReturn.Both
                  );
 
               monitoredItem.on("changed",function(dataValue){
               //io.sockets.emit('Event',dataValue.value.value);
               if (dataValue.value != null )
-              update(id,Mnemo,dataValue.value.value);
+              id.Value = dataValue.value.value  ;
+              socket.emit('OPC_Update',id);
               //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
               });
           i++;

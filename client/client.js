@@ -103,7 +103,7 @@ io.on('connect', function(socket,$rootScope){
     //
     //  });
 
-    socket.on('OPC_Update', function(data){
+   socket.on('OPC_Update', function(data){
      console.log(data);
     //  socket.broadcast.emit('OPC_Update',data);
    });
@@ -194,9 +194,7 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
    });
  //Reponse OPC pour les consignes
   socket.on('Cons_Answer', function(data){
-    // console.log(data)
-    // console.log(data.Socket_ID)
-    socket.to(data.Socket_ID).emit('Cons_Answer', data )
+  socket.to(data.Socket_ID).emit('Cons_Answer', data )
    console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
       });
 

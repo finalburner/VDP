@@ -10,8 +10,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','n
 .factory('socket', function (socketFactory) {
   var mySocket = socketFactory({
     prefix: '',
-    ioSocket: io.connect('http://80.14.220.219:3000')
-  //  ioSocket: io.connect('localhost:3000')
+    // ioSocket: io.connect('http://80.14.220.219:3000')
+   ioSocket: io.connect('localhost:3000')
   });
   //mySocket.forward('temp');
   return mySocket
