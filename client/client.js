@@ -5,19 +5,6 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http);
 process.setMaxListeners(0);
 var OPC_Socket_ID ;
-var list_AL = [
-{ type: 'AL 49850',
-  date : 'hh:mm:ss - dd/mm/yyy',
-  etat : 'Présente',
-  alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-    color: '#003DF5' // Bleue
-},
-{ type: 'AL 49850',
-  date : 'hh:mm:ss - dd/mm/yyy',
-  Etat : 'Présente',
-  alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-    color: '#FF6633' //orange
-}];
 
 // SQL Srv
 var config = {

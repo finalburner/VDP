@@ -45,7 +45,7 @@ AL_0_Color : '#07F900' //Aucune Alarme Présente
 //    });
 // })
 
-.config(function($provide) {
+.config(function($provide) { // To comment
   $provide.decorator('$state', function($delegate) {
     var originalTransitionTo = $delegate.transitionTo;
     $delegate.transitionTo = function(to, toParams, options) {
@@ -108,6 +108,15 @@ $stateProvider
       }
     })
 
+  .state('app.Login', {
+      url: '/Login',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N0/CTi.html',
+          controller: 'CTctrl'
+        }
+      }
+    })
   .state('app.carto', {
     url: '/carto',
       authentificate: true,
@@ -264,4 +273,6 @@ $stateProvider
   // });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/CT');
-});
+})
+
+//

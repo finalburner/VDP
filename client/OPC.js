@@ -12,7 +12,7 @@ var ids ;
 var i = 0 ;
 var BATCH_MONITORING = 1000 ;
 var WAIT = 100;
-var SELECT = 3000;
+var SELECT = 0;
 var Mnemo ;
 var list_AL;
 var socket = io.connect('http://localhost:3000', {reconnect: true, "connect timeout" : 2000});
@@ -126,6 +126,7 @@ if (data.Selected_CT == 'null' )
 console.log('No CT Selected')
 else {
 query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from VDP.dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
+
   sql.connect(config).then(function() {
   new sql.Request().query(query).then(function(recordset) {
   recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
@@ -178,6 +179,7 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
 // console.log(id)
 var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
 socket.emit('CTA_Answer', Retour);
+console.log("CTA Emit ")
 
               }
             });
@@ -225,7 +227,7 @@ socket.on('AL_Query', function (data){
   // console.log('AL_Query : ' + data.Socket_ID) ;
   var AlmToRead = [] ;
   var query ;
-  // console.dir(data)
+  console.dir(data)
   if (data.Selected_CT == 'null' )
   query = "Select TOP 10 * from VDP.dbo.SUPERVISION WHERE Type = 'TA' and Metier = 'CVC' "
   else

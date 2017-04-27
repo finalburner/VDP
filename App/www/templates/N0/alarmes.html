@@ -2,36 +2,37 @@
 
   <ion-nav-bar class="bar-light">
           <ion-nav-buttons side="left">
-                  <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
+                  <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
           </ion-nav-buttons>
   </ion-nav-bar>
 
 <ion-content >
 <!--Barre de recherche-->
-  <div class="recherche col">
-<label class="item item-input row ">
-<i class="icon ion-search placeholder-icon"></i>
-<input type="text" placeholder="Recherche" ng-model="search">
-</label>
+<div class="recherche">
+ <label class="item item-input search-row ">
+ <i class="icon ion-search placeholder-icon"></i>
+ <input type="text" placeholder="Recherche" ng-model="search">
+</label></div>
+
 
 <!--Bouton CT - Intervention-->
-        <div class="item button-bar recherche row">
-     <a class="button" ng-click="Filter_Alm = { Actif : 'true' } ">En cours</a>
+        <div class="item button-bar row">
+     <a class="button btn_CT" ng-click="Filter_Alm = { Actif : 'true' } ">En cours</a>
       <!-- <select class="button" >
             <option>Blue</option>
             <option selected>Green</option>
             <option>Red</option>
     </select> -->
-          <a class="button" ng-click="Filter_Alm = '' ">Toutes</a>
-        </div>
+          <a class="button btn_Int" ng-click="Filter_Alm = '' ">Toutes</a>
+        <!-- </div> -->
   </div>
 <!--Liste de AL-->
 
 <ion-list>
     <!-- <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
     ng-animate="'animate'" collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}"> -->
-    <ion-item class="row AL_Item" ng-class="isItemExpanded(item.Mnemo) ? 'expand-item active' : 'expand-item inactive'"
-  collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item.Mnemo)"   >
+    <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
+  ng-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   >
 
 <div class="col-5 AL_bar_color" style="background-color: {{::item.AL_Color}}"></div>
 <div class="col AL_col">
@@ -39,15 +40,15 @@
 
             <div class="col AL_type" >{{::item.Mnemo}}</div>
             <div class="col "><p class="AL_date">{{::item.date}}</p></div>
-          <div class="col "><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-minus' : 'ion-plus'"></i></div>
+          <div class="col col_arrow"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-down' : 'ion-chevron-down'"></i></div>
 </div>
 <div class="row AL_row_text"><p id="AL_Message">{{::item.Libelle}}</p></div>
-<div class="row AL_row_state"><p>Etat : {{::item.Actif}}</p></div>
-<div class="row AL_row_state"><p>Ack : {{::item.Ack}}</p></div>
+<div class="row AL_row_state">Etat : {{::item.Actif}}</div>
+<div class="row AL_row_state">Ack : {{::item.Ack}}</div>
 <div class="row AL_row_btn">
-<button class="button button-avis" ><p>Créer un Avis</p></button>
-  <button class="button button-light" ng-click ="ACK(item)"><p>Acquitter</p></button>
-    <button class="button button-balanced" ><p>Voir</p></button>
+<button class="button button-avis" >Créer un Avis</button>
+<button class="button button-ack" ng-click ="ACK(item)">Acquitter</button>
+  <button class="button button-voir" >Voir</button>
 </div>
 </div>
           </ion-item>

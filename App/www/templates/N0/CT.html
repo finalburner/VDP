@@ -2,7 +2,7 @@
 
   <ion-nav-bar class="bar-light">
           <ion-nav-buttons side="left">
-                  <button class="button button-icon button-clear button-positive ion-navicon" menu-toggle="left"></button>
+                  <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
           </ion-nav-buttons>
           <ion-nav-buttons side="right">
                    <a ion-button nav-transition="none" ui-sref="app.carto" class="button button-icon ion-ios-location" >  </a >
@@ -21,8 +21,8 @@
 
   <!--Bouton CT - Intervention-->
           <div class="item button-bar row">
-            <a class="button" nav-transition="none" ui-sref="app.CT" >Centres Thermiques</a>
-            <a class="button" nav-transition="none" ui-sref="app.CTi" >Les interventions</a>
+            <a class="button btn_CT" nav-transition="none" ui-sref="app.CT" >Centres Thermiques</a>
+            <a class="button btn_Int" nav-transition="none" ui-sref="app.CTi" >Les interventions</a>
           </div>
 <!--Liste de CT-->
     <ion-list >
@@ -32,16 +32,16 @@
             <!--div style="background-color: #C2A5A5 !important"-->
           <div class ="col-5 CT_bar_color" style="background-color:{{::item.AL_Color}};"></div>
 
-        <div class= "col-90" >
+        <div class= "col col_CT" >
             <div class= "row CT_tit" >
- {{::item.CT}}</div>
+           <p class = "CT_tit_p" >{{::item.CT}}</p></div>
             <div class= "row CT_loc" >
-            {{::item.ADR}}</div>
-            <div class= "row CT_loc" >
-            {{::CT_pow}}</div>
+             <p class = "CT_loc_p">{{::item.ADR}} </p></div>
+            <div class= "row CT_pow" >
+           <p class = "CT_pow_p">  {{::CT_pow}} </p></div>
 
             <div class= "row CT_ala" >
-<p id="CT_ala">{{::CT_alm}}   </p> </div>
+<p  class = "CT_alm_p">{{::CT_alm}}   </p> </div>
     </div>
   </a>
       </ion-list>

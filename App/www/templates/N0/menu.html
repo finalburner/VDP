@@ -9,40 +9,45 @@
 <div class="Bandeau row">
 </div>
 <div class="Menu" >
-  <div class="row ">
-     <p class="titre">
-       Supervision STEGC
-     </p></div>
 
-  <a ion-button menu-close nav-transition="none" ui-sref="app.CT" ui-sref-opts="{reload: true}" class="button button-dark button-clear row">
-    Synoptiques
-  </a >
-  <a  ion-button menu-close nav-transition="none" ui-sref="app.biblio"class="button button-dark button-clear row " >
-    Bibliothèque
-  </a >
-  <a  ion-button menu-close ui-sref="app.rapport"class="button button-dark button-clear row">
-     Qr Code
-  </a >
-  <a  ion-button menu-close ui-sref="app.alarmes" ng-click="JAL()" class="button button-dark button-clear row">
-    Journal des alarmes
-  </a >
-  <a  ion-button menu-close ui-sref="app.admin" class="button button-dark button-clear row">
-    Administration
-  </a >
-  <div class="row" >
-  <h5> {{clientid}} - {{auth}} </h5>
+  <div class="row Titre_Sup">Supervision STEGC</div>
+
+  <div class="row Menu_item_row">
+  <a ion-button menu-close nav-transition="none" ui-sref="app.CT"
+   class="button button-dark button-clear Titre2">Synoptiques</a>
+  </div>
+
+   <div class="row Menu_item_row">
+  <a  ion-button menu-close nav-transition="none" ui-sref="app.biblio"
+  class="button button-dark button-clear Titre2">Bibliothèque</a>
+  </div>
+
+  <div class="row Menu_item_row">
+  <a  ion-button menu-close ui-sref="app.rapport"
+  class="button button-dark button-clear Titre2">Qr Code</a></div>
+
+  <div class="row Menu_item_row">
+  <a  ion-button menu-close ui-sref="app.alarmes" ng-click="JAL()"
+  class="button button-dark button-clear Titre2">Journal des alarmes</a>
+</div>
+
+<div class="row Menu_item_row">
+  <a  ion-button menu-close ui-sref="app.admin"
+   class="button button-dark button-clear Titre2 ">Administration</a>
+</div>
+
+  <div class="row Menu_item_row User" >
+   {{clientid}} - {{auth}}
   </div>
   <div class="row">
-    <button class="button button-light button-block" ng-hide='auth' ng-click="login()">
+    <button menu-close class="button button-light button-block button-cnx" ng-hide='auth' ng-click="login()">
   Connexion
 </button>
- <button class="button button-light button-block" ng-show='auth' ng-click="unlog()">
+ <button menu-close class="button button-light button-block button-cnx" ng-show='auth' ng-click="unlog()">
   Déconnexion
 </button>
-{{isOnline}}
   </div>
-  <div class="row">
-  </div>
+
 </div>
     <!--ion-content>
       <ion-list>

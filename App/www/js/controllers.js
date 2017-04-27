@@ -55,10 +55,32 @@ socket.emit('Cons_Query', item );
    })
 
 .controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, socket, $state,App_Info) {
-  $rootScope.Selected_CT = 'null';
-  $scope.Unselect_CT = function(){
-      $rootScope.Selected_CT = 'null';
-    }
+  //
+  // $scope.username = AuthService.username();
+  // $scope.$on(AUTH_EVENTS.notAuthorized, function(event) {
+  //   var alertPopup = $ionicPopup.alert({
+  //     title: 'Unauthorized!',
+  //     template: 'You are not allowed to access this resource.'
+  //   });
+  // });
+  //
+  // $scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
+  //   AuthService.logout();
+  //   $state.go('login');
+  //   var alertPopup = $ionicPopup.alert({
+  //     title: 'Session Lost!',
+  //     template: 'Sorry, You have to login again.'
+  //   });
+  // });
+  //
+  // $scope.setCurrentUsername = function(name) {
+  //   $scope.username = name;
+  // };
+  //
+  // $rootScope.Selected_CT = 'null';
+  // $scope.Unselect_CT = function(){
+  //     $rootScope.Selected_CT = 'null';
+  //   }
 
 socket.on('connect', function () {
 socket.emit('Client_Connected');
@@ -246,26 +268,27 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 $scope.Selected_CT = $rootScope.Selected_CT ;
 var list_AL_Track = [];
 $scope.list_AL = []
-$scope.Synthese_PresentCount= 0
+$scope.Synthese_PresentCount= 0 ;
 $scope.Filter_Alm ;
 
 $scope.ACK = function(item)
 {
+  // console.log(item)
   socket.emit('AL_Query', { Mode : 'Write' , Type : 'ACK', NodeId : item.NodeId });
-  console.log({ Mode : 'Write' , Type : 'ACK', NodeId : item.NodeId })
+  // console.log({ Mode : 'Write' , Type : 'ACK', NodeId : item.NodeId })
 }
 
-$scope.expand_AL = function(Mnemo) {
-        if ($scope.isItemExpanded(Mnemo)) {
+$scope.expand_AL = function(item) {
+        if ($scope.isItemExpanded(item)) {
           $scope.shownItem = null;
         } else {
-          $scope.shownItem = Mnemo;
+          $scope.shownItem = item.Mnemo;
         }
       };
 
-$scope.isItemExpanded = function(Mnemo) {
-  console.log("shownitem : " + $scope.shownItem)
-        return $scope.shownItem === Mnemo;
+$scope.isItemExpanded = function(item) {
+  // console.log("shownitem : " + $scope.shownItem)
+        return $scope.shownItem === item.Mnemo;
       };
 
 socket.on('OPC_General_Update', function(data){
@@ -353,6 +376,9 @@ if (data.Mode && data.Mode =="Write")
 almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
 $scope.list_AL[almIndex].Ack = "Acquitée"
 
+almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
+if (almIndex != -1 )  // -1
+$scope.list_AL[almIndex].Ack = "Acquitée"
 //Console object again.
 // console.log("After update: ", $scope.list_AL[almIndex])
 
@@ -398,8 +424,11 @@ $scope.list_AL[almIndex].Ack = "Acquitée"
        })
 
 .controller('CTActrl', function($rootScope,$scope,socket) {
+
 $scope.List_CTA = []
+
 $scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
+
 $scope.expand_AL = function(item) {
           if ($scope.isItemExpanded(item)) {
             $scope.shownItem = null;
@@ -416,8 +445,8 @@ socket.emit('CTA_Query', { Selected_CT : $scope.Selected_CT} );
 socket.on('CTA_Answer',function(data){
 console.log(data)
 
-ctaIndex = $scope.list_CTA.findIndex((obj => obj.NodeId == data.NodeId));
-$scope.list_AL[almIndex].Ack = "Acquitée"
+ctaIndex = $scope.List_CTA.findIndex((obj => obj.DesignGroupeFonctionnel== data.DesignGroupeFonctionnel));
+$scope.List_CTA[ctaIndex] = data ;
 $scope.List_CTA.push(data)  ;
 
 // console.log($scope.CTA_list[0].Libelle_groupe)

@@ -3998,7 +3998,8 @@ a.subdued {
     display: block;
     position: absolute;
     top: 0;
-    right: 0;
+    font-family: "Roboto" ;
+    right: 0px;
     left: 0;
     z-index: 0;
     overflow: hidden;
@@ -4008,7 +4009,7 @@ a.subdued {
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 44px; }
     .bar .title.title-left {
@@ -4068,7 +4069,7 @@ a.subdued {
   .bar .buttons span {
     display: inline-block; }
   .bar .buttons-left span {
-    margin-right: 5px;
+    margin-right: 0px;
     display: inherit; }
   .bar .buttons-right span {
     margin-left: 5px;
@@ -4090,8 +4091,11 @@ a.subdued {
   font-size: 24px; }
 
 .platform-android .bar .title {
-  font-size: 19px;
-  line-height: 44px; }
+  font-size: 16px;
+  font-family: "Roboto";
+  line-height: 44px;
+  color : #315286 ;
+}
 
 .bar-light .button {
   border-color: #ddd;
@@ -4108,7 +4112,7 @@ a.subdued {
     background: none;
     box-shadow: none;
     color: #444;
-    font-size: 17px; }
+    font-size: 14px; }
   .bar-light .button.button-icon {
     border-color: transparent;
     background: none; }
@@ -7737,7 +7741,7 @@ input[type="color"] {
   display: block;
   padding-top: 2px;
   padding-left: 0;
-  height: 34px;
+  height: 40px;
   color: #111;
   vertical-align: middle;
   font-size: 14px;
@@ -8571,22 +8575,24 @@ progress {
  * --------------------------------------------------
  */
 .button {
-  border-color: transparent;
+  border-color: #f6f6f6;
   background-color: #f8f8f8;
-  color: #444;
+  /*color: #444;*/
   position: relative;
   display: inline-block;
   margin: 0;
   padding: 0 12px;
-  min-width: 52px;
-  min-height: 47px;
-  border-width: 1px;
+  /*min-width: 52px;
+  min-height: 47px;*/
+  /*border-width: 1px;*/
   border-style: solid;
-  border-radius: 4px;
+  /*border-radius: 4px;*/
   vertical-align: top;
   text-align: center;
   text-overflow: ellipsis;
-  font-size: 16px;
+  font-size: 12px;
+  font-weight: bold ;
+  font-family : "Roboto" ;
   line-height: 42px;
   cursor: pointer; }
   .button:hover {
