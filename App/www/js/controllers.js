@@ -1,5 +1,18 @@
 angular.module('starter.controllers', ['chart.js','angularUUID2','ngCordova'])
 
+.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+})
 // .run(function($rootScope) {
 //
 //       $rootScope.user = {
@@ -25,25 +38,27 @@ angular.module('starter.controllers', ['chart.js','angularUUID2','ngCordova'])
 // return promise;
 // };
 // })
-.controller('AdminCtrl', function($scope,socket,$ionicLoading) {
+.controller('AdminCtrl', function($scope, socket, $ionicLoading) {
+
+$scope.Validate_Item = '' ;
 $scope.list_Cons = []
 socket.emit('Cons_Query', { Mode : "Read"});
+
 socket.on('Cons_Answer', function(data) {
 // console.log(data)
-if(data.Type == "TC")
-{
-if (data.Value) // true data
-data.Etat = data.TOR_CodeEtat1;
-else data.Etat = data.TOR_CodeEtat0;
-}
-
-
+if(data.Value.toString().length >= 6)
+data.Value  = Math.round(data.Value).toFixed(2);
 ConsIndex = $scope.list_Cons.findIndex((obj => obj.Mnemo == data.Mnemo));
 if (ConsIndex == -1 )  // -1
 $scope.list_Cons.push(data);
 else
 $scope.list_Cons[ConsIndex] = data ;
 });
+
+// $scope.Validate(item)
+// {
+//   $scope.Validate_Item = item.Mnemo;
+// }
 
 $scope.Write= function (item)
 {
@@ -52,9 +67,60 @@ item.Mode = "Write";
 socket.emit('Cons_Query', item );
 }
 
+$scope.Analog_Change = function(item)
+{
+  if(item.Value != item.Local_Value)
+{// console.log(item);
+item.Mode = "Write";
+socket.emit('Cons_Query', item );
+}};
+
    })
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, socket, $state,App_Info) {
+.controller('ConCtrl', function($scope, socket, $ionicLoading, $rootScope,$state) {
+
+  //  $scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
+   $scope.Selected_NomGrp = $rootScope.Selected_NomGrp ; // Nom Groupe selectionné
+   $scope.Selected_Grp = $rootScope.Selected_Grp ; //Grp selectionné
+   $scope.Validate_Item = '' ;
+   $scope.list_Cons = [] ;
+  // if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
+  if(!$scope.Selected_NomGrp || !$scope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
+   socket.emit('Cons_Query', { Mode : "Read" , Selected_Grp : $rootScope.Selected_Grp , Selected_CT :$rootScope.Selected_CT });
+   socket.on('Cons_Answer', function(data) {
+   console.log(data)
+   if(data.Value.toString().length >= 6)
+   data.Value  = Math.round(data.Value).toFixed(2);
+   ConsIndex = $scope.list_Cons.findIndex((obj => obj.Mnemo == data.Mnemo));
+   if (ConsIndex == -1 )  // -1
+   $scope.list_Cons.push(data);
+   else
+   $scope.list_Cons[ConsIndex] = data ;
+   });
+
+   // $scope.Validate(item)
+   // {
+   //   $scope.Validate_Item = item.Mnemo;
+   // }
+
+   $scope.Write= function (item)
+   {
+   // console.log(item)
+   item.Mode = "Write";
+   socket.emit('Cons_Query', item );
+   }
+
+   $scope.Analog_Change = function(item)
+   {
+     if(item.Value != item.Local_Value)
+   {// console.log(item);
+   item.Mode = "Write";
+   socket.emit('Cons_Query', item );
+   }};
+
+      })
+
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, socket, $state, App_Info, ConnectivityMonitor, Notif) {
   //
   // $scope.username = AuthService.username();
   // $scope.$on(AUTH_EVENTS.notAuthorized, function(event) {
@@ -81,21 +147,26 @@ socket.emit('Cons_Query', item );
   // $scope.Unselect_CT = function(){
   //     $rootScope.Selected_CT = 'null';
   //   }
-
+ConnectivityMonitor.startWatching();
 socket.on('connect', function () {
 socket.emit('Client_Connected');
+Notif.Show("Connecté");
+
 });
-  $scope.list_N1 = [
+  $scope.list_N1 = [];
+  $scope.list_N1.global = [
   {name : 'Synthèse', url: 'app.CTsyn'},
-  {name :  'Status', url: 'app.CTsta'},
-  {name :  'Synoptique Primaire', url: 'app.CTsynP'},
-  {name :  'Historique', url: 'app.CThis'},
+  {name :  'Etats', url: 'app.CTsta'}, //status anciennement
+  {name :  'Historique', url: 'app.CThis'}
+];
+ $scope.list_N1.local = [
   {name :  'Fiche identité', url: 'app.CTfic'},
   {name :  'Alarmes du CT', url: 'app.alarmes'},
   {name :  'Plans des équipements', url: 'app.CTpla'},
   {name :  'Documentation CT', url: 'app.CTdoc'},
   {name :  'Courbes', url: 'app.CTcou'}
-  ]
+];
+
  $scope.N1_name = '';
  $scope.auth = 0 ;
  $scope.sel = 0 ;
@@ -265,7 +336,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 
 .controller('ALctrl', function($rootScope,$scope,socket,$ionicLoading,App_Info,$state, $stateParams) {
 
-$scope.Selected_CT = $rootScope.Selected_CT ;
+// $scope.Selected_CT = $rootScope.Selected_CT ;
 var list_AL_Track = [];
 $scope.list_AL = []
 $scope.Synthese_PresentCount= 0 ;
@@ -423,11 +494,18 @@ $scope.list_AL[almIndex].Ack = "Acquitée"
            $scope.scanResults = '';
        })
 
-.controller('CTActrl', function($rootScope,$scope,socket) {
+.controller('CTActrl', function($rootScope,$scope,socket,$state) {
+$scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
+if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
+
+$scope.Consigne_Grp = function (NomGrp,Grp)
+    {
+      $rootScope.Selected_NomGrp = NomGrp;
+      $rootScope.Selected_Grp = Grp;
+      $state.go('app.CTcon');
+    };
 
 $scope.List_CTA = []
-
-$scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
 
 $scope.expand_AL = function(item) {
           if ($scope.isItemExpanded(item)) {
@@ -443,11 +521,13 @@ $scope.expand_AL = function(item) {
 socket.emit('CTA_Query', { Selected_CT : $scope.Selected_CT} );
 
 socket.on('CTA_Answer',function(data){
-console.log(data)
+console.log(data);
 
 ctaIndex = $scope.List_CTA.findIndex((obj => obj.DesignGroupeFonctionnel== data.DesignGroupeFonctionnel));
 $scope.List_CTA[ctaIndex] = data ;
 $scope.List_CTA.push(data)  ;
+console.log("push")
+console.dir(data);
 
 // console.log($scope.CTA_list[0].Libelle_groupe)
 });
@@ -483,6 +563,37 @@ $scope.List_CTA.push(data)  ;
 
 
       })
+
+.controller('LoginCtrl', function($scope, $rootScope,$state) {
+
+$scope.submit = function ()
+{
+  $state.go('app.CT');
+}
+      })
+
+.controller('StaCtrl', function($scope, $rootScope,$state,socket) {
+  $scope.Selected_CT = $rootScope.Selected_CT ;
+  $scope.list_Sta = [] ;
+  socket.emit('Sta_Query', { Mode : "Read" , Selected_CT : $scope.Selected_CT });
+  socket.on('Sta_Answer', function(data) {
+  console.log(data)
+
+  StaIndex = $scope.list_Sta.findIndex((obj => obj.Mnemo == data.Mnemo));
+  if (StaIndex == -1 )  // -1
+  $scope.list_Sta.push(data);
+  else
+  $scope.list_Sta[StaIndex] = data ;
+  });
+
+  $scope.Write= function (item)
+  {
+  // console.log(item)
+  item.Mode = "Write";
+  socket.emit('Cons_Query', item );
+  }
+
+})
 
 
 .controller('MyCtrl', function($scope, $cordovaNetwork, $rootScope) {

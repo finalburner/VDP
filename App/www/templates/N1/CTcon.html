@@ -1,9 +1,12 @@
-<ion-view view-title="admin">
+<ion-view view-title="{{::Selected_NomGrp}}">
+
   <ion-nav-bar class="bar-light">
-          <ion-nav-buttons side="left">
-                  <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
-          </ion-nav-buttons>
-  </ion-nav-bar>
+    <ion-nav-back-button class="button-clear">
+      <i class="button icon-left ion-chevron-left button-clear button-dark" ></i>
+
+    </ion-nav-back-button>
+
+</ion-nav-bar>
 
   <ion-content>
     <!--Barre de recherche-->
@@ -33,8 +36,8 @@
           </div>
 
           <div class="col col-20" style="border-radius:0;Align:center;padding:0;">
-          <input type="number" style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.Local_Value"
-          placeholder="{{item.Value}}" onblur="Analog_Change(item)" ng-enter="Analog_Change(item)" ></input>
+          <input type="number" ng-click = "Validate_Item = item" style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.Local_Value"
+          placeholder="{{item.Value}}" ng-enter="Analog_Change(item)" ></input>
         </div>
 
          <!-- <div class = "col col-20"  style="border-radius:0;Align:center;padding:0">

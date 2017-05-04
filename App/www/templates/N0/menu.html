@@ -36,16 +36,15 @@
    class="button button-dark button-clear Titre2 ">Administration</a>
 </div>
 
-  <div class="row Menu_item_row User" >
+  <!-- <div class="row Menu_item_row User" >
    {{clientid}} - {{auth}}
-  </div>
+  </div> -->
   <div class="row">
-    <button menu-close class="button button-light button-block button-cnx" ng-hide='auth' ng-click="login()">
-  Connexion
-</button>
- <button menu-close class="button button-light button-block button-cnx" ng-show='auth' ng-click="unlog()">
-  Déconnexion
-</button>
+    <button menu-close class="button button-light button-block button-cnx"
+    ng-hide='auth' >Connexion</button>
+
+ <button menu-close class="button button-light button-block button-cnx"
+ ng-show='auth' ng-click="unlog()">Déconnexion</button>
   </div>
 
 </div>

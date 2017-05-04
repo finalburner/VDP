@@ -9,12 +9,12 @@ var OPC_Socket_ID ;
 // SQL Srv
 var config = {
     user: 'BdConnectClient',
-    password: '340$Uuxwp7Mcxo7Khy',
+    password: 'Uuxwp7Mcxo7Khy',
     // user: 'SQL_CLIENT',
     // password: 'VdP2016!',
-    server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
+    server: '10.18.10.3\\MSSQLSERVER', // You can use 'localhost\\instance' to connect to named instance
     // server: '10.18.10.3',
-    database: 'VDP',
+    database: 'DONNEES',
     options: {
         encrypt: true // Use this if you're on Windows Azure
     }
@@ -48,6 +48,7 @@ io.on('connect', function(socket,$rootScope){
   socket.on('OPC_Socket_Connected', function(){
   console.log('OPC_Socket_Connected : ' +  socket.id);
   OPC_Socket_ID = socket.id ;
+  socket.to('Clients_Room').emit('Notif', { Msg : 'OPC Connecté' });
   });
 
   //Identification du client Mobile + mise en room "Clients_Room"
@@ -172,19 +173,70 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
   console.log('CTA_Answer_Update redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
     });
 
+//Requete d'un client donné de la liste des status du cT
+    socket.on('Sta_Query', function(data){
+    socket.to(OPC_Socket_ID).emit('Sta_Query', {Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID , Selected_CT : data.Selected_CT })
+    console.log('Sta_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
+    });
+
+// Réponse du client OPC status CT
+    socket.on('Sta_Answer', function(data){
+    socket.to(data.Socket_ID).emit('Sta_Answer', data )
+    console.log('Sta_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+      });
+
 //Requete des consignes d'un Grp fonctionnel d'un CT
    socket.on('Cons_Query', function(data){
+    //  console.log(data)
    data.Socket_ID = socket.id ;
    data.OPC_Socket_ID = OPC_Socket_ID;
    socket.to(OPC_Socket_ID).emit('Cons_Query',  data )
    console.log('Consigne Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
    });
+   
  //Reponse OPC pour les consignes
   socket.on('Cons_Answer', function(data){
+    if(data.Type == "TC")
+    {
+    if (data.Value) // true data
+    data.Etat = data.TOR_CodeEtat1;
+    else data.Etat = data.TOR_CodeEtat0;
+    }
+    console.log(data)
   socket.to(data.Socket_ID).emit('Cons_Answer', data )
    console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
       });
 
+  //Reponse OPC pour les consignes
+  socket.on('Cons_Answer_Update', function(data){
+   if(data.Type == "TC")
+   {
+   if (data.Value) // true data
+   data.Etat = data.TOR_CodeEtat1;
+   else data.Etat = data.TOR_CodeEtat0;
+   }
+  console.log(data)
+   socket.to('Clients_Room').emit('Cons_Answer', data )
+    console.log('CTA_Cons Update for all ' )
+           });
+
+  //Report erreur aux Clients_Room
+  socket.on('Notif_All', function(data)
+  {
+    socket.to('Clients_Room').emit('Notif',data);
+  })
+
+  socket.on('Notif_Client', function(data)
+  {
+    console.log('Notif_Client ' + data.Socket_ID )
+   socket.to(data.Socket_ID).emit('Notif', data )
+  })
+
+  socket.on('disconnect', function () {
+  if (socket.id == OPC_Socket_ID)
+  socket.to('Clients_Room').emit('Notif',{ Msg: 'OPC Déconnecté' });
+
+  });
 
   });
 //---------------------------MySQL----------------------------

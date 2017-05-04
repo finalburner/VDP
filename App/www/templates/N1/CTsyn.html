@@ -22,7 +22,7 @@
       <!-- <ion-list infinite-scroll="addMoreItems()" infinite-scroll-distance="2" > -->
       <ion-list>
           <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive'"
-           ng-repeat="item in List_CTA | filter: search track by item.DesignGroupeFonctionnel"
+           ng-repeat="item in List_CTA | filter: search track by item.DesignGroupeFonctionnel+$index "
 
          class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
 
@@ -65,7 +65,7 @@
 
       <button class="col button button-small button-light" >Fiche identité</boutton>
         <button class="col button button-small button-light" >Synoptique</boutton>
-          <button class="col button button-small button-positive">Consignes</boutton>
+          <button class="col button button-small button-positive" ng-click="Consigne_Grp(item.Libelle_groupe,item.DesignGroupeFonctionnel)">Consignes</boutton>
       </div>
                 </ion-item>
       </ion-list>

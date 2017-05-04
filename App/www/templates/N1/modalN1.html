@@ -3,25 +3,25 @@
 <ion-content>
 <div class="row N1_bar_header">
 <div class="N1_menu_color " style ="background-color: {{modalN1.AL_Color}}"></div>
-<h1 class="N1_menu_title col col-80 ">{{modalN1.name}}</h1>
+<p class="N1_menu_title col col-80 " style="font-family:'Roboto'!important ;font-size:14px !important ;">{{modalN1.name}}</p>
 <i class="icon ion-close-round col col-offset-10" ng-click="N1_close()"></i>
 <!-- <a ion-button ng-click="N1_close()" class="button button-clear col col-offset-10 ion-clouse-round"> -->
 </a >
 </div>
 
 
-<!-- <div class = "col">
-<div class="row N1_row">Synthèse</div>
-<div class="row N1_row">Status</div>
-<div class="row N1_row">Synoptique primaire</div>
-<div class="row N1_row">Historique</div>
-<div class="row N1_row">Fiche d'identité</div>
-<div class="row N1_row">Plans des équipements</div>
-<div class="row N1_row">Documentation CT</div>
-<div class="row N1_row">Courbes</div> -->
-
 <ion-list>
-      <ion-item  ng-repeat="item in list_N1" ng-click="N1_close(item.url)" ui-sref="{{::item.url}}" ui-sref-opts="{reload: true}">{{::item.name}}</ion-item>
+       <ion-item style="background-color:#EAEAEA!important;"></ion-item>
+
+      <ion-item  ng-repeat="item in list_N1.global" ng-click="N1_close(item.url)"
+      ui-sref="{{::item.url}}" ui-sref-opts="{reload: true}"  style="font-family:'Roboto'!important ;font-size:16px !important ;">
+        {{::item.name}}</ion-item>
+
+          <ion-item style="background-color:#EAEAEA!important;"></ion-item>
+
+      <ion-item  ng-repeat="item in list_N1.local" ng-click="N1_close(item.url)"
+      ui-sref="{{::item.url}}" ui-sref-opts="{reload: true}"  style="font-family:'Roboto'!important ;font-size:16px !important ;">
+            {{::item.name}}</ion-item>
 
           </ion-list>
 <!-- </div> -->

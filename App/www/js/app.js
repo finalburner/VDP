@@ -8,13 +8,35 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngAnimate','ngMap'])
 
 .factory('socket', function (socketFactory) {
-  var mySocket = socketFactory({
-    prefix: '',
-    // ioSocket: io.connect('http://80.14.220.219:3000')
-   ioSocket: io.connect('localhost:3000')
-  });
+  console.log(window.cordova)
+  if (window.cordova) { // Mobile APP
+    var mySocket = socketFactory({
+      prefix: '',
+      ioSocket: io.connect('http://80.14.220.219:3000')
+    //  ioSocket: io.connect('http://localhost:3000')
+    });
+  }
+  else { // Desk APP
+    var mySocket = socketFactory({
+      prefix: '',
+     ioSocket: io.connect('http://localhost:3000')
+    });
+  }
   //mySocket.forward('temp');
   return mySocket
+})
+
+.factory('Notif', function (socket,$cordovaToast) { //Service de notification
+
+socket.on('Notif', function(data) {
+  console.log(data)
+  if (window.cordova)  $cordovaToast.show(data.Msg, "short", "bottom");
+});
+this.Show = function(Msg) {
+    if (window.cordova)  $cordovaToast.show(Msg, "short", "bottom");
+		}
+return 0 ;
+
 })
 
 .value('App_Info', {
@@ -84,6 +106,13 @@ $stateProvider
     controller: 'AppCtrl'
   })
 
+    .state('login', {
+      url: '/login',
+        authentificate: false,
+        cache: false,
+      templateUrl: 'templates/N0/login.html',
+      controller: 'LoginCtrl'
+    })
 
   .state('app.CT', {
     url: '/CT',
@@ -178,7 +207,7 @@ $stateProvider
 
     .state('app.CTsyn', {
       url: '/syn',
-      cache:false,
+      cache: false,
    authentificate: true,
       views: {
         'menuContent': {
@@ -189,11 +218,12 @@ $stateProvider
     })
     .state('app.CTsta', {
       url: '/sta',
+      cache:false,
     authentificate: true,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTsta.html',
-          controller: 'AppCtrl'
+          controller: 'StaCtrl'
         }
       }
     })
@@ -237,6 +267,17 @@ $stateProvider
         }
       }
     })
+    .state('app.CTcon', {
+      url: '/CTcon',
+      cache:false ,
+    authentificate: true,
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/N1/CTcon.html',
+          controller: 'ConCtrl'
+        }
+      }
+    })
     .state('app.CTpla', {
       url: '/pla',
     authentificate: true,
@@ -272,7 +313,61 @@ $stateProvider
   //   }
   // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/CT');
+  $urlRouterProvider.otherwise('/login');
 })
 
-//
+.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork,$cordovaToast){
+
+  return {
+    isOnline: function(){
+      if(ionic.Platform.isWebView()){
+        return $cordovaNetwork.isOnline();
+      } else {
+        return navigator.onLine;
+      }
+    },
+    isOffline: function(){
+      if(ionic.Platform.isWebView()){
+        return !$cordovaNetwork.isOnline();
+      } else {
+        return !navigator.onLine;
+      }
+    },
+    startWatching: function(){
+      if(ionic.Platform.isWebView()){
+          $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+          $cordovaToast.show("Connecté", "short", "bottom")
+          });
+          $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+          $cordovaToast.show("Déconnecté", "short", "bottom")
+          });
+        }
+        else {
+          window.addEventListener("online", function(e) {
+              $cordovaToast.show("Connecté", "short", "bottom")
+          }, false);
+
+          window.addEventListener("offline", function(e) {
+              $cordovaToast.show("Déconnecté", "short", "bottom")
+          }, false);
+        }
+    }
+  }
+})
+.filter('orderObjectBy', function(){
+ return function(input, attribute) {
+    if (!angular.isObject(input)) return input;
+
+    var array = [];
+    for(var objectKey in input) {
+        array.push(input[objectKey]);
+    }
+
+    array.sort(function(a, b){
+        a = parseInt(a[attribute]);
+        b = parseInt(b[attribute]);
+        return a - b;
+    });
+    return array;
+ }
+});

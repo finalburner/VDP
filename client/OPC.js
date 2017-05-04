@@ -6,7 +6,7 @@ var opcua = require("node-opcua");
 var io = require('socket.io-client');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
-var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
+var endpointUrl = "opc.tcp://10.18.10.13:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 var ids ;
 var i = 0 ;
@@ -68,10 +68,11 @@ socket.emit('OPC_Socket_Connected');
 
 //Socket query for list CT on SQL
 socket.on('CT_Query', function(data){
-
+if (the_session)
+ {
   console.log('CT_query from ' + data.Socket_ID)
-    sql.connect(config).then(function() {
-    new sql.Request().query('Select distinct localisation,Installation_technique from VDP.dbo.SUPERVISION').then(function(rec) {
+    sql.connect(config_DONNEES).then(function() {
+    new sql.Request().query('Select distinct localisation,Installation_technique from dbo.SUPERVISION order by localisation').then(function(rec) {
     CT_PT_List=JSON.stringify(rec);
     CT_PT_List=CT_PT_List.replace(/\s/g, "") ;
     CT_PT_List=JSON.parse(CT_PT_List);
@@ -115,19 +116,86 @@ console.log(err)
     }).catch(function(err) {
     console.log( err )
     });
+  }
+  if (!the_session) socket.emit('Notif_All', { Msg : 'OPC Session Error'})
+  // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
  });
 
-socket.on('CTA_Query', function (data){
 
+ //Socket query for Status list
+ socket.on('Sta_Query', function(data){
+ if (the_session)
+  {
+   console.log('Sta_Query from ' + data.Socket_ID)
+     sql.connect(config_DONNEES).then(function() {
+      query = "Select Installation_technique,DesignGroupeFonctionnel,DesignObjetFonctionnel,Information,Libelle_information,Type,TOR_CodeEtat1,TOR_CodeEtat0 from dbo.SUPERVISION " ;
+      query += "WHERE localisation = \'" + data.Selected_CT + "\' ";
+      query += "AND NomGroupeFonctionnel = \'GENER\' AND NomObjetFonctionnel = \'SYNTH\' ";
+      query += "AND Metier = \'CVC\'";
+ console.log(query)
+     new sql.Request().query(query).then(function(rec) {
+       rec=JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
+       rec.forEach(function(id){
+         id.Metier = 'CVC';
+         id.NomGroupeFonctionnel = 'GENER';
+         id.NomObjetFonctionnel = 'SYNTH';
+         Mnemo = id.Metier + '_' + id.Installation_technique;
+         Mnemo +=  '_' + id.NomGroupeFonctionnel + id.DesignGroupeFonctionnel;
+         Mnemo +=  '_' + id.NomObjetFonctionnel + id.DesignObjetFonctionnel ;
+         Mnemo +=  '_' + id.Information ;
+         adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique ;
+         adr += '/Acquisition/' + Mnemo + '.Valeur';
+         var NodeId = "ns=2;s=" + adr;
+         id.Mnemo = Mnemo ;
+
+     the_session.readVariableValue(NodeId, function(err,dataValue,diagnostics) {
+               if (err)
+               console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err );
+               else {
+               console.dir(dataValue)
+                 if (dataValue && dataValue.value)
+                 {
+                 id.Value =  dataValue.value.value
+                 if (id.Value)
+                 id.Etat= id.TOR_CodeEtat1
+                 else
+                id.Etat= id.TOR_CodeEtat0
+
+                var Retour = Object.assign({OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
+                socket.emit('Sta_Answer', Retour);
+                console.log(Retour);
+
+
+              } }
+      })
+
+
+ });
+ }).catch(function(err) {
+ console.log( err )
+ });
+
+ }).catch(function(err) {
+ console.log(err)
+ });
+
+   }
+   else socket.emit('Notif_All', { Msg : 'OPC Session Error'})
+   // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
+  });
+
+socket.on('CTA_Query', function (data){
+if (the_session)
+{
 console.log('CTA_Query : ' + data.Socket_ID) ;
 var NodeId = "ns=2;s=" ;
 // console.log(data)
 if (data.Selected_CT == 'null' )
 console.log('No CT Selected')
 else {
-query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from VDP.dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
+query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
 
-  sql.connect(config).then(function() {
+  sql.connect(config_DONNEES).then(function() {
   new sql.Request().query(query).then(function(recordset) {
   recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
   if (recordset) {
@@ -135,11 +203,13 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
     PT = id.Installation_technique;
     Circuit = id.Libelle_groupe;
     Design = id.DesignGroupeFonctionnel;
-
-    TEMP3_AMBIA = NodeId + '/Application/STEGC/Paris/PT/' + PT + '/Acquisition/' + 'CVC_' + PT + '_CIRCU' + Design + '_TEMP3AMBIA_M01.Valeur' ;
-    TEMP3_DEPAR = NodeId + '/Application/STEGC/Paris/PT/' + PT + '/Acquisition/' + 'CVC_' + PT + '_CIRCU' + Design + '_TEMP3DEPAR_M01.Valeur' ;
-
-  // console.log(id)
+    AMBIA = '/STEGC/Paris/PT/' + PT + '/Acquisition/' + 'CVC_' + PT + '_CIRCU' + Design + '_TEMP3AMBIA_M01';
+    DEPAR=  '/STEGC/Paris/PT/' + PT + '/Acquisition/' + 'CVC_' + PT + '_CIRCU' + Design + '_TEMP3DEPAR_M01';
+    TEMP3_AMBIA = NodeId + '/Application' + AMBIA + '.Valeur' ;
+    TEMP3_DEPAR = NodeId + '/Application' + DEPAR + '.Valeur' ;
+    COURBE1 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
+    COURBE2 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + DEPAR + '/Evt\' ORDER BY UTC_App_DateTime DESC'
+    // console.log(id)
     the_session.readVariableValue([TEMP3_AMBIA,TEMP3_DEPAR], function(err,dataValue,diagnostics) {
               if (err)
               console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err );
@@ -150,8 +220,15 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
                    if (dataValue[0].value)  {
                      id.TEMP3_AMBIA = dataValue[0].value.value
                      id.TEMP3_AMBIA_SRC = TEMP3_AMBIA
-                   }
 
+                      // new sql.Request().query(COURBE1).then(function(recordset) {
+                      // recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
+                      // if (recordset)
+                      // id.TEMP3_AMBIA_ARC = recordset['TriggeringValue']
+                      // });
+
+                   }
+ }
  //Monitor TEMP3_AMBI
 // var monitem = the_subscription.monitor({
 // nodeId: opcua.resolveNodeId(TEMP3_AMBIA),
@@ -167,23 +244,27 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
 // console.log(id)
 // });
 
-                 }
 
                 if (dataValue[1])
                 { //console.log(dataValue[1])
                   if (dataValue[1].value)
-                  { id.TEMP3_DEPAR = dataValue[1].value.value}
+                  { id.TEMP3_DEPAR = dataValue[1].value.value
                     id.TEMP3_DEPAR_SRC = TEMP3_DEPAR
+                    //  new sql.Request().query(COURBE2).then(function(recordset) {
+                    //  recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
+                    //  if (recordset)
+                    //   d.TEMP3_DEPAR_ARC = recordset['TriggeringValue']
+                    // });
+                   }
                 }
-
 // console.log(id)
 var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
 socket.emit('CTA_Answer', Retour);
 console.log("CTA Emit ")
 
               }
-            });
 
+});
             //
             // xx the_subscription.monitor("i=155",DataType.Value,function onchanged(dataValue){
             // xx    console.log(" temperature has changed " + dataValue.value.value);
@@ -218,22 +299,26 @@ console.log( err )
 console.log( err )
 });
 }
+}
+  if (!the_session) socket.emit('Notif_All', { Msg : 'OPC Session Error'})
+  // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
 });
-console.log(new Date());
+
 
 socket.on('AL_Query', function (data){
-
+if (the_session)
+{
  if(data.Mode == "Read") {
   // console.log('AL_Query : ' + data.Socket_ID) ;
   var AlmToRead = [] ;
   var query ;
   console.dir(data)
   if (data.Selected_CT == 'null' )
-  query = "Select TOP 10 * from VDP.dbo.SUPERVISION WHERE Type = 'TA' and Metier = 'CVC' "
+  query = "Select  top 200 * from dbo.SUPERVISION WHERE Type = 'TA' and Metier = 'CVC' "
   else
-  query = "Select * from VDP.dbo.SUPERVISION WHERE Type = 'TA' and localisation =\'" + data.Selected_CT +"\'"
+  query = "Select * from dbo.SUPERVISION WHERE Type = 'TA' and localisation =\'" + data.Selected_CT +"\'"
 
-  sql.connect(config).then(function() {
+  sql.connect(config_DONNEES).then(function() {
   new sql.Request().query(query).then(function(recordset) {
   // console.log(recordset)
   if (recordset) {
@@ -361,21 +446,32 @@ var methodsToCall = [];
 
  }
 }
+}
+  if (!the_session) socket.emit('Notif_All', { Msg : 'OPC Session Error'})
+  // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
     });
+
 socket.on('Cons_Query', function (data){
+if (the_session)
+{
   if (data.Mode == "Read")
   {
   console.log(data)
   var NodeId = "ns=2;s=" ;
-
-  query = 'Select Metier, Installation_technique, NomGroupeFonctionnel, ' + // Consigne Analogique
-  ' DesignGroupeFonctionnel , NomObjetFonctionnel ,  DesignObjetFonctionnel ,'+
-  '  Information, Libelle_groupe, Libelle_information, Type, ANA_Unite, ANA_ValeurMini, ANA_ValeurMaxi, '+
-  'TOR_CodeEtat0, TOR_CodeEtat1 from VDP.dbo.SUPERVISION ' +
-  ' Where Localisation =\'CT93213\' AND Type  IN ( \'TC\' , \'TR\' )'
-
+  if (data.Selected_CT && data.Selected_Grp)
+  {
+  query =  "Select Metier, Installation_technique, NomGroupeFonctionnel, "  // Consigne Analogique
+  query += " DesignGroupeFonctionnel , NomObjetFonctionnel ,  DesignObjetFonctionnel ,"
+  query += " Information, Libelle_groupe, Libelle_information, Type, ANA_Unite, ANA_ValeurMini, ANA_ValeurMaxi, "
+  query += " TOR_CodeEtat0, TOR_CodeEtat1 from dbo.SUPERVISION WHERE Localisation =\'"+ data.Selected_CT +"\'"
+  query += " AND NomGroupeFonctionnel = \'CIRCU\' AND DesignGroupeFonctionnel= \'" + data.Selected_Grp
+  query += "\' AND Type IN (\'TC\' , \'TR\') AND Metier = \'CVC\' order by Type "
+  // console.log(query)
+}
+  else
+  query = "Select Metier, Installation_technique, NomGroupeFonctionnel, DesignGroupeFonctionnel , NomObjetFonctionnel ,  DesignObjetFonctionnel , Information, Libelle_groupe, Libelle_information, Type, ANA_Unite, ANA_ValeurMini, ANA_ValeurMaxi, TOR_CodeEtat0, TOR_CodeEtat1 from dbo.SUPERVISION Where Localisation =\'CT93213\' AND NomGroupeFonctionnel = \'CIRCU\' AND Type IN (\'TC\' , \'TR\') AND metier = \'CVC\' order by Type "
   // query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from VDP.dbo.SUPERVISION WHERE localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
-    sql.connect(config).then(function() {
+    sql.connect(config_DONNEES).then(function() {
     new sql.Request().query(query).then(function(recordset) {
     recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
     // console.log(recordset)
@@ -389,29 +485,31 @@ socket.on('Cons_Query', function (data){
       id.Mnemo = Mnemo ;
       adr = '/Application/STEGC/Paris/PT/' + id.Installation_technique ;
       adr += '/Acquisition/' + Mnemo ;
-      id.NodeId = "ns=2;s=" + adr;
-    // console.log(id)
-      the_session.readVariableValue(id.NodeId + '.Valeur', function(err,dataValue,diagnostics) {
+      id.adr = NodeId + adr + '.Valeur' ;
+      // console.log(id)
+      the_session.readVariableValue(id.adr, function(err,dataValue,diagnostics) {
                 if (err)
                 console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err );
                 else {
-
-      if (dataValue && dataValue.value) {
+                  // console.dir(dataValue)
+  if (dataValue && dataValue.value) {
   id.Value = dataValue.value.value
   //Renvoi de la consigne unitaire vers le client
   var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
   socket.emit('Cons_Answer', Retour);
+  console.log( Retour )
         }
       }
     });
   });
 } }); });
 }
-if ( data.Mode =="Write") {
+if ( data.Mode =="Write" ) {
 
-  console.log(data)
+if (data.Type == "TC")
+  {
 
-var nodesToWrite = [
+var nodeToWrite = [
        {
            nodeId: opcua.resolveNodeId(data.NodeId + '.Valeur'),
            attributeId: opcua.AttributeIds.Value,
@@ -421,13 +519,30 @@ var nodesToWrite = [
               //  sourcePicoseconds: 30,
                value: { /* Variant */
                    dataType: opcua.DataType.Boolean,
-                    value: data.Value_Local
-               }     }       }
-   ];
+                    value: data.Local_Value
+               }     }       }   ];
+}
+if (data.Type == "TR")
+  {
+        console.log(data)
+var nodeToWrite = [
+       {
+           nodeId: opcua.resolveNodeId(data.NodeId + '.Valeur'),
+           attributeId: opcua.AttributeIds.Value,
+           indexRange: null,
+           value: { /* dataValue*/
+              //  sourceTimestamp: new Date(2015, 5, 3),
+              //  sourcePicoseconds: 30,
+               value: { /* Variant */
+                   dataType: opcua.DataType.Double,
+                    value: data.Local_Value
+               }     }       }   ];
+}
 
-   the_session.write(nodesToWrite, function (err, statusCodes) {
+
+   the_session.write(nodeToWrite, function (err, statusCodes) {
       if (!err) {
-          console.log( statusCodes.length + '--' + nodesToWrite.length);
+          console.log( statusCodes.length + '--' + nodeToWrite.length);
           console.log( statusCodes[0] + '--' + opcua.StatusCodes.BadNotWritable);
           console.log(statusCodes + '--' + opcua.StatusCodes.Good);
 
@@ -435,13 +550,12 @@ var nodesToWrite = [
          if (err) {
         console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err ); }
         else {
-
-
-
       if (dataValue && dataValue.value) {
-      data.Value = dataValue.value.value
+        console.log(dataValue)
+      data.Value = dataValue.value.value;
       //Renvoi de la consigne unitaire vers le client
-      socket.emit('Cons_Answer', data);
+      socket.emit('Notif_Client', { Msg : data.Libelle_information + ' changé à \'' + data.Value + '\'', Socket_ID : data.Socket_ID})
+      socket.emit('Cons_Answer_Update', data);
       }
 
       }
@@ -451,15 +565,33 @@ var nodesToWrite = [
 
 });
 }
+}
+  if (!the_session) socket.emit('Notif_All', { Msg : 'OPC Session Error'})
+  // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
 });
 
-var config = {
+var config_DONNEES = {
     user: 'BdConnectClient',
-    password: '340$Uuxwp7Mcxo7Khy',
+    password: 'Uuxwp7Mcxo7Khy',
     // user : 'root',
     // password:'P@ssw0rd',
-    server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
-    database: 'VDP',
+    // server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
+    server: '10.18.10.3\\MSSQLSERVER',
+    database: 'DONNEES',
+
+    options: {
+        encrypt: true // Use this if you're on Windows Azure
+    }
+}
+
+var config_ARCHIVES = {
+    user: 'BdConnectClient',
+    password: 'Uuxwp7Mcxo7Khy',
+    // user : 'root',
+    // password:'P@ssw0rd',
+    // server: 'localhost\\SQLEXPRESS', // You can use 'localhost\\instance' to connect to named instance
+    server: '10.18.10.3\\MSSQLSERVER',
+    database: 'ARCHIVES',
 
     options: {
         encrypt: true // Use this if you're on Windows Azure
@@ -472,7 +604,7 @@ async.series([
 
 
   function(callback)  {
-    sql.connect(config).then(function() {
+    sql.connect(config_DONNEES).then(function() {
         // Query
     console.log('MS SQL connected success');
         new sql.Request()
@@ -481,7 +613,7 @@ async.series([
           // .query('select TOP 5 * from SUPERVISION where id = @input_parameter').then(function(recordset) {
         //  .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TA\' ').then(function(recordset) {
         // .query('select TOP '+ SELECT +' * from VDP.dbo.SUPERVISION Where Type= \'TM\' ').then(function(recordset) {
-          .query('select TOP '+ SELECT + ' * from VDP.dbo.SUPERVISION  ').then(function(recordset) {
+          .query('select TOP '+ SELECT + ' * from dbo.SUPERVISION  ').then(function(recordset) {
         // .query('select * from VDP.dbo.SUPERVISION ').then(function(recordset) {
         //  ids= recordset;
 
@@ -542,8 +674,8 @@ async.series([
 
        init_OPC_sub=new opcua.ClientSubscription(the_session,{
            requestedPublishingInterval: 1000,
-        //   requestedLifetimeCount: 10,
-        //   requestedMaxKeepAliveCount: 2,
+        requestedLifetimeCount: 10,
+         requestedMaxKeepAliveCount: 2,
            maxNotificationsPerPublish: 1,
            publishingEnabled: true,
            priority: 8

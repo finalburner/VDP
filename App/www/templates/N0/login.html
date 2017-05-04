@@ -1,20 +1,38 @@
-
-  <ion-content>
+    <ion-content>
     <div class="Bandeau">
+    PARIS
     </div>
-    <form ng-submit="doLogin()">
-      <div class="list">
-        <label class="item item-input row" margin-top= "50px">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="modalCnx.username">
+    <div class= "User_Content">
+
+
+      <div class="row Titre_Login_Sup">Supervision STEGC</div>
+
+        <div class="row Login_User">Nom d'utilisateur</div>
+
+
+       <label class="item item-input row Login_User_Input" >
+          <input type="text" ng-model="modalCnx.username"   value= "STEGC">
         </label>
-        <label class="item item-input row ">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="modalCnx.password">
+
+          <div class="row Login_Pass">Mot de passe</div>
+
+
+        <label class="item item-input row Login_Pass_Input">
+          <input type="password" ng-model="modalCnx.password"  ng-pattern="/[\w\d]{3,15}/i" >
         </label>
-        <label class="item row">
-          <button class="button button-block button-positive" type="submit">Log in</button>
-        </label>
-      </div>
-    </form>
+
+
+         <div class="item item-checkbox Login_Check_Text row">
+            Je suis en permanence/astreinte
+            <label class="checkbox Login_Check_Box">
+            <input type="checkbox">
+            </label>
+         </div>
+
+          <button class="button btn-connect" ng-click="submit()"
+           type="submit">Se connecter</button>
+           <button class="button btn-quit" ng-click="submit()"
+            type="submit">Quitter l'application</button>
+
+  </div>
   </ion-content>

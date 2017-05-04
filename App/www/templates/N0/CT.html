@@ -22,12 +22,14 @@
   <!--Bouton CT - Intervention-->
           <div class="item button-bar row">
             <a class="button btn_CT" nav-transition="none" ui-sref="app.CT" >Centres Thermiques</a>
-            <a class="button btn_Int" nav-transition="none" ui-sref="app.CTi" >Les interventions</a>
+            <!-- <a class="button btn_Int" nav-transition="none" ui-sref="app.CTi" >Les interventions</a> -->
           </div>
 <!--Liste de CT-->
     <ion-list >
         <!-- <a class = "item row CT_row" on-hold="N1(item.name)"  ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" > -->
-         <a class = "item row CT_row" on-hold="N1_open(item.CT,item.AL_Color)" ng-click="CT_N1(item.CT)" ng-repeat="item in list_CT | filter: search track by item.CT+$index"  ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
+         <a class = "item row CT_row" on-hold="N1_open(item.CT,item.AL_Color)" ng-click="CT_N1(item.CT)"
+          ng-repeat="item in list_CT  | filter: search  "  
+          ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
 
             <!--div style="background-color: #C2A5A5 !important"-->
           <div class ="col-5 CT_bar_color" style="background-color:{{::item.AL_Color}};"></div>
