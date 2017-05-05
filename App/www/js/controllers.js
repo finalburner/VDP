@@ -150,7 +150,7 @@ socket.emit('Cons_Query', item );
 ConnectivityMonitor.startWatching();
 socket.on('connect', function () {
 socket.emit('Client_Connected');
-Notif.Show("Connecté");
+// Notif.Show("Connecté");
 
 });
   $scope.list_N1 = [];
@@ -345,7 +345,12 @@ $scope.Filter_Alm ;
 $scope.ACK = function(item)
 {
   // console.log(item)
-  socket.emit('AL_Query', { Mode : 'Write' , Type : 'ACK', NodeId : item.NodeId });
+  if (!item.Ack)
+  {item.Mode = 'Write';
+  item.Type = 'ACK'
+  socket.emit('AL_Query', item);}
+  else
+  console.log('Alarme déja acquitée')
   // console.log({ Mode : 'Write' , Type : 'ACK', NodeId : item.NodeId })
 }
 
@@ -394,9 +399,9 @@ console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
 
 //Reception des Alarmes unitaires depuis OPC
 socket.on('AL_Answer', function(data){
-    console.log(data)
-if (!data.Mode) // Existence propriété Mode
-  { // Arrivé des infos d'une alarmes
+
+// if (!data.Mode) // Existence propriété Mode
+//   { // Arrivé des infos d'une alarmes
 
 
   data.AL_Color = App_Info.AL_0_Color ; //applique la couleur CT de base
@@ -404,12 +409,12 @@ if (!data.Mode) // Existence propriété Mode
   if (data.Criticite == '2')  data.AL_Color = App_Info.AL_2_Color ; //applique la couleur CT majeure
   if (data.Criticite == '3')  data.AL_Color = App_Info.AL_3_Color ; //applique la couleur CT critique
   if (data.Criticite == '10')  data.AL_Color = App_Info.AL_10_Color ; //applique la couleur CT critique
-  if (data.Actif == true) data.Actif = "Présente"
-  if (data.Actif == false) data.Actif = "Disparue"
-  if (data.Ack == true) data.Ack = "Acquittée"
-  if (data.Ack == false) data.Ack = "Non Acquitée"
+  if (data.Actif) data.Actif_Label = "Présente"
+  else data.Actif_Label  = "Disparue"
+  if (data.Ack) data.Ack_Label  = "Acquittée"
+  else data.Ack_Label  = "Non Acquitée"
 
-
+  console.log(data)
 //   if (list_AL_Track.length =='0')  // liste encore vide
 //   {
 //     list_AL_Track.push(data.Mnemo);
@@ -432,28 +437,33 @@ if (!data.Mode) // Existence propriété Mode
 //   $scope.list_AL.push(data);
 // }
 //  }
-
-almIndex = $scope.list_AL.findIndex((obj => obj.Mnemo == data.Mnemo));
-if (almIndex == -1 )  // -1
-$scope.list_AL.push(data);
-else
-$scope.list_AL[almIndex] = data ;
-
-}
-
-if (data.Mode && data.Mode =="Write")
-{
-// Mise à jour du status ACK après acquittement
-almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
-$scope.list_AL[almIndex].Ack = "Acquitée"
-
-almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
+almIndex = $scope.list_AL.findIndex((obj => obj.Mnemo== data.Mnemo));
+console.log(almIndex)
 if (almIndex != -1 )  // -1
-$scope.list_AL[almIndex].Ack = "Acquitée"
+$scope.list_AL[almIndex] = data ;
+else
+$scope.list_AL.push(data);
+
+// almIndex = $scope.list_AL.findIndex((obj => obj.Mnemo == data.Mnemo));
+// if (almIndex == -1 )  // -1
+// $scope.list_AL.push(data);
+// else
+// $scope.list_AL[almIndex] = data ;
+
+// }
+//
+// if (data.Mode && data.Mode =="Write")
+// {
+// Mise à jour du status ACK après acquittement
+// almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
+// $scope.list_AL[almIndex].Ack = "true"
+
+// almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
+// if (almIndex != -1 )  // -1
+// $scope.list_AL[almIndex].Ack = true ;
 //Console object again.
 // console.log("After update: ", $scope.list_AL[almIndex])
 
-}
 
    });
 
@@ -523,11 +533,17 @@ socket.emit('CTA_Query', { Selected_CT : $scope.Selected_CT} );
 socket.on('CTA_Answer',function(data){
 console.log(data);
 
-ctaIndex = $scope.List_CTA.findIndex((obj => obj.DesignGroupeFonctionnel== data.DesignGroupeFonctionnel));
+ctaIndex = $scope.List_CTA.findIndex((obj => obj.DesignGroupeFonctionnel == data.DesignGroupeFonctionnel));
+console.log(ctaIndex)
+if (ctaIndex != -1 )  // -1
 $scope.List_CTA[ctaIndex] = data ;
-$scope.List_CTA.push(data)  ;
-console.log("push")
-console.dir(data);
+else
+$scope.List_CTA.push(data);
+
+
+// $scope.List_CTA.push(data)  ;
+// console.log("push")
+// console.dir(data);
 
 // console.log($scope.CTA_list[0].Libelle_groupe)
 });

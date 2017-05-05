@@ -145,6 +145,7 @@ socket.on('AL_Query',function(data)
 
 //Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
 socket.on('AL_Answer',function(data) {
+  console.log(data)
   socket.to(data.Socket_ID).emit('AL_Answer', data) ;
 });
 
@@ -193,7 +194,7 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
    socket.to(OPC_Socket_ID).emit('Cons_Query',  data )
    console.log('Consigne Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
    });
-   
+
  //Reponse OPC pour les consignes
   socket.on('Cons_Answer', function(data){
     if(data.Type == "TC")

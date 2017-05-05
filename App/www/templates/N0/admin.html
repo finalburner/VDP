@@ -34,13 +34,13 @@
 
           <div class="col col-20" style="border-radius:0;Align:center;padding:0;">
           <input type="number" style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.Local_Value"
-          placeholder="{{item.Value}}" onblur="Analog_Change(item)" ng-enter="Analog_Change(item)" ></input>
+          placeholder="{{item.Value}}" ng-blur="Analog_Change(item)" ng-enter="Analog_Change(item)" ></input>
         </div>
 
-         <!-- <div class = "col col-20"  style="border-radius:0;Align:center;padding:0">
+         <div  style="border-radius:0;Align:center;padding:0;position: absolute; left: -9999px; width: 1px; height: 1px;">
         <button type="submit" class="button button-block button-positive" style="margin: 10px 0 0 0 0 ;left : -100px"
         ng-click="Analog_Change()">Valider</button>
-      </div> -->
+      </div>
         </form>
 
 

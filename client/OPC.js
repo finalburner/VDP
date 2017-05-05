@@ -6,7 +6,7 @@ var opcua = require("node-opcua");
 var io = require('socket.io-client');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
-var endpointUrl = "opc.tcp://10.18.10.13:9080/CODRA/ComposerUAServer";
+var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 var ids ;
 var i = 0 ;
@@ -312,9 +312,11 @@ if (the_session)
   // console.log('AL_Query : ' + data.Socket_ID) ;
   var AlmToRead = [] ;
   var query ;
+  var Ack;
+  var Actif ;
   console.dir(data)
   if (data.Selected_CT == 'null' )
-  query = "Select  top 200 * from dbo.SUPERVISION WHERE Type = 'TA' and Metier = 'CVC' "
+  query = "Select top 300 * from dbo.SUPERVISION WHERE Type = 'TA' and Metier = 'CVC' "
   else
   query = "Select * from dbo.SUPERVISION WHERE Type = 'TA' and localisation =\'" + data.Selected_CT +"\'"
 
@@ -356,13 +358,13 @@ if (dataValue[0].statusCode )
   {
      id.StatusCode_Actif = dataValue[0].statusCode._base['name'];
      if ( id.StatusCode_Actif = 'Good' && dataValue[0].value)
-     id.Actif = dataValue[0].value.value;
+     Actif = dataValue[0].value.value;
   }
   if (dataValue[0].statusCode['name'])
   {
       id.StatusCode_Actif = dataValue[0].statusCode['name'];
       if( id.StatusCode_Actif = 'Good' && dataValue[0].value)
-      id.Actif= dataValue[0].value.value;
+      Actif= dataValue[0].value.value;
   }
  }
 //Gestion d'erreur OPC lecture attribut Ack
@@ -373,22 +375,25 @@ if (dataValue[0].statusCode )
    {
       id.StatusCode_Ack = dataValue[1].statusCode._base['name'];
       if ( id.StatusCode_Ack = 'Good' && dataValue[1].value)
-      id.Ack = dataValue[1].value.value;
+      Ack = dataValue[1].value.value;
     }
 
   if (dataValue[1].statusCode['name'])
     {
        id.StatusCode_Ack = dataValue[1].statusCode['name'];
        if( id.StatusCode_Ack = 'Good' && dataValue[1].value)
-       id.Ack = dataValue[1].value.value;
+       Ack = dataValue[1].value.value;
     }
 
   }
 
+if(!(Ack && !Actif))
+{
 //Renvoi de l'alarme unitaire vers le client
 var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID },id);
-console.log(Retour)
+// console.log(Retour)
 socket.emit('AL_Answer', Retour);
+}
     }
 
       });
@@ -403,7 +408,7 @@ socket.emit('AL_Answer', Retour);
 if( data.Mode == "Write" )
 {
   console.log(data)
-  if (data.Type = "ACK") {
+  if (data.Type == "ACK") {
 
   //
   // var browsePath = [
@@ -436,7 +441,10 @@ var methodsToCall = [];
     if (results.length && results[0].statusCode == opcua.StatusCodes.Good)
      {
        console.log("ACK done ")
-       socket.emit('AL_Answer',data );
+       data.Ack = true ;
+      //  console.log(data)
+       socket.emit('Notif_Client', { Msg : data.Libelle + ' acquitté(e)' , Socket_ID : data.Socket_ID});
+       socket.emit('AL_Answer', data );
      }
      else
      console.log(err)
@@ -494,6 +502,7 @@ if (the_session)
                   // console.dir(dataValue)
   if (dataValue && dataValue.value) {
   id.Value = dataValue.value.value
+  id.Local_Value = id.Value ;
   //Renvoi de la consigne unitaire vers le client
   var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
   socket.emit('Cons_Answer', Retour);
@@ -508,10 +517,11 @@ if ( data.Mode =="Write" ) {
 
 if (data.Type == "TC")
   {
+    console.log(data.adr)
 
 var nodeToWrite = [
        {
-           nodeId: opcua.resolveNodeId(data.NodeId + '.Valeur'),
+           nodeId: opcua.resolveNodeId(data.adr ),
            attributeId: opcua.AttributeIds.Value,
            indexRange: null,
            value: { /* dataValue*/
@@ -527,7 +537,7 @@ if (data.Type == "TR")
         console.log(data)
 var nodeToWrite = [
        {
-           nodeId: opcua.resolveNodeId(data.NodeId + '.Valeur'),
+           nodeId: opcua.resolveNodeId(data.adr ),
            attributeId: opcua.AttributeIds.Value,
            indexRange: null,
            value: { /* dataValue*/
@@ -546,7 +556,7 @@ var nodeToWrite = [
           console.log( statusCodes[0] + '--' + opcua.StatusCodes.BadNotWritable);
           console.log(statusCodes + '--' + opcua.StatusCodes.Good);
 
-         the_session.readVariableValue(data.NodeId + '.Valeur', function(err,dataValue,diagnostics) {
+         the_session.readVariableValue(data.adr , function(err,dataValue,diagnostics) {
          if (err) {
         console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err ); }
         else {
