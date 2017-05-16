@@ -5,98 +5,13 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 // angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap','ngMaterial'])
-angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngAnimate','ngMap'])
+var app =angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngAnimate','ngMap']) ;
+var controllers = angular.module('starter.controllers', ['chart.js','angularUUID2','ngCordova']);
 
-.factory('socket', function (socketFactory) {
-  console.log(window.cordova)
-  if (window.cordova) { // Mobile APP
-    var mySocket = socketFactory({
-      prefix: '',
-      ioSocket: io.connect('http://80.14.220.219:3000')
-    //  ioSocket: io.connect('http://localhost:3000')
-    });
-  }
-  else { // Desk APP
-    var mySocket = socketFactory({
-      prefix: '',
-     ioSocket: io.connect('http://localhost:3000')
-    });
-  }
-  //mySocket.forward('temp');
-  return mySocket
-})
-
-.factory('Notif', function (socket,$cordovaToast) { //Service de notification
-
-socket.on('Notif', function(data) {
-  console.log(data)
-  if (window.cordova)  $cordovaToast.show(data.Msg, "short", "bottom");
-});
-this.Show = function(Msg) {
-    if (window.cordova)  $cordovaToast.show(Msg, "short", "bottom");
-		}
-return 0 ;
-
-})
-
-.value('App_Info', {
-ID : 'null',
-AL_10_Color : '#D500F9', //AL DefCom
-AL_3_Color : '#F44336', //AL Critique
-AL_2_Color : '#FF8F00', //AL Majeure
-AL_1_Color : '#2196F3', //AL Mineure
-AL_0_Color : '#07F900' //Aucune Alarme Présente
-})
-
-// .service('App_Info_Ask' , function(socket, App_Info){
-//   socket.emit('App_Info_Query');
-//   console.log('App_Info_Query');
-//
-//   socket.on('App_Info_Answer',function(data){
-//     App_Info.OPC_Socket_ID = data.OPC_Socket_ID ;
-//   });
-// })
-// .run(function($ionicPlatform, $ionicPopup, $cordovaNetwork) {
-//    $ionicPlatform.ready(function() {
-//       if ($cordovaNetwork.isOffline()) {
-//          $ionicPopup.confirm({
-//             title: "Internet is not working",
-//             content: "Internet is not working on your device."
-//          });
-//       }
-//    });
-// })
-
-.config(function($provide) { // To comment
-  $provide.decorator('$state', function($delegate) {
-    var originalTransitionTo = $delegate.transitionTo;
-    $delegate.transitionTo = function(to, toParams, options) {
-      return originalTransitionTo(to, toParams, angular.extend({
-        reload: true
-      }, options));
-    };
-    return $delegate;
-  });
-})
+app
 
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
-})
-
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider,USER_ROLES) {
 $stateProvider
     .state('app', {
     url: '/app',
@@ -111,18 +26,25 @@ $stateProvider
         authentificate: false,
         cache: false,
       templateUrl: 'templates/N0/login.html',
-      controller: 'LoginCtrl'
+      controller: 'LoginCtrl',
+      data: {
+      authorizedRoles: []
+    }
+
     })
 
   .state('app.CT', {
     url: '/CT',
-      authentificate: true,
-      cache:false,
+    authentificate: true,
+    cache:false,
     views: {
       'menuContent': {
         templateUrl: 'templates/N0/CT.html',
         controller: 'CTctrl'
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     }
   })
 
@@ -134,7 +56,10 @@ $stateProvider
           templateUrl: 'templates/N0/CTi.html',
           controller: 'CTctrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
 
   .state('app.Login', {
@@ -144,7 +69,10 @@ $stateProvider
           templateUrl: 'templates/N0/CTi.html',
           controller: 'CTctrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
   .state('app.carto', {
     url: '/carto',
@@ -154,7 +82,10 @@ $stateProvider
         templateUrl: 'templates/N0/carto.html',
         controller: 'CTctrl'
       }
-    }
+    },
+    data: {
+    authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+  }
   })
 
   .state('app.alarmes', {
@@ -170,7 +101,10 @@ $stateProvider
         //   socket.emit('AL_Query', { Selected_CT : $rootScope.Selected_CT});
         // }
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.rapport', {
       url: '/rapport',
@@ -180,7 +114,10 @@ $stateProvider
           templateUrl: 'templates/N0/rapport.html',
           controller: 'QrCtrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.admin', {
       url: '/admin',
@@ -191,7 +128,10 @@ $stateProvider
           templateUrl: 'templates/N0/admin.html',
           controller: 'AdminCtrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
 
     .state('app.biblio', {
@@ -202,7 +142,10 @@ $stateProvider
           templateUrl: 'templates/N0/biblio.html',
           controller: 'AppCtrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
 
     .state('app.CTsyn', {
@@ -214,7 +157,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTsyn.html',
           controller: 'CTActrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CTsta', {
       url: '/sta',
@@ -225,7 +171,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTsta.html',
           controller: 'StaCtrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CTcou', {
       url: '/cou',
@@ -235,7 +184,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTcou.html',
           controller: 'CTctrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CTdoc', {
       url: '/doc',
@@ -245,7 +197,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTdoc.html',
           controller: 'CTctrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CThis', {
       url: '/his',
@@ -255,7 +210,10 @@ $stateProvider
           templateUrl: 'templates/N1/CThis.html',
           controller: 'CTctrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CTfic', {
       url: '/fic',
@@ -265,7 +223,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTfic.html',
           controller: 'CTfic'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CTcon', {
       url: '/CTcon',
@@ -276,7 +237,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTcon.html',
           controller: 'ConCtrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CTpla', {
       url: '/pla',
@@ -286,7 +250,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTpla.html',
           controller: 'CTctrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
     .state('app.CTsynP', {
       url: '/synP',
@@ -296,7 +263,10 @@ $stateProvider
           templateUrl: 'templates/N1/CTsynP.html',
           controller: 'CTctrl'
         }
-      }
+      },
+      data: {
+      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    }
     })
 
 
@@ -315,59 +285,3 @@ $stateProvider
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 })
-
-.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork,$cordovaToast){
-
-  return {
-    isOnline: function(){
-      if(ionic.Platform.isWebView()){
-        return $cordovaNetwork.isOnline();
-      } else {
-        return navigator.onLine;
-      }
-    },
-    isOffline: function(){
-      if(ionic.Platform.isWebView()){
-        return !$cordovaNetwork.isOnline();
-      } else {
-        return !navigator.onLine;
-      }
-    },
-    startWatching: function(){
-      if(ionic.Platform.isWebView()){
-          $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-          $cordovaToast.show("Connecté", "short", "bottom")
-          });
-          $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-          $cordovaToast.show("Déconnecté", "short", "bottom")
-          });
-        }
-        else {
-          window.addEventListener("online", function(e) {
-              $cordovaToast.show("Connecté", "short", "bottom")
-          }, false);
-
-          window.addEventListener("offline", function(e) {
-              $cordovaToast.show("Déconnecté", "short", "bottom")
-          }, false);
-        }
-    }
-  }
-})
-.filter('orderObjectBy', function(){
- return function(input, attribute) {
-    if (!angular.isObject(input)) return input;
-
-    var array = [];
-    for(var objectKey in input) {
-        array.push(input[objectKey]);
-    }
-
-    array.sort(function(a, b){
-        a = parseInt(a[attribute]);
-        b = parseInt(b[attribute]);
-        return a - b;
-    });
-    return array;
- }
-});

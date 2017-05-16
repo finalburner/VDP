@@ -1,27 +1,5 @@
-angular.module('starter.controllers', ['chart.js','angularUUID2','ngCordova'])
 
-.directive('ngEnter', function () {
-    return function (scope, element, attrs) {
-        element.bind("keydown keypress", function (event) {
-            if(event.which === 13) {
-                scope.$apply(function (){
-                    scope.$eval(attrs.ngEnter);
-                });
-
-                event.preventDefault();
-            }
-        });
-    };
-})
-// .run(function($rootScope) {
-//
-//       $rootScope.user = {
-//         clientid: '',
-//          username: '',
-//           password: '',
-//            auth: ''
-//        };
-//     })
+controllers
 
 // .service('sql_request',function(uuid2,socket){
 //   var hash = uuid2.newguid();
@@ -38,6 +16,16 @@ angular.module('starter.controllers', ['chart.js','angularUUID2','ngCordova'])
 // return promise;
 // };
 // })
+.controller('UserCtrl', function ($scope, USER_ROLES, AuthService) {
+  $scope.CurrentUser = null;
+  $scope.UserRoles = USER_ROLES;
+  $scope.isAuthorized = AuthService.isAuthorized;
+
+  $scope.setCurrentUser = function (user) {
+    $scope.currentUser = user;
+  };
+})
+
 .controller('AdminCtrl', function($scope, socket, $ionicLoading) {
 
 $scope.Validate_Item = '' ;
@@ -189,14 +177,14 @@ $ionicModal.fromTemplateUrl('templates/N0/login.html',function(modal){
           animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
           focusFirstInput: true
         });
-
-$ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
-          $scope.modalN1 = modal;
-        }, {
-          scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
-          animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
-          focusFirstInput: true
-        });
+//
+// $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
+//           $scope.modalN1 = modal;
+//         }, {
+//           scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
+//           animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
+//           focusFirstInput: true
+//         });
 
 $scope.CT_N1 = function (name)
   {
@@ -580,13 +568,35 @@ $scope.List_CTA.push(data);
 
       })
 
-.controller('LoginCtrl', function($scope, $rootScope,$state) {
-
-$scope.submit = function ()
+.controller('LoginCtrl', function($scope, $rootScope, $state, AUTH_EVENTS, USER_ROLES, AuthService)
 {
+
+$scope.Cnx = {
+    username: '',
+    password: ''
+  };
+
+$scope.login = function (Cnx)
+{
+  AuthService.login(Cnx).then(function(user) {
+  $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+  $scope.setCurrentUser(user);
   $state.go('app.CT');
-}
-      })
+ }, function () {
+      $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+    });
+  };
+
+    $scope.currentUser = null;
+    $scope.userRoles = USER_ROLES;
+    $scope.isAuthorized = AuthService.isAuthorized;
+
+    $scope.setCurrentUser = function (user) {
+      $scope.currentUser = user;
+    };
+
+ })
+
 
 .controller('StaCtrl', function($scope, $rootScope,$state,socket) {
   $scope.Selected_CT = $rootScope.Selected_CT ;
@@ -610,7 +620,6 @@ $scope.submit = function ()
   }
 
 })
-
 
 .controller('MyCtrl', function($scope, $cordovaNetwork, $rootScope) {
     document.addEventListener("deviceready", function () {

@@ -1,6 +1,7 @@
  /*global require,console,setTimeout */
 var sql = require('mssql');
 var app = require('express')();
+var crypto = require('crypto');
 var http = require('http').Server(app)
 var io = require('socket.io')(http);
 process.setMaxListeners(0);
@@ -101,7 +102,7 @@ io.on('connect', function(socket,$rootScope){
    //data comming from App = { Socket_id: 'null', CT : 'null' }
    //supposing data = { Socket_id: 'null', CT : 'null', Answer : 'null', Error : ''  }
    console.log(data);
-   var query = "Select * from VDP.dbo.SUPERVISION Where localisation = \'" + data.CT +  "' and Type= 'TA'" ;
+   var query = "Select * from dbo.SUPERVISION Where localisation = \'" + data.CT +  "' and Type= 'TA'" ;
    sql.connect(config).then(function() {
    new sql.Request().query(query).then(function(recordset) {
    var OPC_promise = new Promise(function(resolve, reject) {
@@ -142,11 +143,50 @@ socket.on('AL_Query',function(data)
   });
 
 
-
 //Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
 socket.on('AL_Answer',function(data) {
   console.log(data)
   socket.to(data.Socket_ID).emit('AL_Answer', data) ;
+});
+
+//Requet d'authentification SQL d'un client
+socket.on('Login_Query',function(data) {
+  console.log(data)
+  var hash = crypto.createHash('md5').update(data.password).digest("hex");
+  console.log(hash)
+  var query = "Select * from dbo.USERS Where UserName = \'"+ data.username +"\'" ;
+  sql.connect(config).then(function() {
+  new sql.Request().query(query).then(function(recordset) {
+    if(recordset)
+    {
+    rec=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
+    if(rec[0]) // utilisateur trouvé
+    {
+    console.log(rec[0])
+    if (rec[0].PassWord == hash)
+    {
+    socket.emit('Login_Answer', { id : socket.id , user : { id : rec[0].ID , role : rec[0].Role , name : data.username , pass : hash }  })
+    }
+    else
+    {
+    // authentification problem
+    console.log('Wrong User or Password')
+    socket.emit('Notif', { Msg : "Nom d'utilisateur ou Mot de passe Incorrect" });
+     }}
+    else //utilisateur introuvable
+    {console.log('No User With theses credentials')
+    socket.emit('Notif', { Msg : "Nom d'utilisateur ou Mot de passe Incorrect" });
+    }
+
+  //
+  // var OPC_promise = new Promise(function(resolve, reject) {
+  // socket.emit('OPC_Read_Query', { Socket_id: data.Socket_id, var:{ id: recordset , value:'null' }});
+  // socket.emit('AL_CT_Query', data);
+}
+  }).catch(function(err) {
+
+  });
+  });
 });
 
 //Redirige les MAJ des KPI OPC vers Clients_Room

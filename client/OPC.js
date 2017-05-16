@@ -638,8 +638,8 @@ async.series([
           // console.log(ids);
           callback();
           }).catch(function(err) {
-             console.log('Request error : ' + err.message);
 
+            console.log(err.name + ' --> ' + err.code + ' : ' + err.message);
         });
     ////////////////// STORED SQL PROCEDURE ///////////////////////////////////
             // new sql.Request()
@@ -651,7 +651,7 @@ async.series([
             //     // ... error checks
             // });
         }).catch(function(err) {
-            console.log('MS SQL error : ' + err);
+            console.log(err.name + ' --> ' + err.code + ' : ' + err.message);
 
         });
 
