@@ -13,13 +13,13 @@
 <ion-list>
        <ion-item style="background-color:#EAEAEA!important;"></ion-item>
 
-      <ion-item  ng-repeat="item in list_N1.global" ng-click="N1_close(item.url)"
+      <ion-item  ng-repeat="item in list_N1.GLOBAL" ng-click="N1_close(item.url)"
       ui-sref="{{::item.url}}" ui-sref-opts="{reload: true}"  style="font-family:'Roboto'!important ;font-size:16px !important ;">
         {{::item.name}}</ion-item>
 
           <ion-item style="background-color:#EAEAEA!important;"></ion-item>
 
-      <ion-item  ng-repeat="item in list_N1.local" ng-click="N1_close(item.url)"
+      <ion-item  ng-repeat="item in list_N1.LOCAL" ng-click="N1_close(item.url)"
       ui-sref="{{::item.url}}" ui-sref-opts="{reload: true}"  style="font-family:'Roboto'!important ;font-size:16px !important ;">
             {{::item.name}}</ion-item>
 

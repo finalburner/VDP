@@ -1,13 +1,13 @@
 app
 
-.factory('AuthService', function (socket, Session) {
+.factory('AuthService', function (socket, Session, P) {
   var authService = {};
 
   authService.login = function (Cnx) {
     var promise = new Promise(function(resolve, reject) {
-    socket.emit('Login_Query', Cnx)
-    socket.on('Login_Answer', function(data) {
-    console.log(data)
+    socket.emit(P.SOCKET.LQ, Cnx)
+    socket.on(P.SOCKET.LA, function(data) {
+    // console.log(data) //
     resolve(data.user);
     Session.create(data.id, data.user.id, data.user.role);
   });
@@ -16,13 +16,14 @@ app
 }
 
   authService.isAuthenticated = function () {
-    return !!Session.userId;
+    return !!Session.userId; //false si null
   };
 
   authService.isAuthorized = function (authorizedRoles) {
-    if (!angular.isArray(authorizedRoles)) {
+    if (!angular.isArray(authorizedRoles)) { // array transformation
       authorizedRoles = [authorizedRoles];
     }
+    //isAuthorized = isAuthenticated && authorizedRoles Exists
     return (authService.isAuthenticated() &&
       authorizedRoles.indexOf(Session.userRole) !== -1);
   };
@@ -44,7 +45,7 @@ app
 })
 
 .factory('socket', function (socketFactory) {
-  console.log(window.cordova)
+  // console.log(window.cordova)
   if (window.cordova) { // Mobile APP
     var mySocket = socketFactory({
       prefix: '',

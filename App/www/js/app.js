@@ -11,7 +11,7 @@ var controllers = angular.module('starter.controllers', ['chart.js','angularUUID
 app
 
 
-.config(function($stateProvider, $urlRouterProvider,USER_ROLES) {
+.config(function($stateProvider, $urlRouterProvider,P) {
 $stateProvider
     .state('app', {
     url: '/app',
@@ -26,7 +26,7 @@ $stateProvider
         authentificate: false,
         cache: false,
       templateUrl: 'templates/N0/login.html',
-      controller: 'LoginCtrl',
+      controller: 'AppCtrl',
       data: {
       authorizedRoles: []
     }
@@ -43,7 +43,7 @@ $stateProvider
         controller: 'CTctrl'
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     }
   })
@@ -58,7 +58,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
 
@@ -71,7 +71,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
   .state('app.carto', {
@@ -84,7 +84,7 @@ $stateProvider
       }
     },
     data: {
-    authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+    authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
   }
   })
 
@@ -103,7 +103,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.rapport', {
@@ -116,7 +116,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.admin', {
@@ -130,7 +130,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
 
@@ -144,7 +144,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
 
@@ -159,7 +159,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CTsta', {
@@ -173,7 +173,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CTcou', {
@@ -186,7 +186,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CTdoc', {
@@ -199,7 +199,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CThis', {
@@ -212,7 +212,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CTfic', {
@@ -225,7 +225,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CTcon', {
@@ -239,7 +239,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CTpla', {
@@ -252,7 +252,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
     .state('app.CTsynP', {
@@ -265,7 +265,7 @@ $stateProvider
         }
       },
       data: {
-      authorizedRoles: [USER_ROLES.admin, USER_ROLES.editor]
+      authorizedRoles: [P.USER_ROLES.admin, P.USER_ROLES.editor]
     }
     })
 

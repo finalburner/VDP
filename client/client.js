@@ -187,6 +187,7 @@ socket.on('Login_Query',function(data) {
 
   });
   });
+  
 });
 
 //Redirige les MAJ des KPI OPC vers Clients_Room
