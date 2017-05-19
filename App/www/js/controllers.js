@@ -1,6 +1,6 @@
 controllers
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
+.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $stateParams, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
 
 ConnectivityMonitor.startWatching();
 socket.on(P.SOCKET.CO , function () {
@@ -26,11 +26,11 @@ $scope.setCurrentUser = function (user) {
 $scope.login = function (Cnx)
 {
   // console.log(Cnx)
+  $state.go('app.CT'); // for test only
   AuthService.login(Cnx).then(function(user) {
   $rootScope.$broadcast(P.AUTH_EVENTS.loginSuccess);
   $scope.setCurrentUser(user);
   $state.go('app.CT');
-  console.log($scope.currentUser.role + '-' + $scope.userRoles.admin)
   // console.log($scope.currentUser)
  }, function () {
       $rootScope.$broadcast(P.AUTH_EVENTS.loginFailed);
@@ -71,8 +71,10 @@ $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
           focusFirstInput: true
         });
 
-$scope.CT_N1 = function (name)
+$scope.CT_N1 = function (event,name) //ouvre synthèse d'un CT
   {
+    // console.log(map.zoom)
+
     $rootScope.Selected_CT = name;
     $state.go('app.CTsyn');
   };
@@ -162,28 +164,59 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 })
 
 
-.controller('CTctrl', function($scope,socket,$ionicLoading, P ) {
+.controller('CTctrl', function($rootScope, $scope,socket,$ionicLoading, P, $cordovaGeolocation, $ionicSideMenuDelegate) {
+
+  $rootScope.$on('$stateChangeStart',
+  function(event, toState, toParams, fromState, fromParams){
+  if(toState.url == "/carto")
+   $ionicSideMenuDelegate.canDragContent(false);
+  if(fromState.url == "/carto")
+   $ionicSideMenuDelegate.canDragContent(true);
+  })
+  var def  =  [48.861253, 2.329920]
+  $scope.loc = def ;
+  var posOptions = {timeout: 10000, enableHighAccuracy: false};
+
+     $cordovaGeolocation
+     .getCurrentPosition(posOptions)
+
+     .then(function (position) {
+        var pos  = [ position.coords.latitude , position.coords.longitude ]
+        $scope.loc = pos;
+        $scope.marker = pos;
+      console.log($scope.loc)
+     }, function(err) {
+        console.log(err)
+     });
+
   $ionicLoading.show({
     content: 'Loading',
     animation: 'fade-in',
     showBackdrop: true,
-    duration: 200,
+    duration: 700,
     maxWidth: 200,
     showDelay: 0
   });
 
   $scope.list_CT = [] ;
-  var list_CT_track = [];
   socket.emit(P.SOCKET.CTQ);
   socket.on(P.SOCKET.CTA, function(data){
-  console.log(data)
+  // console.log(data)
   var AL_Color;
+  var CTdata;
   AL_Color = P.ALARM.AL_0_Color ; //applique la couleur CT de base
   if (data.AL_1)  AL_Color = P.ALARM.AL_1_Color ; //applique la couleur CT mineure
   if (data.AL_2)  AL_Color = P.ALARM.AL_2_Color ; //applique la couleur CT majeure
   if (data.AL_3)  AL_Color = P.ALARM.AL_3_Color ; //applique la couleur CT critique
   if (data.AL_10)  AL_Color = P.ALARM.AL_10_Color ; //applique la couleur CT critique
-  $scope.list_CT.push({ CT : data.localisation , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }) ;
+  CTdata = { CT : data.localisation , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }
+  ctIndex = $scope.list_CT.findIndex((obj => obj.localisation== data.localisation));
+  if (ctIndex != -1 )  // -1
+  $scope.list_CT[ctIndex] = CTdata ;
+  else
+  $scope.list_CT.push(CTdata);
+
+  // $scope.list_CT.push({ CT : data.localisation , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }) ;
   // console.log($scope.list_CT)
   });
 
@@ -278,10 +311,10 @@ socket.on(P.SOCKET.ALA, function(data){
   if (data.Ack) data.Ack_Label  = "Acquittée"
   else data.Ack_Label  = "Non Acquitée"
 
-  console.log(data)
+  // console.log(data)
 
 almIndex = $scope.list_AL.findIndex((obj => obj.Mnemo== data.Mnemo));
-console.log(almIndex)
+// console.log(almIndex)
 if (almIndex != -1 )  // -1
 $scope.list_AL[almIndex] = data ;
 else

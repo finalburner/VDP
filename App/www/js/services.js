@@ -49,7 +49,7 @@ app
   if (window.cordova) { // Mobile APP
     var mySocket = socketFactory({
       prefix: '',
-      ioSocket: io.connect('http://80.14.220.219:3000')
+      ioSocket: io.connect('http://80.11.8.31:3000')
     //  ioSocket: io.connect('http://localhost:3000')
     });
   }

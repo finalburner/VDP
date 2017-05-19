@@ -1,4 +1,4 @@
-<ion-view view-title="">
+<ion-view view-title="" >
 
 
     <ion-nav-bar class="bar-light">
@@ -18,26 +18,31 @@
    <i class="icon ion-search placeholder-icon"></i>
    <input type="text" placeholder="Recherche" ng-model="search">
  </label></div>
- 
-    <ng-map zoom-to-include-markers="auto" center="[48.861253, 2.329920]"
+
+    <ng-map  center="{{loc}}"
      default-style="false"
-     zoom = "13"
-     style="height:100%;width:100%;"
+     zoom = "12"
+     style="height:85vh !important;max-height:90vh;width:100%;"
      >
 
-      <shape name="circle" ng-repeat="CT in list_CT" no-watcher="true"
-           stroke-color="{{::CT.AL_Color}}"
+     <marker  animation="Animation.BOUNCE"  position="{{marker}}" title="Mobile"></marker>
+      <shape name="circle" ng-repeat="item in list_CT | filter: search" no-watcher="true"
+           stroke-color="{{::item.AL_Color}}"
            stroke-opacity="0.8"
            stroke-weight="2"
-           fill-color="{{::CT.AL_Color}}"
+           fill-color="{{::item.AL_Color}}"
            fill-opacity="0.8"
-           center="[{{::CT.LAT}},{{::CT.LONG}}]"
-           radius="80">
+           title="{{::item.CT}}"
+           center="[{{::item.LAT}},{{::item.LONG}}]"
+           radius="80"
+           on-click="CT_N1(this)"
+           >
+           <!-- on-click="CT_N1(this)"  -->
          </shape>
 
 
 
     </ng-map>
 
-</ion-content>>
+</ion-content>
 </ion-view>

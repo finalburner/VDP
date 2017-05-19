@@ -6,11 +6,12 @@ var opcua = require("node-opcua");
 var io = require('socket.io-client');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
-var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
+var endpointUrl = "opc.tcp://10.18.10.13:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 var ids ;
 var i = 0 ;
-var BATCH_MONITORING = 1000 ;
+var Write_Perm = true ; //activer le controle-commande
+var BATCH_MONITORING = 0 ;
 var WAIT = 100;
 var SELECT = 0;
 var Mnemo ;
@@ -513,7 +514,7 @@ if (the_session)
   });
 } }); });
 }
-if ( data.Mode =="Write" ) {
+if ( data.Mode =="Write" && Write_Perm ) {
 
 if (data.Type == "TC")
   {
@@ -709,7 +710,6 @@ async.series([
              }
               //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
               });
-
     });
     callback();
   },

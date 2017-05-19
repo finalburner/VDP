@@ -12,3 +12,5 @@ a corn
 acorn
 after
 ajv
+ionic info
+ionic serve

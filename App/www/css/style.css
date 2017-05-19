@@ -1,6 +1,5 @@
 .Bandeau
 {
-
   background-color: #BD2759;
   font-family: "Roboto";
   font-size: 48px;
@@ -10,9 +9,6 @@
   vertical-align: bottom;
   position: relative;
   padding : 30px 30px 30px 30px !important;
-
-
-
 }
 
 /*Login*/
@@ -624,7 +620,6 @@ height: 40px;
     background-color: #000;
     }
 }
-
 
 /*Consigne*/
 
