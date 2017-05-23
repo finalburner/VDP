@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 // angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap','ngMaterial'])
 var app = angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngAnimate','ngMap']) ;
-var controllers = angular.module('starter.controllers', ['chart.js','angularUUID2','ngCordova']);
+var controllers = angular.module('starter.controllers', ['angularUUID2','ngCordova']);
 
 app
 .config(function($stateProvider, $urlRouterProvider,P) {

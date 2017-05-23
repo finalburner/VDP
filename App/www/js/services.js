@@ -1,6 +1,6 @@
 app
 
-.factory('AuthService', function (socket, Session, P) {
+.factory('AuthService', ['socket', 'Session', 'P', function (socket, Session, P) {
   var authService = {};
 
   authService.login = function (Cnx) {
@@ -29,7 +29,7 @@ app
   };
 
   return authService;
-})
+}])
 
 .service('Session', function () {
   this.create = function (sessionId, userId, userRole) {
@@ -44,26 +44,26 @@ app
   };
 })
 
-.factory('socket', function (socketFactory) {
+.factory('socket', ['socketFactory','P', function (socketFactory,P) {
   // console.log(window.cordova)
   if (window.cordova) { // Mobile APP
     var mySocket = socketFactory({
       prefix: '',
-      ioSocket: io.connect('http://80.11.8.31:3000')
+      ioSocket: io.connect(P.PARAM.SRV_WEB)
     //  ioSocket: io.connect('http://localhost:3000')
     });
   }
   else { // Desk APP
     var mySocket = socketFactory({
       prefix: '',
-     ioSocket: io.connect('http://localhost:3000')
+     ioSocket: io.connect(P.PARAM.SRV_LOCAL)
     });
   }
   //mySocket.forward('temp');
   return mySocket
-})
+}])
 
-.factory('Notif', function (socket,$cordovaToast) { //Service de notification
+.factory('Notif', ['socket', '$cordovaToast', function (socket,$cordovaToast) { //Service de notification
 
 socket.on('Notif', function(data) {
   // console.log(data)
@@ -76,9 +76,9 @@ this.Show = function(Msg) {
 		}
 return 0 ;
 
-})
+}])
 
-.factory('ConnectivityMonitor', function($rootScope, $cordovaNetwork,$cordovaToast){
+.factory('ConnectivityMonitor', ['$rootScope', '$cordovaNetwork', '$cordovaToast', function($rootScope, $cordovaNetwork,$cordovaToast){
 
   return {
     isOnline: function(){
@@ -115,4 +115,4 @@ return 0 ;
         }
     }
   }
-})
+}])

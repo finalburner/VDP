@@ -27,15 +27,15 @@ http.listen(3000, function(){
 
 });
 
-// process.on('uncaughtException', function(err) {
-//         if(err.errno === 'EADDRINUSE' && err.port === '3000')
-//              console.log('Port 3000 already in use. Using Port 4000');
-//              http.close();
-//              http.listen(4000, function(){
-//                console.log('listening on *:4000');
-//              });
-//
-//     });
+process.on('uncaughtException', function(err) {
+        if(err.errno === 'EADDRINUSE' && err.port === '3000')
+             console.log('Port 3000 already in use. Using Port 4000');
+             http.close();
+             http.listen(4000, function(){
+               console.log('listening on *:4000');
+             });
+
+    });
 
 
 // app.get('/', function(req, res){
@@ -205,15 +205,16 @@ console.log('CTA_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID 
 
 // Réponse du client OPC en circuit CTA
 socket.on('CTA_Answer', function(data){
+  // console.log(data)
 socket.to(data.Socket_ID).emit('CTA_Answer', data )
 console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
   });
 
-//Mise à jour OPC des températures ambiantes
-  socket.on('CTA_Answer_Update', function(data){
-  socket.to(data.Socket_ID).emit('CTA_Answer_Update', data )
-  console.log('CTA_Answer_Update redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
-    });
+// //Mise à jour OPC des températures ambiantes
+//   socket.on('CTA_Answer_Update', function(data){
+//   socket.to(data.Socket_ID).emit('CTA_Answer_Update', data )
+//   console.log('CTA_Answer_Update redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+//     });
 
 //Requete d'un client donné de la liste des status du cT
     socket.on('Sta_Query', function(data){
@@ -246,7 +247,7 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
     }
     console.log(data)
   socket.to(data.Socket_ID).emit('Cons_Answer', data )
-   console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+   console.log('Consigne Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
       });
 
   //Reponse OPC pour les consignes

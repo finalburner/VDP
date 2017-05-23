@@ -1,25 +1,22 @@
 app
-run(function($trace) {
-  $trace.enable('TRANSITION');
-})
 
- $rootScope.$on('$stateChangeStart', function (event, next) {
-    console.log(event)
-    console.log(next)
-    var authorizedRoles = next.data.authorizedRoles;
-
-    if (!AuthService.isAuthorized(authorizedRoles)) {
-      event.preventDefault();
-      if (AuthService.isAuthenticated()) {
-        // user is not allowed
-        $rootScope.$broadcast(P.AUTH_EVENTS.notAuthorized);
-      } else {
-        // user is not logged in
-        $rootScope.$broadcast(P.AUTH_EVENTS.notAuthenticated);
-        $state.go('login')
-      }
-    }
-  });
+ // $rootScope.$on('$stateChangeStart', function (event, next) {
+ //    console.log(event)
+ //    console.log(next)
+ //    var authorizedRoles = next.data.authorizedRoles;
+ //
+ //    if (!AuthService.isAuthorized(authorizedRoles)) {
+ //      event.preventDefault();
+ //      if (AuthService.isAuthenticated()) {
+ //        // user is not allowed
+ //        $rootScope.$broadcast(P.AUTH_EVENTS.notAuthorized);
+ //      } else {
+ //        // user is not logged in
+ //        $rootScope.$broadcast(P.AUTH_EVENTS.notAuthenticated);
+ //        $state.go('login')
+ //      }
+ //    }
+ //  });
 
 .config(function($provide) { // To comment
   $provide.decorator('$state', function($delegate) {

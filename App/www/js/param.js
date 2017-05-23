@@ -1,5 +1,10 @@
 app
 .constant('P', {
+  PARAM : {
+    SRV_WEB : 'http://80.14.220.219:3000',
+    SRV_LOCAL : 'http://localhost:3000'
+
+  },
   SOCKET :
   {  //Socket Event
         LQ   : 'Login_Query',

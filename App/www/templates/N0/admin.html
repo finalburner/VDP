@@ -15,7 +15,7 @@
 
     <ion-list>
         <ion-item class="row animate-repeat"
-        ng-animate="'animate'" ng-repeat="item in list_Cons | filter: search track by item.Mnemo" class="item col" style = "padding: 0 ;">
+        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search track by item.Mnemo+$index" class="item col" style = "padding: 0 ;">
     <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 
 
@@ -39,7 +39,7 @@
 
          <div  style="border-radius:0;Align:center;padding:0;position: absolute; left: -9999px; width: 1px; height: 1px;">
         <button type="submit" class="button button-block button-positive" style="margin: 10px 0 0 0 0 ;left : -100px"
-        ng-click="Analog_Change()">Valider</button>
+        ng-click="Analog_Change(item)">Valider</button>
       </div>
         </form>
 

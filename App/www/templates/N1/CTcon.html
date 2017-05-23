@@ -18,7 +18,7 @@
 
     <ion-list>
         <ion-item class="row animate-repeat"
-        ng-animate="'animate'" ng-repeat="item in list_Cons | filter: search track by item.Mnemo" class="item col" style = "padding: 0 ;">
+        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search track by item.Mnemo+$index" class="item col" style = "padding: 0 ;">
     <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 
 

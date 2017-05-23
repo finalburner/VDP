@@ -6,11 +6,11 @@ var opcua = require("node-opcua");
 var io = require('socket.io-client');
 var client = new opcua.OPCUAClient({keepSessionAlive: true});
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
-var endpointUrl = "opc.tcp://10.18.10.13:9080/CODRA/ComposerUAServer";
+var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 var ids ;
 var i = 0 ;
-var Write_Perm = true ; //activer le controle-commande
+var Write_Perm = false ; //activer le controle-commande
 var BATCH_MONITORING = 0 ;
 var WAIT = 100;
 var SELECT = 0;
@@ -69,55 +69,69 @@ socket.emit('OPC_Socket_Connected');
 
 //Socket query for list CT on SQL
 socket.on('CT_Query', function(data){
-if (the_session)
- {
   console.log('CT_query from ' + data.Socket_ID)
+  var tmp ;
+  var OPC_Read = [] ;
+  var len ;
+  if (the_session)
+      {
+
+   // Requete SQL CT + PT
     sql.connect(config_DONNEES).then(function() {
     new sql.Request().query('Select distinct localisation,Installation_technique from dbo.SUPERVISION order by localisation').then(function(rec) {
     CT_PT_List=JSON.stringify(rec);
     CT_PT_List=CT_PT_List.replace(/\s/g, "") ;
     CT_PT_List=JSON.parse(CT_PT_List);
-    // console.log(ids)
-    CT_PT_List.forEach(function(id){
-    CT = id.localisation ; //Centre Thermique
-    PT = id.Installation_technique ; //Point technique
-    AD = NodeId + '/Application/STEGC/Paris/PT/' + PT + '/_Entite/Adresse' ;  // Adresse
-    CP = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/CodePostal' ; //Code Postale
-    VI = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/Ville' ; //Ville
-    LAT = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/Latitude' ;  //latitude
-    LONG = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/Longitude' ;  //Longitude
-    AL_10 = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/SyntheseDefCom/ExistPresent' //Présence Alarme DefCom
-    AL_3 = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/SyntheseCritique/ExistPresent' //Présence Alarme Critique
-    AL_2 = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/SyntheseMajeure/ExistPresent' //Présence Alarme Majeure
-    AL_1 = NodeId +'/Application/STEGC/Paris/PT/' + PT + '/_Entite/SyntheseMineure/ExistPresent' //Présence Alarme Mineure
-    the_session.readVariableValue([AD,CP,VI,LAT,LONG,AL_10,AL_3,AL_2,AL_1], function(err,dataValue,diagnostics) {
-              if (err)
-              console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err );
-              else {
-    if (dataValue[0] && dataValue[1] && dataValue[2] && dataValue[0].value && dataValue[1].value && dataValue[2].value)
-    id.ADR = dataValue[0].value.value + ' ' + dataValue[1].value.value + ' ' + dataValue[2].value.value; //Adresse Complète
-    if (dataValue[3] && dataValue[3].value) id.LAT = dataValue[3].value.value;
-    if (dataValue[4] && dataValue[4].value) id.LONG = dataValue[4].value.value;
-    if (dataValue[5] && dataValue[5].value) id.AL_10 = dataValue[5].value.value;
-    if (dataValue[6] && dataValue[6].value) id.AL_3 = dataValue[6].value.value;
-    if (dataValue[7] && dataValue[7].value) id.AL_2 = dataValue[7].value.value;
-    if (dataValue[8] && dataValue[8].value) id.AL_1 = dataValue[8].value.value;
-
-  var Retour = Object.assign({OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
+    len = CT_PT_List.length ;
+    for (var i = 0; i < len; i++) {
+    tmp = NodeId + '/Application/STEGC/Paris/PT/' + CT_PT_List[i].Installation_technique ;
+    AD = tmp + '/_Entite/Adresse' ;  // Adresse
+    CP = tmp + '/_Entite/CodePostal' ; //Code Postale
+    VI = tmp + '/_Entite/Ville' ; //Ville
+    LAT = tmp + '/_Entite/Latitude' ;  //latitude
+    LONG = tmp + '/_Entite/Longitude' ;  //Longitude
+    AL_10 = tmp + '/_Entite/SyntheseDefCom/ExistPresent' //Présence Alarme DefCom
+    AL_3 = tmp + '/_Entite/SyntheseCritique/ExistPresent' //Présence Alarme Critique
+    AL_2 = tmp + '/_Entite/SyntheseMajeure/ExistPresent' //Présence Alarme Majeure
+    AL_1 = tmp + '/_Entite/SyntheseMineure/ExistPresent' //Présence Alarme Mineure
+    // var OPC_Read = {AD,CP,VI,LAT,LONG,AL_10,AL_3,AL_2,AL_1 }
+    OPC_Read.push(AD,CP,VI,LAT,LONG,AL_10,AL_3,AL_2,AL_1)
+     }
+     var opc_len = OPC_Read.length
+    //  console.log(OPC_Read)
+    //      console.log(OPC_Read.length)
+    //      console.log(len)
+   the_session.readVariableValue(OPC_Read,function(err,dataValue,diagnostics) {
+    if (err)
+    console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err );
+    else {
+    for(i=0 ; i< opc_len ; i = i + 9)
+    {
+    if (dataValue[i] && dataValue[i+1] && dataValue[i+2] && dataValue[i].value && dataValue[i+1].value && dataValue[i+2].value)
+    ADR = dataValue[i].value.value + ' ' + dataValue[i+1].value.value + ' ' + dataValue[i+2].value.value; //Adresse Complète
+    if (dataValue[i+3] && dataValue[i+3].value) LAT = dataValue[i+3].value.value;
+    if (dataValue[i+4] && dataValue[i+4].value) LONG = dataValue[i+4].value.value;
+    if (dataValue[i+5] && dataValue[i+5].value) AL_10 = dataValue[i+5].value.value;
+    if (dataValue[i+6] && dataValue[i+6].value) AL_3 = dataValue[i+6].value.value;
+    if (dataValue[i+7] && dataValue[i+7].value) AL_2 = dataValue[i+7].value.value;
+    if (dataValue[i+8] && dataValue[i+8].value) AL_1 = dataValue[i+8].value.value;
+    CT =  CT_PT_List[i/9].localisation;
+    PT =  CT_PT_List[i/9].Installation_technique;
+    var Retour = {OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID, len : len , item : i/9 ,  CT : CT, PT : PT, ADR : ADR , LAT : LAT , LONG : LONG , AL_10 : AL_10 , AL_3 : AL_3 , AL_2 : AL_2 , AL_1 : AL_1 }
+  // console.log(Retour)
   socket.emit('CT_Answer', Retour);
-  console.log(dataValue);
-
-  }
-
-      });
-  });
+//   // console.log(dataValue);
+  }}
+})
+// }
 }).catch(function(err) {
 console.log(err)
 });
-    }).catch(function(err) {
-    console.log( err )
-    });
-  }
+ }).catch(function(err) {
+console.log(err)
+});
+}
+
   if (!the_session) socket.emit('Notif_All', { Msg : 'OPC Session Error'})
   // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
  });
@@ -136,7 +150,8 @@ console.log(err)
  console.log(query)
      new sql.Request().query(query).then(function(rec) {
        rec=JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
-       rec.forEach(function(id){
+      for (var i = 0, len = rec.length; i < len; i++) {
+         id = rec[i];
          id.Metier = 'CVC';
          id.NomGroupeFonctionnel = 'GENER';
          id.NomObjetFonctionnel = 'SYNTH';
@@ -166,12 +181,9 @@ console.log(err)
                 socket.emit('Sta_Answer', Retour);
                 console.log(Retour);
 
-
               } }
       })
-
-
- });
+ }
  }).catch(function(err) {
  console.log( err )
  });
@@ -190,17 +202,20 @@ if (the_session)
 {
 console.log('CTA_Query : ' + data.Socket_ID) ;
 var NodeId = "ns=2;s=" ;
+var OPC_Read = []  ;
+var len ;
 // console.log(data)
 if (data.Selected_CT == 'null' )
 console.log('No CT Selected')
 else {
 query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
-
   sql.connect(config_DONNEES).then(function() {
   new sql.Request().query(query).then(function(recordset) {
   recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
   if (recordset) {
-    recordset.forEach(function(id){
+    len = recordset.length
+    for (var i = 0 ; i < len; i++) {
+    id = recordset[i];
     PT = id.Installation_technique;
     Circuit = id.Libelle_groupe;
     Design = id.DesignGroupeFonctionnel;
@@ -208,26 +223,35 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
     DEPAR=  '/STEGC/Paris/PT/' + PT + '/Acquisition/' + 'CVC_' + PT + '_CIRCU' + Design + '_TEMP3DEPAR_M01';
     TEMP3_AMBIA = NodeId + '/Application' + AMBIA + '.Valeur' ;
     TEMP3_DEPAR = NodeId + '/Application' + DEPAR + '.Valeur' ;
-    COURBE1 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
-    COURBE2 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + DEPAR + '/Evt\' ORDER BY UTC_App_DateTime DESC'
-    // console.log(id)
-    the_session.readVariableValue([TEMP3_AMBIA,TEMP3_DEPAR], function(err,dataValue,diagnostics) {
+    // COURBE1 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
+    // COURBE2 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + DEPAR + '/Evt\' ORDER BY UTC_App_DateTime DESC'
+  // console.log(id)
+   OPC_Read.push(TEMP3_AMBIA,TEMP3_DEPAR)
+  }
+  var opc_len = OPC_Read.length ;
+  // console.log(OPC_Read)
+  // console.log(len)
+  // console.log(opc_len)
+
+    the_session.readVariableValue( OPC_Read, function(err,dataValue,diagnostics) {
               if (err)
               console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err );
               else {
-
-                if (dataValue[0])
+              for(i=0 ; i< opc_len ; i = i + 2)
+              {
+                id = recordset[i/2];
+                if (dataValue[i])
                  { // console.log(dataValue[0])
-                   if (dataValue[0].value)  {
-                     id.TEMP3_AMBIA = dataValue[0].value.value
+                   if (dataValue[i].value)  {
                      id.TEMP3_AMBIA_SRC = TEMP3_AMBIA
+                     id.TEMP3_AMBIA = dataValue[i].value.value
+
 
                       // new sql.Request().query(COURBE1).then(function(recordset) {
                       // recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
                       // if (recordset)
                       // id.TEMP3_AMBIA_ARC = recordset['TriggeringValue']
                       // });
-
                    }
  }
  //Monitor TEMP3_AMBI
@@ -246,24 +270,28 @@ query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_tec
 // });
 
 
-                if (dataValue[1])
+                if (dataValue[i+1])
                 { //console.log(dataValue[1])
-                  if (dataValue[1].value)
-                  { id.TEMP3_DEPAR = dataValue[1].value.value
-                    id.TEMP3_DEPAR_SRC = TEMP3_DEPAR
+                  if (dataValue[i+1].value)
+                  { id.TEMP3_DEPAR_SRC = TEMP3_DEPAR
+                    id.TEMP3_DEPAR = dataValue[i+1].value.value
+
                     //  new sql.Request().query(COURBE2).then(function(recordset) {
                     //  recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
                     //  if (recordset)
                     //   d.TEMP3_DEPAR_ARC = recordset['TriggeringValue']
                     // });
                    }
+
                 }
 // console.log(id)
-var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
+var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID , len : len, item : i/2  }, id );
 socket.emit('CTA_Answer', Retour);
 console.log("CTA Emit ")
+console.log(Retour)
 
               }
+            }
 
 });
             //
@@ -290,18 +318,18 @@ console.log("CTA Emit ")
     // var Retour = { OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID , CTA_List : CTA_List };
     // socket.emit('CTA_Answer', Retour);
   // console.log(Retour)
+};
+
+}).catch(function(err) {
+console.log( err )
+});
+}).catch(function(err) {
+console.log( err )
 });
 
 }
-}).catch(function(err) {
-console.log( err )
-});
-}).catch(function(err) {
-console.log( err )
-});
 }
-}
-  if (!the_session) socket.emit('Notif_All', { Msg : 'OPC Session Error'})
+  else socket.emit('Notif_All', { Msg : 'OPC Session Error'})
   // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
 });
 
@@ -326,7 +354,8 @@ if (the_session)
   // console.log(recordset)
   if (recordset) {
   recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
-  recordset.forEach(function(id){
+  for (var i = 0, len = recordset.length; i < len; i++) {
+  id = recordset[i];
   // var adr;
                   Mnemo = id.Metier + '_' + id.Installation_technique;
                   Mnemo +=  '_' + id.NomGroupeFonctionnel + id.DesignGroupeFonctionnel;
@@ -337,11 +366,12 @@ if (the_session)
                   var NodeId = "ns=2;s=" + adr;
                   if (id.TOR_CriticiteAlarme && id.Libelle_information )
                   AlmToRead.push({ NodeId : NodeId , Mnemo : Mnemo , Libelle: id.Libelle_information, Criticite : id.TOR_CriticiteAlarme , Actif : '' , Ack : ''});
-  });
+  };
 
       //  console.log(AlmToRead)
       //  socket.broadcast.to(OPC_Socket_ID).emit('OPC_Read_Query',AlmToRead);
-      AlmToRead.forEach(function(id){
+      for (var i = 0, len = AlmToRead.length; i < len; i++) {
+      id = AlmToRead[i];
       alm_actif = id.NodeId + '.valeur';
       alm_ack = id.NodeId + '/Alm/Acknowledged';
       // console.log(alm_state);
@@ -398,7 +428,7 @@ socket.emit('AL_Answer', Retour);
     }
 
       });
-    });
+    };
   }
       }).catch(function(err) { //Gestion globale des erreurs SQL
       console.log('SQL QUERY ERROR :' ); console.dir (err)
@@ -467,6 +497,7 @@ if (the_session)
   {
   console.log(data)
   var NodeId = "ns=2;s=" ;
+  var OPC_Read = [];
   if (data.Selected_CT && data.Selected_Grp)
   {
   query =  "Select Metier, Installation_technique, NomGroupeFonctionnel, "  // Consigne Analogique
@@ -483,10 +514,11 @@ if (the_session)
     sql.connect(config_DONNEES).then(function() {
     new sql.Request().query(query).then(function(recordset) {
     recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
-    // console.log(recordset)
+    console.log(recordset)
     if (recordset) {
-      recordset.forEach(function(id){
-      var newid;
+      var len = recordset.length
+      for (var i = 0 ; i < len; i++) {
+      id = recordset[i];
       Mnemo = id.Metier + '_' + id.Installation_technique;
       Mnemo +=  '_' + id.NomGroupeFonctionnel + id.DesignGroupeFonctionnel;
       Mnemo +=  '_' + id.NomObjetFonctionnel + id.DesignObjetFonctionnel ;
@@ -496,23 +528,34 @@ if (the_session)
       adr += '/Acquisition/' + Mnemo ;
       id.adr = NodeId + adr + '.Valeur' ;
       // console.log(id)
-      the_session.readVariableValue(id.adr, function(err,dataValue,diagnostics) {
+      OPC_Read.push(id.adr)
+      }
+      var opc_len = OPC_Read.length
+      var Value,Local_Value ;
+      the_session.readVariableValue(OPC_Read, function(err,dataValue,diagnostics) {
                 if (err)
                 console.log( "diag >>>> " + diagnostics + " ---- Error >>>> " + err );
                 else {
-                  // console.dir(dataValue)
-  if (dataValue && dataValue.value) {
-  id.Value = dataValue.value.value
-  id.Local_Value = id.Value ;
-  //Renvoi de la consigne unitaire vers le client
-  var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
-  socket.emit('Cons_Answer', Retour);
-  console.log( Retour )
+                  var id = [] ;
+
+   for(i=0 ; i < opc_len ; i++)
+    {              // console.dir(dataValue)
+      // console.log(i)
+  id = recordset[i];
+  if (dataValue[i] && dataValue[i].value) {
+  Value = dataValue[i].value.value
+  Local_Value = id.Value ;
+
         }
+
+    //Renvoi de la consigne unitaire vers le client
+    var Retour = Object.assign({ len : len , item : i , OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID , Value : Value , Local_Value : Local_Value }, id);
+    socket.emit('Cons_Answer', Retour);
       }
+    }
     });
-  });
-} }); });
+  };
+ }); });
 }
 if ( data.Mode =="Write" && Write_Perm ) {
 
@@ -691,8 +734,8 @@ async.series([
            publishingEnabled: true,
            priority: 8
        });
-
-  sub_param.forEach(function(id){
+       for (var i = 0, len = sub_param.length; i < len; i++) {
+       id = sub_param[i];
               var nodeId = "ns=2;s=" + id.adr;
               var monitoredItem  = init_OPC_sub.monitor({
                  nodeId: opcua.resolveNodeId(nodeId),
@@ -710,21 +753,21 @@ async.series([
              }
               //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
               });
-    });
+    };
     callback();
   },
     // step 3 : browse
-  //   function(callback) {
-  //      the_session.browse("ObjectsFolder", function(err,browse_result){
-  //          if(!err) {
-  //              browse_result[0].references.forEach(function(reference) {
-  //                  console.log(" result : " +  reference.browseName.toString());
-  //              });
-  //          }
-  //          callback(err);
-  //      });
-  //   },
-  //
+    // function(callback) {
+    //    the_session.browse("ObjectsFolder", function(err,browse_result){
+    //        if(!err) {
+    //            browse_result[0].references.forEach(function(reference) {
+    //                console.log(" result : " +  reference.browseName.toString());
+    //            });
+    //        }
+    //        callback(err);
+    //    });
+    // },
+    //
   //   function(callback) {
   //     var crawler = new NodeCrawler(the_session);
   //
@@ -747,7 +790,7 @@ async.series([
   //  step 4 : read a variable with readVariableValue
     // function(callback) {
     //
-    //   ids.forEach(function(id){
+    //   aids.forEach(function(id){
     //   var nodeId = "ns=2;s=" + id;
     //    the_session.readVariableValue(nodeId, function(err,dataValue) {
     //        if (!err) {
@@ -800,7 +843,8 @@ async.series([
        },10000);*/
 
        // install monitored item
-  ids.forEach(function(id){
+       for (var i = 0, len = ids.length; i < len; i++) {
+       id = ids[i];
   if  (i< BATCH_MONITORING) {
     var adr;
               Mnemo = id.Metier + '_' + id.Installation_technique;
@@ -831,7 +875,7 @@ async.series([
           console.log('wait');
           i=0;
           }
-    });
+    };
     console.log('Subscription Finished');
       // callback();
   },

@@ -1,6 +1,6 @@
 controllers
 
-.controller('AppCtrl', function($rootScope, $scope, $ionicModal, $stateParams, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
+.controller('AppCtrl', ['$rootScope', '$scope', '$ionicModal', '$stateParams', '$timeout', 'socket', '$state', 'P', 'ConnectivityMonitor', 'Notif', 'AuthService', function($rootScope, $scope, $ionicModal, $stateParams, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
 
 ConnectivityMonitor.startWatching();
 socket.on(P.SOCKET.CO , function () {
@@ -71,7 +71,7 @@ $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
           focusFirstInput: true
         });
 
-$scope.CT_N1 = function (event,name) //ouvre synthèse d'un CT
+$scope.CT_N1 = function (name) //ouvre synthèse d'un CT
   {
     // console.log(map.zoom)
 
@@ -113,27 +113,30 @@ $scope.N1_close = function(name) {
 //     $scope.modalCnx.show();
 //   };
 
-})
+}])
 
-.controller('ConCtrl', function($scope, socket, $ionicLoading, $rootScope,$state, P) {
+.controller('ConCtrl', ['$scope', 'socket', '$ionicLoading', '$rootScope', '$state', 'P', function($scope, socket, $ionicLoading, $rootScope,$state, P) {
 
   //  $scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
    $scope.Selected_NomGrp = $rootScope.Selected_NomGrp ; // Nom Groupe selectionné
    $scope.Selected_Grp = $rootScope.Selected_Grp ; //Grp selectionné
    $scope.Validate_Item = '' ;
-   $scope.list_Cons = [] ;
+   $scope.List_Cons = [] ;
+   var List_Cons_Local = [] ;
   // if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
   if(!$scope.Selected_NomGrp || !$scope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
    socket.emit(P.SOCKET.CQ , { Mode : "Read" , Selected_Grp : $rootScope.Selected_Grp , Selected_CT :$rootScope.Selected_CT });
    socket.on(P.SOCKET.CA , function(data) {
    console.log(data)
-   if(data.Value.toString().length >= 6)
+if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
    data.Value  = Math.round(data.Value).toFixed(2);
-   ConsIndex = $scope.list_Cons.findIndex((obj => obj.Mnemo == data.Mnemo));
+   ConsIndex = List_Cons_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
    if (ConsIndex == -1 )  // -1
-   $scope.list_Cons.push(data);
+   List_Cons_Local.push(data);
    else
-   $scope.list_Cons[ConsIndex] = data ;
+   List_Cons_Local[ConsIndex] = data ;
+
+   if( data.len - 1 == data.item) $scope.List_Cons = List_Cons_Local ;
    });
 
    $scope.Write= function (item)
@@ -151,9 +154,9 @@ $scope.N1_close = function(name) {
    socket.emit(P.SOCKET.CQ, item );
    }};
 
-      })
+      }])
 
-.controller('CTfic', function($scope,socket) {
+.controller('CTfic', ['$scope', 'socket', function($scope,socket) {
 $scope.Live_Update = [];
 
 socket.on('update',function(data){
@@ -161,25 +164,25 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 // console.log(data.id + ">>>>" + data.value )
 // console.log(Live_Update);
 });
-})
+}])
 
 
-.controller('CTctrl', function($rootScope, $scope,socket,$ionicLoading, P, $cordovaGeolocation, $ionicSideMenuDelegate) {
+.controller('CTctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$cordovaGeolocation', '$ionicSideMenuDelegate', function($rootScope, $scope,socket,$ionicLoading, P, $cordovaGeolocation, $ionicSideMenuDelegate) {
 
+  var list_CT_local = [] ;
   $rootScope.$on('$stateChangeStart',
   function(event, toState, toParams, fromState, fromParams){
   if(toState.url == "/carto")
    $ionicSideMenuDelegate.canDragContent(false);
   if(fromState.url == "/carto")
    $ionicSideMenuDelegate.canDragContent(true);
-  })
+ });
   var def  =  [48.861253, 2.329920]
   $scope.loc = def ;
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
      $cordovaGeolocation
      .getCurrentPosition(posOptions)
-
      .then(function (position) {
         var pos  = [ position.coords.latitude , position.coords.longitude ]
         $scope.loc = pos;
@@ -189,19 +192,19 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
         console.log(err)
      });
 
-  $ionicLoading.show({
-    content: 'Loading',
-    animation: 'fade-in',
-    showBackdrop: true,
-    duration: 700,
-    maxWidth: 200,
-    showDelay: 0
-  });
+  // $ionicLoading.show({
+  //   content: 'Loading',
+  //   animation: 'fade-in',
+  //   showBackdrop: true,
+  //   duration: 300,
+  //   maxWidth: 200,
+  //   showDelay: 0
+  // });
 
   $scope.list_CT = [] ;
   socket.emit(P.SOCKET.CTQ);
   socket.on(P.SOCKET.CTA, function(data){
-  // console.log(data)
+    // console.log(data)
   var AL_Color;
   var CTdata;
   AL_Color = P.ALARM.AL_0_Color ; //applique la couleur CT de base
@@ -209,15 +212,16 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
   if (data.AL_2)  AL_Color = P.ALARM.AL_2_Color ; //applique la couleur CT majeure
   if (data.AL_3)  AL_Color = P.ALARM.AL_3_Color ; //applique la couleur CT critique
   if (data.AL_10)  AL_Color = P.ALARM.AL_10_Color ; //applique la couleur CT critique
-  CTdata = { CT : data.localisation , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }
-  ctIndex = $scope.list_CT.findIndex((obj => obj.localisation== data.localisation));
+  CTdata = { CT : data.CT , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }
+  ctIndex = list_CT_local.findIndex(function(obj) { obj.CT == data.CT});
   if (ctIndex != -1 )  // -1
-  $scope.list_CT[ctIndex] = CTdata ;
+  list_CT_local[ctIndex] = CTdata ;
   else
-  $scope.list_CT.push(CTdata);
-
+  list_CT_local.push(CTdata);
   // $scope.list_CT.push({ CT : data.localisation , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }) ;
   // console.log($scope.list_CT)
+  if (data.len -1  == data.item)
+   $scope.list_CT = list_CT_local
   });
 
     // socket.emit('ListeCT');
@@ -234,9 +238,9 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
     //     },
     $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3QWWdY2M8JtbDSSrVriG9lIwD5anCRHo";
 
-  })
+  }])
 
-.controller('ALctrl', function($rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
+.controller('ALctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$state', '$stateParams', function($rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
 
 // $scope.Selected_CT = $rootScope.Selected_CT ;
 var list_AL_Track = [];
@@ -313,7 +317,7 @@ socket.on(P.SOCKET.ALA, function(data){
 
   // console.log(data)
 
-almIndex = $scope.list_AL.findIndex((obj => obj.Mnemo== data.Mnemo));
+almIndex = $scope.list_AL.findIndex(function(obj) { obj.Mnemo== data.Mnemo});
 // console.log(almIndex)
 if (almIndex != -1 )  // -1
 $scope.list_AL[almIndex] = data ;
@@ -335,10 +339,10 @@ $scope.list_AL.push(data);
 
    });
 
-    })
+    }])
 
 
-.controller('CTActrl', function($rootScope, $scope, socket, $state, P) {
+.controller('CTActrl', ['$rootScope', '$scope', 'socket', '$state', 'P', function($rootScope, $scope, socket, $state, P) {
 $scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
 if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
 
@@ -348,7 +352,7 @@ $scope.Consigne_Grp = function (NomGrp,Grp)
       $rootScope.Selected_Grp = Grp;
       $state.go('app.CTcon');
     };
-
+var List_CTA_Local =  [ ];
 $scope.List_CTA = []
 
 $scope.expand_AL = function(item) {
@@ -363,18 +367,15 @@ $scope.expand_AL = function(item) {
         };
 
 socket.emit(P.SOCKET.CTAQ , { Selected_CT : $scope.Selected_CT} );
-
 socket.on(P.SOCKET.CTAA ,function(data){
-
-console.log(data);
-
-ctaIndex = $scope.List_CTA.findIndex((obj => obj.DesignGroupeFonctionnel == data.DesignGroupeFonctionnel));
-console.log(ctaIndex)
-if (ctaIndex != -1 )  // -1
-$scope.List_CTA[ctaIndex] = data ;
+// console.log(data)
+cta = List_CTA_Local.findIndex(function(obj) { obj.DesignGroupeFonctionnel == data.Libelle_groupe});
+if (cta == -1 )  // -1 ==> unfound
+List_CTA_Local.push(data);
 else
-$scope.List_CTA.push(data);
+List_CTA_Local[cta] = data ;
 
+if (data.len -1 == data.item) $scope.List_CTA = List_CTA_Local ;
 });
 
 
@@ -396,16 +397,16 @@ $scope.List_CTA.push(data);
 //           }
 //         };
 
-      })
+      }])
 
-.controller('StaCtrl', function($scope, $rootScope,$state,socket, P) {
+.controller('StaCtrl', ['$scope', '$rootScope', '$state', 'socket', 'P', function($scope, $rootScope,$state,socket, P) {
   $scope.Selected_CT = $rootScope.Selected_CT ;
   $scope.list_Sta = [] ;
   socket.emit(P.SOCKET.SQ , { Mode : "Read" , Selected_CT : $scope.Selected_CT });
   socket.on(P.SOCKET.SA , function(data) {
   console.log(data)
 
-  StaIndex = $scope.list_Sta.findIndex((obj => obj.Mnemo == data.Mnemo));
+  StaIndex = $scope.list_Sta.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
   if (StaIndex == -1 )  // -1
   $scope.list_Sta.push(data);
   else
@@ -419,9 +420,9 @@ $scope.List_CTA.push(data);
   socket.emit(P.SOCKET.CQ, item );
   }
 
-})
+}])
 
-.controller('QrCtrl', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
+.controller('QrCtrl', ['$scope', '$rootScope', '$cordovaBarcodeScanner', '$ionicPlatform', function($scope, $rootScope, $cordovaBarcodeScanner, $ionicPlatform) {
            $scope.scan = function(){
                $ionicPlatform.ready(function() {
                    $cordovaBarcodeScanner
@@ -440,22 +441,27 @@ $scope.List_CTA.push(data);
            };
 
            $scope.scanResults = '';
-       })
+       }])
 
-.controller('AdminCtrl', function($scope, socket, $ionicLoading, P) {
+.controller('AdminCtrl', ['$scope', 'socket', '$ionicLoading', 'P', function($scope, socket, $ionicLoading, P) {
 
 $scope.Validate_Item = '' ;
-$scope.list_Cons = []
+$scope.List_Cons = []
+var List_Cons_Local = []
 socket.emit(P.SOCKET.CQ, { Mode : "Read"});
 socket.on((P.SOCKET.CA), function(data) {
-// console.log(data)
-if(data.Value.toString().length >= 6)
+console.log(data)
+if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
 data.Value  = Math.round(data.Value).toFixed(2);
-ConsIndex = $scope.list_Cons.findIndex((obj => obj.Mnemo == data.Mnemo));
+
+ConsIndex = List_Cons_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
 if (ConsIndex == -1 )  // -1
-$scope.list_Cons.push(data);
+List_Cons_Local.push(data);
 else
-$scope.list_Cons[ConsIndex] = data ;
+List_Cons_Local[ConsIndex] = data ;
+
+if( data.len - 1 == data.item) $scope.List_Cons = List_Cons_Local ;
+
 });
 
 // $scope.Validate(item)
@@ -465,10 +471,12 @@ $scope.list_Cons[ConsIndex] = data ;
 
 $scope.Write= function (item)
 {
-// console.log(item)
+  if(item.Value != item.Local_Value)
+  {
+console.log(item)
 item.Mode = "Write";
 socket.emit(P.SOCKET.CQ, item );
-}
+}};
 
 $scope.Analog_Change = function(item)
 {
@@ -478,8 +486,8 @@ item.Mode = "Write";
 socket.emit(P.SOCKET.CQ, item );
 }};
 
-   })
-.controller('MyCtrl', function($scope, $cordovaNetwork, $rootScope) {
+   }])
+.controller('MyCtrl', ['$scope', '$cordovaNetwork', '$rootScope', function($scope, $cordovaNetwork, $rootScope) {
     document.addEventListener("deviceready", function () {
 
         $scope.network = $cordovaNetwork.getNetwork();
@@ -504,4 +512,4 @@ socket.emit(P.SOCKET.CQ, item );
         })
 
   }, false);
-});
+}]);

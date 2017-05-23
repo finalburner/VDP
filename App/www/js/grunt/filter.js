@@ -1,0 +1,1 @@
+app.filter("orderObjectBy",function(){return function(a,b){if(!angular.isObject(a))return a;var c=[];for(var d in a)c.push(a[d]);return c.sort(function(a,c){return a=parseInt(a[b]),c=parseInt(c[b]),a-c}),c}});
