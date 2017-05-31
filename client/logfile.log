@@ -1,0 +1,251 @@
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T13:15:55.364Z"}
+{"level":"info","message":"Socket connected <<>> Id :pt5KnDVk6NGgqZERAAAB","timestamp":"2017-05-30T13:15:55.540Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T13:15:55.547Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T13:15:55.579Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T13:15:55.594Z"}
+{"level":"info","message":"Cons_Query from PNNA_Y9FAKliacq9AAAA","timestamp":"2017-05-30T14:03:55.394Z"}
+{"level":"info","message":"AL_query from PNNA_Y9FAKliacq9AAAA","timestamp":"2017-05-30T14:03:57.298Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:22:03.561Z"}
+{"level":"info","message":"Socket connected <<>> Id :yP8pKvcXMBuKGvXIAAAB","timestamp":"2017-05-30T14:22:03.746Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:22:06.930Z"}
+{"level":"info","message":"Socket connected <<>> Id :8-TsCCja7_0w60VRAAAA","timestamp":"2017-05-30T14:22:07.097Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:22:07.097Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:22:07.149Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:22:07.166Z"}
+{"level":"info","message":"CT_query from D8falObk_03yXN_mAAAB","timestamp":"2017-05-30T14:22:12.967Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:22:55.254Z"}
+{"level":"info","message":"Socket connected <<>> Id :t5VKZdFLSPcuhe7TAAAA","timestamp":"2017-05-30T14:22:55.430Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:22:55.430Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:22:55.493Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:22:55.509Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:23:10.882Z"}
+{"level":"info","message":"Socket connected <<>> Id :mRzdQ0wQtLRzrhBWAAAA","timestamp":"2017-05-30T14:23:11.062Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:23:11.069Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:23:11.106Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:23:11.122Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:25:20.056Z"}
+{"level":"info","message":"Socket connected <<>> Id :f4_lKl0YgF085AOhAAAA","timestamp":"2017-05-30T14:25:20.234Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:25:20.234Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:25:20.282Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:25:20.299Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:25:46.644Z"}
+{"level":"info","message":"Socket connected <<>> Id :HG2hBqIk8-DwyNT-AAAB","timestamp":"2017-05-30T14:25:46.816Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:25:46.837Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:25:46.875Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:25:46.894Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:27:43.743Z"}
+{"level":"info","message":"Socket connected <<>> Id :mracuHCwIiHKtamPAAAA","timestamp":"2017-05-30T14:27:43.901Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:27:43.921Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:27:43.976Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:27:43.991Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:28:16.873Z"}
+{"level":"info","message":"Socket connected <<>> Id :0i8TixMt1cRJrDk0AAAA","timestamp":"2017-05-30T14:28:17.037Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:28:17.037Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:28:17.084Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:28:17.099Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:28:31.419Z"}
+{"level":"info","message":"Socket connected <<>> Id :euFoGwryBiOWy07mAAAA","timestamp":"2017-05-30T14:28:31.586Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:28:31.592Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:28:31.634Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:28:31.650Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:30:19.955Z"}
+{"level":"info","message":"Socket connected <<>> Id :tJh7dDLb-8sPR0PPAAAA","timestamp":"2017-05-30T14:30:20.125Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:30:20.131Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:30:20.181Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:30:20.200Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:30:26.657Z"}
+{"level":"info","message":"Socket connected <<>> Id :9WohzghBN15q4WeQAAAA","timestamp":"2017-05-30T14:30:26.836Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:30:26.837Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:30:26.875Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:30:26.892Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:31:22.675Z"}
+{"level":"info","message":"Socket connected <<>> Id :9s0vndoqrWa8wH97AAAA","timestamp":"2017-05-30T14:31:22.827Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:31:22.842Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:31:22.883Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:31:22.901Z"}
+{"level":"info","message":"CT_query from JGisrUJNiZ9Mngc_AAAB","timestamp":"2017-05-30T14:31:29.401Z"}
+{"level":"error","message":"OPC errorReferenceError: ADR is not defined","timestamp":"2017-05-30T14:31:29.847Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:32:12.158Z"}
+{"level":"info","message":"Socket connected <<>> Id :WRS5BH7SnXaM1BCkAAAB","timestamp":"2017-05-30T14:32:12.355Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:32:12.381Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:32:12.431Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:32:12.448Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:36:47.367Z"}
+{"level":"info","message":"Socket connected <<>> Id :TUPNgs6gdR4F8qL-AAAB","timestamp":"2017-05-30T14:36:47.547Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:36:47.563Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:36:47.615Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:36:47.636Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:38:40.463Z"}
+{"level":"info","message":"Socket connected <<>> Id :sLxjiUYfE1_WUGmzAAAA","timestamp":"2017-05-30T14:38:40.622Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:38:40.622Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:38:40.669Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:38:40.684Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:40:37.950Z"}
+{"level":"info","message":"Socket connected <<>> Id :RDx4Rc6HDglbfH7BAAAA","timestamp":"2017-05-30T14:40:38.124Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:40:38.126Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:40:38.173Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:40:38.188Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:40:39.825Z"}
+{"level":"info","message":"Socket connected <<>> Id :kD4DUz4oEyvfigRSAAAA","timestamp":"2017-05-30T14:40:40.009Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:40:40.016Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:40:40.074Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:40:40.106Z"}
+{"level":"info","message":"CT_query from vMRAJzGfJT4fSztyAAAB","timestamp":"2017-05-30T14:40:41.269Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:41:50.727Z"}
+{"level":"info","message":"Socket connected <<>> Id :d7GNK1y5d1tUZwhqAAAA","timestamp":"2017-05-30T14:41:50.909Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:41:50.921Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:41:50.942Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:41:50.957Z"}
+{"level":"info","message":"CT_query from odauFglUFZ2TjTCCAAAB","timestamp":"2017-05-30T14:41:54.084Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:42:23.693Z"}
+{"level":"info","message":"Socket connected <<>> Id :gSGNJkJwNzvIvUNqAAAA","timestamp":"2017-05-30T14:42:23.852Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:42:23.852Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:42:23.884Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:42:23.899Z"}
+{"level":"info","message":"CT_query from NytF2DSPsQqRUfQNAAAB","timestamp":"2017-05-30T14:42:27.652Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:45:29.942Z"}
+{"level":"info","message":"Socket connected <<>> Id :pLTgYrxZvR9AVTMBAAAB","timestamp":"2017-05-30T14:45:30.109Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:45:30.127Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:45:30.164Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:45:30.177Z"}
+{"level":"info","message":"CT_query from wHUkmyjbAerCFmvLAAAA","timestamp":"2017-05-30T14:45:31.669Z"}
+{"level":"error","message":"OPC errorTypeError: Cannot set property 'ADR' of undefined","timestamp":"2017-05-30T14:45:32.036Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:45:48.731Z"}
+{"level":"info","message":"Socket connected <<>> Id :0d_X51cspT7g_fSbAAAB","timestamp":"2017-05-30T14:45:48.905Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:45:48.923Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:45:48.962Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:45:48.969Z"}
+{"level":"info","message":"CT_query from hQPrHBOCpXdZvoMcAAAA","timestamp":"2017-05-30T14:45:50.373Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:46:40.761Z"}
+{"level":"info","message":"Socket connected <<>> Id :jb0AgIBgUUdboVKYAAAB","timestamp":"2017-05-30T14:46:40.921Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:46:40.939Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:46:40.977Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:46:40.995Z"}
+{"level":"info","message":"CT_query from bTAGQ_hgwJW7KbGPAAAA","timestamp":"2017-05-30T14:46:42.428Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:47:05.057Z"}
+{"level":"info","message":"Socket connected <<>> Id :2VpTQWOLojnKDJQvAAAB","timestamp":"2017-05-30T14:47:05.216Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:47:05.233Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:47:05.264Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:47:05.288Z"}
+{"level":"info","message":"CT_query from 5EzksyuT11xdGqsNAAAC","timestamp":"2017-05-30T14:47:38.121Z"}
+{"level":"info","message":"CT_query from TnmPUZKnVryTmlBtAAAD","timestamp":"2017-05-30T14:47:49.515Z"}
+{"message":"Failed to connect to 10.18.10.3:undefined in 15000ms","name":"ConnectionError","code":"ETIMEOUT","stack":"ConnectionError: Failed to connect to 10.18.10.3:undefined in 15000ms\n    at Connection.<anonymous> (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\mssql\\lib\\tedious.js:378:25)\n    at Connection.g (events.js:291:16)\n    at emitOne (events.js:96:13)\n    at Connection.emit (events.js:188:7)\n    at Connection.connectTimeout (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\tedious\\lib\\connection.js:467:12)\n    at ontimeout (timers.js:365:14)\n    at tryOnTimeout (timers.js:237:5)\n    at Timer.listOnTimeout (timers.js:207:5)","originalError":{"message":"Failed to connect to 10.18.10.3:undefined in 15000ms","code":"ETIMEOUT"},"level":"error","timestamp":"2017-05-30T14:47:53.127Z"}
+{"level":"info","message":"CT_query from TnmPUZKnVryTmlBtAAAD","timestamp":"2017-05-30T14:48:18.760Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:49:06.844Z"}
+{"level":"info","message":"Socket connected <<>> Id :WNdMCdkeB4aMLKDcAAAA","timestamp":"2017-05-30T14:49:07.016Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:49:07.023Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:49:07.062Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:49:07.077Z"}
+{"level":"info","message":"CT_query from 4M7lHs5aB_qQ5MZZAAAB","timestamp":"2017-05-30T14:49:09.348Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:50:27.137Z"}
+{"level":"info","message":"Socket connected <<>> Id :8VCWF23bAQ8SX5jCAAAB","timestamp":"2017-05-30T14:50:27.297Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:50:27.317Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:50:27.355Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:50:27.373Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:51:39.623Z"}
+{"level":"info","message":"Socket connected <<>> Id :WVS928UnPOR3WlbAAAAB","timestamp":"2017-05-30T14:51:39.849Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:51:39.875Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:51:39.935Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:51:39.961Z"}
+{"level":"info","message":"CT_query from FJE2sVcivBLW1JW2AAAA","timestamp":"2017-05-30T14:51:41.486Z"}
+{"level":"error","message":"OPC errorTypeError: Cannot read property 'AL_0_Color' of undefined","timestamp":"2017-05-30T14:51:41.858Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:52:06.438Z"}
+{"level":"info","message":"Socket connected <<>> Id :hnzgcasqCBy8SvvLAAAB","timestamp":"2017-05-30T14:52:06.621Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:52:06.640Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:52:06.681Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:52:06.699Z"}
+{"level":"info","message":"CT_query from -clvpTis_wXm1f-ZAAAA","timestamp":"2017-05-30T14:52:08.245Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:52:13.415Z"}
+{"level":"info","message":"Socket connected <<>> Id :iKWM7orQ3LvIUcjVAAAA","timestamp":"2017-05-30T14:52:13.576Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:52:13.577Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:52:13.621Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:52:13.642Z"}
+{"level":"info","message":"CT_query from 4gB0FcgDOa57_mw4AAAB","timestamp":"2017-05-30T14:52:13.985Z"}
+{"level":"info","message":"CT_query from Xwace-2YNZgj7l1LAAAC","timestamp":"2017-05-30T14:53:44.584Z"}
+{"message":"Failed to connect to 10.18.10.3:undefined in 15000ms","name":"ConnectionError","code":"ETIMEOUT","stack":"ConnectionError: Failed to connect to 10.18.10.3:undefined in 15000ms\n    at Connection.<anonymous> (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\mssql\\lib\\tedious.js:378:25)\n    at Connection.g (events.js:291:16)\n    at emitOne (events.js:96:13)\n    at Connection.emit (events.js:188:7)\n    at Connection.connectTimeout (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\tedious\\lib\\connection.js:467:12)\n    at ontimeout (timers.js:365:14)\n    at tryOnTimeout (timers.js:237:5)\n    at Timer.listOnTimeout (timers.js:207:5)","originalError":{"message":"Failed to connect to 10.18.10.3:undefined in 15000ms","code":"ETIMEOUT"},"level":"error","timestamp":"2017-05-30T14:53:59.592Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:55:36.151Z"}
+{"level":"info","message":"Socket connected <<>> Id :YldRncQ2jEKCfvkKAAAB","timestamp":"2017-05-30T14:55:36.317Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:55:36.332Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:55:36.364Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:55:36.379Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:57:47.526Z"}
+{"level":"info","message":"Socket connected <<>> Id :E5A-9jM0N-fYtdOQAAAA","timestamp":"2017-05-30T14:57:47.693Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:57:47.693Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:57:47.736Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:57:47.747Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:58:00.900Z"}
+{"level":"info","message":"Socket connected <<>> Id :fnZPH8FjVs2wAwwBAAAB","timestamp":"2017-05-30T14:58:01.053Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:58:01.089Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:58:01.134Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:58:01.153Z"}
+{"level":"info","message":"CT_query from fVCwEqN31p63Lz-hAAAC","timestamp":"2017-05-30T14:58:06.912Z"}
+{"level":"info","message":"CT_query from fVCwEqN31p63Lz-hAAAC","timestamp":"2017-05-30T14:58:10.106Z"}
+{"level":"info","message":"CT_query from fVCwEqN31p63Lz-hAAAC","timestamp":"2017-05-30T14:58:11.834Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:58:18.529Z"}
+{"level":"info","message":"Socket connected <<>> Id :N49qAjfcT20CPQIfAAAA","timestamp":"2017-05-30T14:58:18.694Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:58:18.710Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:58:18.741Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:58:18.773Z"}
+{"level":"info","message":"CT_query from 3UVZIm3WRckZfJ73AAAB","timestamp":"2017-05-30T14:58:28.710Z"}
+{"level":"info","message":"CT_query from 3UVZIm3WRckZfJ73AAAB","timestamp":"2017-05-30T14:58:33.438Z"}
+{"level":"info","message":"CT_query from 3UVZIm3WRckZfJ73AAAB","timestamp":"2017-05-30T14:58:34.450Z"}
+{"level":"info","message":"CT_query from 3UVZIm3WRckZfJ73AAAB","timestamp":"2017-05-30T14:58:36.002Z"}
+{"level":"info","message":"CT_query from 3UVZIm3WRckZfJ73AAAB","timestamp":"2017-05-30T14:58:37.604Z"}
+{"level":"info","message":"CT_query from 3UVZIm3WRckZfJ73AAAB","timestamp":"2017-05-30T14:58:50.724Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:59:03.043Z"}
+{"level":"info","message":"Socket connected <<>> Id :i7q1aywB-5ixPHSuAAAB","timestamp":"2017-05-30T14:59:03.217Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:59:03.243Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:59:03.294Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:59:03.313Z"}
+{"level":"info","message":"CT_query from 2aiLyeb1CyqDU4uWAAAA","timestamp":"2017-05-30T14:59:04.956Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:59:37.759Z"}
+{"level":"info","message":"Socket connected <<>> Id :k8FYpS4dSf4vF_vEAAAA","timestamp":"2017-05-30T14:59:37.907Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:59:37.922Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:59:37.959Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:59:37.977Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T14:59:48.602Z"}
+{"level":"info","message":"Socket connected <<>> Id :2AHC8WUXYSfGTX5LAAAB","timestamp":"2017-05-30T14:59:48.762Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T14:59:48.772Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T14:59:48.812Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T14:59:48.827Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T15:00:00.537Z"}
+{"level":"info","message":"Socket connected <<>> Id :C_eH8ft8vnn59TQbAAAB","timestamp":"2017-05-30T15:00:00.735Z"}
+{"level":"info","message":"CT_query from i4aZ3SZzvSzhoEhpAAAA","timestamp":"2017-05-30T15:00:02.943Z"}
+{"level":"error","message":"OPC session error","timestamp":"2017-05-30T15:00:02.943Z"}
+{"level":"info","message":"CT_query from i4aZ3SZzvSzhoEhpAAAA","timestamp":"2017-05-30T15:00:07.563Z"}
+{"level":"error","message":"OPC session error","timestamp":"2017-05-30T15:00:07.563Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T15:00:20.798Z"}
+{"level":"info","message":"Socket connected <<>> Id :qf7uV5lSRkA8gnoaAAAC","timestamp":"2017-05-30T15:00:20.940Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T15:00:20.956Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T15:00:21.008Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T15:00:21.025Z"}
+{"level":"info","message":"CT_query from i4aZ3SZzvSzhoEhpAAAA","timestamp":"2017-05-30T15:00:23.331Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T15:00:44.130Z"}
+{"level":"info","message":"Socket connected <<>> Id :lJsKJCGms1As6y2gAAAB","timestamp":"2017-05-30T15:00:44.294Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T15:00:44.325Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T15:00:44.367Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T15:00:44.380Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T15:00:54.159Z"}
+{"level":"info","message":"Socket connected <<>> Id :yO8QOd8l7dxFqSPQAAAA","timestamp":"2017-05-30T15:00:54.325Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T15:00:54.346Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T15:00:54.392Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T15:00:54.410Z"}
+{"level":"info","message":"CT_query from hwyDjH8livqoO0fAAAAB","timestamp":"2017-05-30T15:00:57.070Z"}
+{"level":"info","message":"CT_query from hwyDjH8livqoO0fAAAAB","timestamp":"2017-05-30T15:00:59.068Z"}
+{"level":"info","message":"CT_query from hwyDjH8livqoO0fAAAAB","timestamp":"2017-05-30T15:01:01.708Z"}
+{"level":"info","message":"CT_query from hwyDjH8livqoO0fAAAAB","timestamp":"2017-05-30T15:01:03.695Z"}
+{"level":"info","message":"CT_query from hwyDjH8livqoO0fAAAAB","timestamp":"2017-05-30T15:01:05.628Z"}
+{"level":"info","message":"CT_query from hwyDjH8livqoO0fAAAAB","timestamp":"2017-05-30T15:01:06.966Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-05-30T15:03:16.858Z"}
+{"level":"info","message":"Socket connected <<>> Id :MyZe8o9MvprZbnlSAAAA","timestamp":"2017-05-30T15:03:17.055Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-05-30T15:03:17.070Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-05-30T15:03:17.102Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-05-30T15:03:17.117Z"}
+{"level":"info","message":"Socket connected <<>> Id :f6qYk-BuwkcEpdtjAAAC","timestamp":"2017-05-31T08:01:29.889Z"}
+{"level":"info","message":"CT_query from Hne2vqHXfj359jZOAAAD","timestamp":"2017-05-31T08:01:44.753Z"}
+{"level":"info","message":"CT_query from Hne2vqHXfj359jZOAAAD","timestamp":"2017-05-31T08:02:45.544Z"}
+{"level":"info","message":"Cons_Query from Hne2vqHXfj359jZOAAAD","timestamp":"2017-05-31T08:02:48.839Z"}
+{"level":"error","message":"OPC errorError:  ServiceFault returned by server { /*ServiceFault*/\n responseHeader                /* ResponseHeader                   */: {\n   timeStamp                   /* UtcTime                          */: 2017-05-31T07:56:28.511Z\n   requestHandle               /* IntegerId                        */: 6               0x6\n   serviceResult               /* StatusCode                       */: BadSessionIdInvalid (0x80250000)\n   serviceDiagnostics          /* DiagnosticInfo                   */: {\n     namespaceUri              /* Int32                            */: -1\n     symbolicId                /* Int32                            */: -1\n     locale                    /* Int32                            */: -1\n     localizedText             /* Int32                            */: -1\n     additionalInfo            /* String                           */: null\n     innerStatusCode           /* StatusCode                       */: Good (0x00000)\n     innerDiagnosticInfo       /* DiagnosticInfo                   */: {\n     }\n   }\n   stringTable                 /* String                        [] */: [ ] (l=1)\n   additionalHeader            /* ExtensionObject                  */: null\n }\n};","timestamp":"2017-05-31T08:02:49.115Z"}
+{"level":"error","message":"OPC error","timestamp":"2017-05-31T08:02:49.123Z"}
+{"level":"error","message":"","timestamp":"2017-05-31T08:02:49.124Z"}
+{"message":" ServiceFault returned by server { /*ServiceFault*/\n responseHeader                /* ResponseHeader                   */: {\n   timeStamp                   /* UtcTime                          */: 2017-05-31T07:56:28.519Z\n   requestHandle               /* IntegerId                        */: 7               0x7\n   serviceResult               /* StatusCode                       */: BadSessionIdInvalid (0x80250000)\n   serviceDiagnostics          /* DiagnosticInfo                   */: {\n     namespaceUri              /* Int32                            */: -1\n     symbolicId                /* Int32                            */: -1\n     locale                    /* Int32                            */: -1\n     localizedText             /* Int32                            */: -1\n     additionalInfo            /* String                           */: null\n     innerStatusCode           /* StatusCode                       */: Good (0x00000)\n     innerDiagnosticInfo       /* DiagnosticInfo                   */: {\n     }\n   }\n   stringTable                 /* String                        [] */: [ ] (l=1)\n   additionalHeader            /* ExtensionObject                  */: null\n }\n};","stack":"Error:  ServiceFault returned by server { /*ServiceFault*/\n responseHeader                /* ResponseHeader                   */: {\n   timeStamp                   /* UtcTime                          */: 2017-05-31T07:56:28.519Z\n   requestHandle               /* IntegerId                        */: 7               0x7\n   serviceResult               /* StatusCode                       */: BadSessionIdInvalid (0x80250000)\n   serviceDiagnostics          /* DiagnosticInfo                   */: {\n     namespaceUri              /* Int32                            */: -1\n     symbolicId                /* Int32                            */: -1\n     locale                    /* Int32                            */: -1\n     localizedText             /* Int32                            */: -1\n     additionalInfo            /* String                           */: null\n     innerStatusCode           /* StatusCode                       */: Good (0x00000)\n     innerDiagnosticInfo       /* DiagnosticInfo                   */: {\n     }\n   }\n   stringTable                 /* String                        [] */: [ ] (l=1)\n   additionalHeader            /* ExtensionObject                  */: null\n }\n};\n    at process_request_callback (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\node-opcua\\lib\\client\\client_secure_channel_layer.js:66:15)\n    at ClientSecureChannelLayer._on_message_received (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\node-opcua\\lib\\client\\client_secure_channel_layer.js:121:5)\n    at emitMany (events.js:127:13)\n    at MessageBuilder.emit (events.js:201:7)\n    at MessageBuilder._decode_message_body (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\node-opcua\\lib\\misc\\message_builder.js:445:22)\n    at MessageBuilderBase._feed_messageChunk (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\node-opcua\\lib\\misc\\message_builder_base.js:189:18)\n    at PacketAssembler.<anonymous> (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\node-opcua\\lib\\misc\\message_builder_base.js:49:14)\n    at emitOne (events.js:96:13)\n    at PacketAssembler.emit (events.js:188:7)\n    at PacketAssembler.feed (C:\\Users\\ahmaidouch\\Desktop\\node_modules\\node-opcua\\lib\\transport\\packet_assembler.js:102:14)","response":{"responseHeader":{"timeStamp":"2017-05-31T07:56:28.519Z","requestHandle":7,"serviceResult":{"value":2149908480,"description":"The session id is not valid.","name":"BadSessionIdInvalid"},"serviceDiagnostics":{"namespaceUri":-1,"symbolicId":-1,"locale":-1,"localizedText":-1,"innerStatusCode":{"value":0,"description":"No Error","name":"Good"}},"stringTable":[[""]]}},"level":"error","timestamp":"2017-05-31T08:02:49.125Z"}

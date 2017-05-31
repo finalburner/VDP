@@ -1,4 +1,4 @@
-<ion-view view-title="{{Selected_CT}}">
+<ion-view view-title="{{::Selected_CT}}">
 
   <ion-nav-bar class="bar-light">
     <ion-nav-back-button class="button-clear">
@@ -6,8 +6,8 @@
 
     </ion-nav-back-button>
 
-
 </ion-nav-bar>
+
 
   <ion-content>
 
@@ -21,7 +21,7 @@
       Eau
     </div> -->
 
-<div class="item Bib_item"  ng-repeat="item in list_Sta | filter : search" style="padding: 10px 0 0 20px;">
+<div class="item Bib_item"  ng-repeat="item in List_Sta | filter : search" style="padding: 10px 0 0 20px;">
 {{::item.Libelle_information}}
 <p class="status">{{::item.Etat}}</p>
 </div>

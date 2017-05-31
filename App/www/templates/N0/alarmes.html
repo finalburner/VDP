@@ -1,6 +1,10 @@
 <ion-view view-title="Journal des alarmes">
 
   <ion-nav-bar class="bar-light">
+      <!-- <ion-nav-back-button class="button-clear">
+          <i class="button icon-left ion-chevron-left button-clear button-dark" ></i>
+
+        </ion-nav-back-button> -->
           <ion-nav-buttons side="left">
                   <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
           </ion-nav-buttons>
@@ -32,7 +36,7 @@
     <!-- <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
     ng-animate="'animate'" collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}"> -->
     <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
-  ng-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo+$index" class="item col"  ng-click="expand_AL(item)"   >
+  ng-repeat="item in List_AL | filter : Filter_Alm | filter : search track by item.Mnemo+$index" class="item col"  ng-click="expand_AL(item)"   >
 
 <div class="col-5 AL_bar_color" style="background-color: {{::item.AL_Color}}"></div>
 <div class="col AL_col">
@@ -42,7 +46,7 @@
             <div class="col "><p class="AL_date">{{::item.date}}</p></div>
           <div class="col col_arrow"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-down' : 'ion-chevron-down'"></i></div>
 </div>
-<div class="row AL_row_text"><p id="AL_Message">{{::item.Libelle}}</p></div>
+<div class="row AL_row_text"><p id="AL_Message">{{::item.Libelle_information}}</p></div>
 <div class="row AL_row_state">Etat : {{item.Actif_Label}}</div>
 <div class="row AL_row_state">Ack : {{item.Ack_Label}}</div>
 <div class="row AL_row_btn">

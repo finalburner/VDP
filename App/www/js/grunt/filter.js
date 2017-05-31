@@ -1,1 +1,1 @@
-app.filter("orderObjectBy",function(){return function(a,b){if(!angular.isObject(a))return a;var c=[];for(var d in a)c.push(a[d]);return c.sort(function(a,c){return a=parseInt(a[b]),c=parseInt(c[b]),a-c}),c}});
+app.filter("orderObjectBy",function(){return function(r,n){if(!angular.isObject(r))return r;var t=[];for(var e in r)t.push(r[e]);return t.sort(function(r,t){return r=parseInt(r[n]),t=parseInt(t[n]),r-t}),t}});

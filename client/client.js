@@ -101,7 +101,7 @@ io.on('connect', function(socket,$rootScope){
    socket.on('AL_CT_Query', function(data){
    //data comming from App = { Socket_id: 'null', CT : 'null' }
    //supposing data = { Socket_id: 'null', CT : 'null', Answer : 'null', Error : ''  }
-   console.log(data);
+  //  console.log(data);
    var query = "Select * from dbo.SUPERVISION Where localisation = \'" + data.CT +  "' and Type= 'TA'" ;
    sql.connect(config).then(function() {
    new sql.Request().query(query).then(function(recordset) {
@@ -130,7 +130,9 @@ console.log('CT_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
 
 //Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
 socket.on('CT_Answer',function(data) {
-socket.to(data.Socket_ID).emit('CT_Answer', data) ;
+console.log(data)
+console.log(' redirected from : ' + OPC_Socket_ID + ' to ' + socket.id )
+socket.to(data.info.Socket_ID).emit('', data.data) ;
 
 });
 
@@ -145,15 +147,15 @@ socket.on('AL_Query',function(data)
 
 //Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
 socket.on('AL_Answer',function(data) {
-  console.log(data)
+  // console.log(data)
   socket.to(data.Socket_ID).emit('AL_Answer', data) ;
 });
 
 //Requet d'authentification SQL d'un client
 socket.on('Login_Query',function(data) {
-  console.log(data)
+  // console.log(data)
   var hash = crypto.createHash('md5').update(data.password).digest("hex");
-  console.log(hash)
+  // console.log(hash)
   var query = "Select * from dbo.USERS Where UserName = \'"+ data.username +"\'" ;
   sql.connect(config).then(function() {
   new sql.Request().query(query).then(function(recordset) {
@@ -165,6 +167,7 @@ socket.on('Login_Query',function(data) {
     console.log(rec[0])
     if (rec[0].PassWord == hash)
     {
+      console.log("ok")
     socket.emit('Login_Answer', { id : socket.id , user : { id : rec[0].ID , role : rec[0].Role , name : data.username , pass : hash }  })
     }
     else
@@ -193,7 +196,7 @@ socket.on('Login_Query',function(data) {
 //Redirige les MAJ des KPI OPC vers Clients_Room
 socket.on('OPC_General_Update',function(data) {
   // socket.to(data.Socket_ID).emit('AL_Answer', data) ;
-  console.log(data);
+  // console.log(data);
   socket.to('Clients_Room').emit('OPC_General_Update',data);
 });
 
@@ -245,7 +248,7 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
     data.Etat = data.TOR_CodeEtat1;
     else data.Etat = data.TOR_CodeEtat0;
     }
-    console.log(data)
+    // console.log(data)
   socket.to(data.Socket_ID).emit('Cons_Answer', data )
    console.log('Consigne Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
       });
@@ -258,7 +261,7 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
    data.Etat = data.TOR_CodeEtat1;
    else data.Etat = data.TOR_CodeEtat0;
    }
-  console.log(data)
+  // console.log(data)
    socket.to('Clients_Room').emit('Cons_Answer', data )
     console.log('CTA_Cons Update for all ' )
            });

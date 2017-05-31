@@ -21,7 +21,7 @@ $stateProvider
 
     .state('login', {
       url: '/login',
-        authentificate: false,
+        authentificate: true,
         cache: false,
       templateUrl: 'templates/N0/login.html',
       controller: 'AppCtrl',
@@ -34,20 +34,20 @@ $stateProvider
   .state('app.CT', {
     url: '/CT',
     authentificate: true,
-    cache:false,
+    cache: false,
     views: {
       'menuContent': {
         templateUrl: 'templates/N0/CT.html',
         controller: 'CTctrl'
-      },
+      }},
       data: {
       authorizedRoles: [P.USER_ROLES.admin]
-    }
     }
   })
 
     .state('app.CTi', {
       url: '/CTi',
+      cache: false,
         authentificate: true,
       views: {
         'menuContent': {
@@ -62,6 +62,7 @@ $stateProvider
 
   .state('app.Login', {
       url: '/Login',
+      cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N0/CTi.html',
@@ -74,6 +75,7 @@ $stateProvider
     })
   .state('app.carto', {
     url: '/carto',
+    cache: false,
       authentificate: true,
     views: {
       'menuContent': {
@@ -87,7 +89,7 @@ $stateProvider
   })
 
   .state('app.alarmes', {
-      cache : false,
+      cache: false,
       url: '/alarmes',
       authentificate: true,
       views: {
@@ -106,6 +108,7 @@ $stateProvider
     })
     .state('app.rapport', {
       url: '/rapport',
+      cache: false,
       authentificate: true,
       views: {
         'menuContent': {
@@ -134,6 +137,7 @@ $stateProvider
 
     .state('app.biblio', {
       url: '/biblio',
+      cache: false,
       authentificate: true,
       views: {
         'menuContent': {
@@ -176,7 +180,7 @@ $stateProvider
     })
     .state('app.CTcou', {
       url: '/cou',
-    authentificate: true,
+    authentificate: true,cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTcou.html',
@@ -189,7 +193,7 @@ $stateProvider
     })
     .state('app.CTdoc', {
       url: '/doc',
-    authentificate: true,
+    authentificate: true, cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTdoc.html',
@@ -202,7 +206,7 @@ $stateProvider
     })
     .state('app.CThis', {
       url: '/his',
-    authentificate: true,
+    authentificate: true,cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CThis.html',
@@ -215,7 +219,7 @@ $stateProvider
     })
     .state('app.CTfic', {
       url: '/fic',
-    authentificate: true,
+    authentificate: true,cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTfic.html',
@@ -228,8 +232,7 @@ $stateProvider
     })
     .state('app.CTcon', {
       url: '/CTcon',
-      cache:false ,
-    authentificate: true,
+    authentificate: true,cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTcon.html',
@@ -242,7 +245,7 @@ $stateProvider
     })
     .state('app.CTpla', {
       url: '/pla',
-    authentificate: true,
+    authentificate: true,cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTpla.html',
@@ -255,7 +258,7 @@ $stateProvider
     })
     .state('app.CTsynP', {
       url: '/synP',
-    authentificate: true,
+    authentificate: true,cache: false,
       views: {
         'menuContent': {
           templateUrl: 'templates/N1/CTsynP.html',

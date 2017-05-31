@@ -47,6 +47,9 @@ app
   });
 })
 
+
+
+
 // .run(function($ionicPlatform, $ionicPopup, $cordovaNetwork) {
 //    $ionicPlatform.ready(function() {
 //       if ($cordovaNetwork.isOffline()) {

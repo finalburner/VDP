@@ -1,13 +1,41 @@
+
 controllers
 
 .controller('AppCtrl', ['$rootScope', '$scope', '$ionicModal', '$stateParams', '$timeout', 'socket', '$state', 'P', 'ConnectivityMonitor', 'Notif', 'AuthService', function($rootScope, $scope, $ionicModal, $stateParams, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
+  var i = 1 ;
 
+//   $scope.$on('$ionicView.enter', function() {
+//      // Code you want executed every time view is opened/
+//   $rootScope.Selected_CT = "CT05320"
+//   setTimeout(function(){
+//   i = Math.floor(5 * Math.random() + 1)
+//   if (i==1) $state.go('app.CT');
+//   if (i==2) $state.go('app.CTsta');
+//   if (i==3) $state.go('app.CTsyn');
+//   if (i==4) $state.go('app.CTcon');
+//   if (i==5) {$state.go('app.alarmes'); }
+// },2000 ); // 5 à 10 s
+//   })
+// $rootScope.$on('$stateChangeStart', function (event, next) {
+//   var authorizedRoles = next.data.authorizedRoles;
+//   if (!AuthService.isAuthorized(authorizedRoles)) {
+//     event.preventDefault();
+//     if (AuthService.isAuthenticated()) {
+//       // user is not allowed
+//       $rootScope.$broadcast(P.AUTH_EVENTS.notAuthorized);
+//     } else {
+//       // user is not logged in
+//       $rootScope.$broadcast(P.AUTH_EVENTS.notAuthenticated);
+//     }
+//   }
+// });
 ConnectivityMonitor.startWatching();
 socket.on(P.SOCKET.CO , function () {
 socket.emit(P.SOCKET.CC);
 Notif.Show("Connecté");
 });
 
+// $state.go('app.CT'); //test only
 $scope.list_N1 = P.MODAL_N1;
 
 $scope.Cnx = {
@@ -26,7 +54,6 @@ $scope.setCurrentUser = function (user) {
 $scope.login = function (Cnx)
 {
   // console.log(Cnx)
-  $state.go('app.CT'); // for test only
   AuthService.login(Cnx).then(function(user) {
   $rootScope.$broadcast(P.AUTH_EVENTS.loginSuccess);
   $scope.setCurrentUser(user);
@@ -79,10 +106,7 @@ $scope.CT_N1 = function (name) //ouvre synthèse d'un CT
     $state.go('app.CTsyn');
   };
 
-$scope.closeN1 = function(id) {
-sel = id ;
-menu_N1=!menu_N1;
- };
+
 
 //Change Selected_CT to 'null' - display alarm for ALL CTS
 $scope.JAL = function() {
@@ -122,21 +146,32 @@ $scope.N1_close = function(name) {
    $scope.Selected_Grp = $rootScope.Selected_Grp ; //Grp selectionné
    $scope.Validate_Item = '' ;
    $scope.List_Cons = [] ;
+
+  //  $scope.$on('$destroy', function(){
+  //            $scope.List_Cons = null;
+  //            List_Cons_Local = null;
+  //            console.log("destroyed")
+  //          });
+  var ConsIndex;
    var List_Cons_Local = [] ;
   // if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
   if(!$scope.Selected_NomGrp || !$scope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
    socket.emit(P.SOCKET.CQ , { Mode : "Read" , Selected_Grp : $rootScope.Selected_Grp , Selected_CT :$rootScope.Selected_CT });
    socket.on(P.SOCKET.CA , function(data) {
-   console.log(data)
+  //  console.log(data)
 if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
    data.Value  = Math.round(data.Value).toFixed(2);
-   ConsIndex = List_Cons_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
+    ConsIndex = List_Cons_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
    if (ConsIndex == -1 )  // -1
    List_Cons_Local.push(data);
    else
    List_Cons_Local[ConsIndex] = data ;
 
-   if( data.len - 1 == data.item) $scope.List_Cons = List_Cons_Local ;
+   if( data.len - 1 == data.item)
+   {
+     $scope.List_Cons = List_Cons_Local ;
+     console.log(data.len-List_Cons_Local.length)
+   }
    });
 
    $scope.Write= function (item)
@@ -157,6 +192,7 @@ if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
       }])
 
 .controller('CTfic', ['$scope', 'socket', function($scope,socket) {
+
 $scope.Live_Update = [];
 
 socket.on('update',function(data){
@@ -167,16 +203,16 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 }])
 
 
-.controller('CTctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$cordovaGeolocation', '$ionicSideMenuDelegate', function($rootScope, $scope,socket,$ionicLoading, P, $cordovaGeolocation, $ionicSideMenuDelegate) {
+.controller('CTctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$cordovaGeolocation', '$ionicSideMenuDelegate','$state', function($rootScope, $scope,socket,$ionicLoading, P, $cordovaGeolocation, $ionicSideMenuDelegate, $state ) {
 
-  var list_CT_local = [] ;
-  $rootScope.$on('$stateChangeStart',
-  function(event, toState, toParams, fromState, fromParams){
+
+  $rootScope.$on('$stateChangeStart',  function(event, toState, toParams, fromState, fromParams){
   if(toState.url == "/carto")
    $ionicSideMenuDelegate.canDragContent(false);
   if(fromState.url == "/carto")
    $ionicSideMenuDelegate.canDragContent(true);
  });
+
   var def  =  [48.861253, 2.329920]
   $scope.loc = def ;
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -196,37 +232,33 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
   //   content: 'Loading',
   //   animation: 'fade-in',
   //   showBackdrop: true,
-  //   duration: 300,
+  //   duration: 1000,
   //   maxWidth: 200,
   //   showDelay: 0
   // });
+  //
+  // $scope.$on('$destroy', function(){
+  //           $scope.List_CT = null;
+  //           List_CT_Local = null;
+  //         });
 
-  $scope.list_CT = [] ;
+  var len ;
+  $scope.List_CT = [] ;
+  var AL_Color = P.ALARM.AL_0_Color ; //applique la couleur CT de base
+
   socket.emit(P.SOCKET.CTQ);
   socket.on(P.SOCKET.CTA, function(data){
-    // console.log(data)
-  var AL_Color;
-  var CTdata;
-  AL_Color = P.ALARM.AL_0_Color ; //applique la couleur CT de base
-  if (data.AL_1)  AL_Color = P.ALARM.AL_1_Color ; //applique la couleur CT mineure
-  if (data.AL_2)  AL_Color = P.ALARM.AL_2_Color ; //applique la couleur CT majeure
-  if (data.AL_3)  AL_Color = P.ALARM.AL_3_Color ; //applique la couleur CT critique
-  if (data.AL_10)  AL_Color = P.ALARM.AL_10_Color ; //applique la couleur CT critique
-  CTdata = { CT : data.CT , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }
-  ctIndex = list_CT_local.findIndex(function(obj) { obj.CT == data.CT});
-  if (ctIndex != -1 )  // -1
-  list_CT_local[ctIndex] = CTdata ;
-  else
-  list_CT_local.push(CTdata);
-  // $scope.list_CT.push({ CT : data.localisation , AL_Color : AL_Color, LAT : data.LAT , LONG : data.LONG , ADR : data.ADR }) ;
-  // console.log($scope.list_CT)
-  if (data.len -1  == data.item)
-   $scope.list_CT = list_CT_local
+ $scope.List_CT = data ;
+  //  $ionicLoading.hide();
   });
+ // console.log(parseInt(len,10)* Math.random())
+  //  console.log(List_CT_Local[0].len * Math.random())
+
+
 
     // socket.emit('ListeCT');
     // socket.on('ListeCT_rep', function(data){
-    //$scope.list_CT = data ;
+    //$scope.List_CT = data ;
    $scope.CT_pow = "100kW Gaz SED14";
    $scope.CT_alm = "Message d\'information caractérisant l\'alarme.Ca peut être long"
 
@@ -243,8 +275,8 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 .controller('ALctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$state', '$stateParams', function($rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
 
 // $scope.Selected_CT = $rootScope.Selected_CT ;
-var list_AL_Track = [];
-$scope.list_AL = []
+var List_AL_Local = [];
+$scope.List_AL = []
 $scope.Synthese_PresentCount= 0 ;
 $scope.Filter_Alm ;
 
@@ -287,7 +319,7 @@ socket.emit(P.SOCKET.ALQ , { Mode : 'Read' , Selected_CT : $rootScope.Selected_C
 console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
 // $ionicLoading.show({
 // content: 'Loading', animation: 'fade-in', showBackdrop: true,
-// duration: 700, maxWidth: 200,  showDelay: 0
+// duration: 1000, maxWidth: 200,  showDelay: 0
 // });
 });
 
@@ -304,25 +336,30 @@ socket.on(P.SOCKET.ALA, function(data){
 
 // if (!data.Mode) // Existence propriété Mode
 //   { // Arrivé des infos d'une alarmes
-
+  // console.log(data)
   data.AL_Color = P.ALARM.AL_0_Color ; //applique la couleur CT de base
-  if (data.Criticite == '1')  data.AL_Color = P.ALARM.AL_1_Color ; //applique la couleur CT mineure
-  if (data.Criticite == '2')  data.AL_Color = P.ALARM.AL_2_Color ; //applique la couleur CT majeure
-  if (data.Criticite == '3')  data.AL_Color = P.ALARM.AL_3_Color ; //applique la couleur CT critique
-  if (data.Criticite == '10')  data.AL_Color = P.ALARM.AL_10_Color ; //applique la couleur CT critique
+  if (data.TOR_CriticiteAlarme == '1')  data.AL_Color = P.ALARM.AL_1_Color ; //applique la couleur CT mineure
+  if (data.TOR_CriticiteAlarme == '2')  data.AL_Color = P.ALARM.AL_2_Color ; //applique la couleur CT majeure
+  if (data.TOR_CriticiteAlarme == '3')  data.AL_Color = P.ALARM.AL_3_Color ; //applique la couleur CT critique
+  if (data.TOR_CriticiteAlarme == '10')  data.AL_Color = P.ALARM.AL_10_Color ; //applique la couleur CT critique
   if (data.Actif) data.Actif_Label = "Présente"
   else data.Actif_Label  = "Disparue"
   if (data.Ack) data.Ack_Label  = "Acquittée"
   else data.Ack_Label  = "Non Acquitée"
 
-  // console.log(data)
 
-almIndex = $scope.list_AL.findIndex(function(obj) { obj.Mnemo== data.Mnemo});
+
+var almIndex = List_AL_Local.findIndex(function(obj) { obj.Mnemo== data.Mnemo});
 // console.log(almIndex)
 if (almIndex != -1 )  // -1
-$scope.list_AL[almIndex] = data ;
+List_AL_Local[almIndex] = data ;
 else
-$scope.list_AL.push(data);
+List_AL_Local.push(data);
+
+if(data.len -1 == data.item)
+{$scope.List_AL = List_AL_Local ;
+// $ionicLoading.hide();
+}
 
 // if (data.Mode && data.Mode =="Write")
 // {
@@ -343,8 +380,11 @@ $scope.list_AL.push(data);
 
 
 .controller('CTActrl', ['$rootScope', '$scope', 'socket', '$state', 'P', function($rootScope, $scope, socket, $state, P) {
+
+
 $scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
 if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
+
 
 $scope.Consigne_Grp = function (NomGrp,Grp)
     {
@@ -369,7 +409,7 @@ $scope.expand_AL = function(item) {
 socket.emit(P.SOCKET.CTAQ , { Selected_CT : $scope.Selected_CT} );
 socket.on(P.SOCKET.CTAA ,function(data){
 // console.log(data)
-cta = List_CTA_Local.findIndex(function(obj) { obj.DesignGroupeFonctionnel == data.Libelle_groupe});
+var cta = List_CTA_Local.findIndex(function(obj) { obj.DesignGroupeFonctionnel == data.Libelle_groupe});
 if (cta == -1 )  // -1 ==> unfound
 List_CTA_Local.push(data);
 else
@@ -400,17 +440,23 @@ if (data.len -1 == data.item) $scope.List_CTA = List_CTA_Local ;
       }])
 
 .controller('StaCtrl', ['$scope', '$rootScope', '$state', 'socket', 'P', function($scope, $rootScope,$state,socket, P) {
+
   $scope.Selected_CT = $rootScope.Selected_CT ;
-  $scope.list_Sta = [] ;
+  if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
+
+  $scope.List_Sta = [] ;
+  var List_Sta_Local = []
   socket.emit(P.SOCKET.SQ , { Mode : "Read" , Selected_CT : $scope.Selected_CT });
   socket.on(P.SOCKET.SA , function(data) {
   console.log(data)
 
-  StaIndex = $scope.list_Sta.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
+  var StaIndex = List_Sta_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
   if (StaIndex == -1 )  // -1
-  $scope.list_Sta.push(data);
+  List_Sta_Local.push(data);
   else
-  $scope.list_Sta[StaIndex] = data ;
+  List_Sta_Local[StaIndex] = data ;
+
+  if (data.len -1 == data.item ) $scope.List_Sta = List_Sta_Local ;
   });
 
   $scope.Write= function (item)
@@ -447,6 +493,7 @@ if (data.len -1 == data.item) $scope.List_CTA = List_CTA_Local ;
 
 $scope.Validate_Item = '' ;
 $scope.List_Cons = []
+var ConsIndex
 var List_Cons_Local = []
 socket.emit(P.SOCKET.CQ, { Mode : "Read"});
 socket.on((P.SOCKET.CA), function(data) {
@@ -459,7 +506,6 @@ if (ConsIndex == -1 )  // -1
 List_Cons_Local.push(data);
 else
 List_Cons_Local[ConsIndex] = data ;
-
 if( data.len - 1 == data.item) $scope.List_Cons = List_Cons_Local ;
 
 });

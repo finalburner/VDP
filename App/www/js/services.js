@@ -7,7 +7,6 @@ app
     var promise = new Promise(function(resolve, reject) {
     socket.emit(P.SOCKET.LQ, Cnx)
     socket.on(P.SOCKET.LA, function(data) {
-    // console.log(data) //
     resolve(data.user);
     Session.create(data.id, data.user.id, data.user.role);
   });

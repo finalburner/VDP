@@ -128,3 +128,136 @@ grunt
 grunt
 cd .. 
 grunt
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+grunt
+grunt
+cd ../App
+ionic run android
+ionic serve
+ionic serve
+ionic serve
+ionic serve
+ionic serve --address 192.168.101.103
+ionic run android
+dir
+nodemon client
+cd ../App
+ionic run android
+cd .. 
+cd client
+nodemon client
+nodemon client
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+
+nodemon opc
+nodemon opc
+cd ..
+cd App
+grunt
+npm install -g grunt-ng-annotate
+npm install -g grunt-contrib-uglify
+grunt
+
+npm install grunt-ng-annotate
+npm install grunt-contrib-uglify
+grunt
+cd ..
+grunt
+grunt
+ionic serve 
+ionic serve 
+quit
+quit
+ionic serve 
+npm install -g windows-build-tools
+quit
+nodemon client.js
+nodemon client
+ionic serve
+npm install -g node-opcua
+ionic serve
+nodemon client
+npm version mssql
+npm info mssql version
+nodemon client
+nodemon opc
+npm install pkg
+dir
+pkg opc.js
+npm install -g pkg 
+pkg opc.js
+pkg opc.js --targets win-x64
+pkg opc.js --targets win-x64
+nodemon opc
+cd ../App 
+ionic serve
+npm install debug -g --save
+nodemon opc 
+nodemon client 
+ionic serve
+cd .. 
+cd client
+dir 
+pkg win-x64 client.js
+pkg client.js 
+pkg client.js -t node6-win-x64
+pkg opc.js -t node6-win-x64
+cd .. 
+npm install node-opcua --save
+cd .. 
+cd Vdp/client
+dir 
+pkg opc.js -t node6-win-x64
+pkg --help
+pkg --help -d
+pkg opc.js -t node6-win-x64 -d
+cd ../app
+ionic serve
+cd ../client
+cd .
+cd..
+cd .. 
+grunt
+cd client
+cd grunt 
+pkg opc.js -t node6-win-x64 -d
+pkg opc.js -t node6-win-x64 
+cd ..
+npm install -*g npm-check
+npm install  npm-check
+npm-check
+npm-check
+cd .. 
+npm-check
+npm install  npm-check -g
+npm-check
+npm-check -u
+npm-check -u
+npm-check -u
+npm-check -u
+npm-check -u
+npm-check -u
+npm-check -u
+npm-check -u
+npm-check -u
+cd client
+npm-check -u
+npm-check -u
+npm-check -u
+  $ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365
+  $ openssl req -x509 -newke rsa:2048 -keyout key.pem -out cert.pem -days 365
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365
+dir
+dir
+nodemon client
+nodemon client
+nodemon opc 
+nodemon opc 
+ionic serve

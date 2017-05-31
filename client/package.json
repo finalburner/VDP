@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "ascoltatori": "^3.2.0",
-    "async": "^2.1.4",
+    "async": "^2.4.1",
     "node-opcua": "0.0.61",
     "socket.io": "^1.7.2",
     "woopsa": "^1.1.9"
