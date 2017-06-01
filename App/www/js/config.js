@@ -17,8 +17,8 @@ app
  //      }
  //    }
  //  });
-
 .config(function($provide) { // To comment
+
   $provide.decorator('$state', function($delegate) {
     var originalTransitionTo = $delegate.transitionTo;
     $delegate.transitionTo = function(to, toParams, options) {

@@ -261,3 +261,17 @@ nodemon client
 nodemon opc 
 nodemon opc 
 ionic serve
+nodemon client
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon client
+nodemon opc 
+nodemon opc 
+nodemon opc 

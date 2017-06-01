@@ -48,14 +48,14 @@ app
   if (window.cordova) { // Mobile APP
     var mySocket = socketFactory({
       prefix: '',
-      ioSocket: io.connect(P.PARAM.SRV_WEB)
+      ioSocket: io.connect(P.PARAM.SRV_WEB, {secure: true , rejectUnauthorized: false})
     //  ioSocket: io.connect('http://localhost:3000')
     });
   }
   else { // Desk APP
     var mySocket = socketFactory({
       prefix: '',
-     ioSocket: io.connect(P.PARAM.SRV_LOCAL)
+     ioSocket: io.connect(P.PARAM.SRV_LOCAL, {secure: true , rejectUnauthorized: false })
     });
   }
   //mySocket.forward('temp');

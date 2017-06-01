@@ -1,8 +1,8 @@
 app
 .constant('P', {
   PARAM : {
-    SRV_WEB : 'http://80.14.220.219:3000',
-    SRV_LOCAL : 'http://localhost:3000'
+    SRV_WEB : 'https://80.14.220.219:3000',
+    SRV_LOCAL : 'https://localhost:3000'
 
   },
   SOCKET :
@@ -11,6 +11,7 @@ app
         LA   : 'Login_Answer',
         CQ   : 'Cons_Query',
         CA   : 'Cons_Answer',
+        CAU  : 'Cons_Answer_Update',
         CC   : 'Client_Connected',
         CO   : 'Connect',
         CTQ  : 'CT_Query',

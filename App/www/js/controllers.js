@@ -4,6 +4,7 @@ controllers
 .controller('AppCtrl', ['$rootScope', '$scope', '$ionicModal', '$stateParams', '$timeout', 'socket', '$state', 'P', 'ConnectivityMonitor', 'Notif', 'AuthService', function($rootScope, $scope, $ionicModal, $stateParams, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
   var i = 1 ;
 
+// $state.go('app.CT'); //test only
 //   $scope.$on('$ionicView.enter', function() {
 //      // Code you want executed every time view is opened/
 //   $rootScope.Selected_CT = "CT05320"
@@ -35,7 +36,7 @@ socket.emit(P.SOCKET.CC);
 Notif.Show("Connecté");
 });
 
-// $state.go('app.CT'); //test only
+
 $scope.list_N1 = P.MODAL_N1;
 
 $scope.Cnx = {
@@ -141,51 +142,31 @@ $scope.N1_close = function(name) {
 
 .controller('ConCtrl', ['$scope', 'socket', '$ionicLoading', '$rootScope', '$state', 'P', function($scope, socket, $ionicLoading, $rootScope,$state, P) {
 
-  //  $scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
-   $scope.Selected_NomGrp = $rootScope.Selected_NomGrp ; // Nom Groupe selectionné
-   $scope.Selected_Grp = $rootScope.Selected_Grp ; //Grp selectionné
    $scope.Validate_Item = '' ;
    $scope.List_Cons = [] ;
 
-  //  $scope.$on('$destroy', function(){
-  //            $scope.List_Cons = null;
-  //            List_Cons_Local = null;
-  //            console.log("destroyed")
-  //          });
-  var ConsIndex;
-   var List_Cons_Local = [] ;
-  // if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
-  if(!$scope.Selected_NomGrp || !$scope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
-   socket.emit(P.SOCKET.CQ , { Mode : "Read" , Selected_Grp : $rootScope.Selected_Grp , Selected_CT :$rootScope.Selected_CT });
+  if(!$rootScope.Selected_NomGrp || !$rootScope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
+   socket.emit(P.SOCKET.CQ , { M : "Read" , Selected_Grp : $rootScope.Selected_Grp , Selected_CT :$rootScope.Selected_CT });
    socket.on(P.SOCKET.CA , function(data) {
   //  console.log(data)
-if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
-   data.Value  = Math.round(data.Value).toFixed(2);
-    ConsIndex = List_Cons_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
-   if (ConsIndex == -1 )  // -1
-   List_Cons_Local.push(data);
-   else
-   List_Cons_Local[ConsIndex] = data ;
-
-   if( data.len - 1 == data.item)
-   {
-     $scope.List_Cons = List_Cons_Local ;
-     console.log(data.len-List_Cons_Local.length)
-   }
+// if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
+//    data.Value  = Math.round(data.Value).toFixed(2);
+    $scope.List_Cons = data;
+    console.log(data)
    });
 
    $scope.Write= function (item)
    {
    // console.log(item)
-   item.Mode = "Write";
+   item.M= "Write";
    socket.emit(P.SOCKET.CQ, item );
    }
 
    $scope.Analog_Change = function(item)
    {
-     if(item.Value != item.Local_Value)
+     if(item.V != item.LV)
    {// console.log(item);
-   item.Mode = "Write";
+   item.M = "Write";
    socket.emit(P.SOCKET.CQ, item );
    }};
 
@@ -228,54 +209,27 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
         console.log(err)
      });
 
-  // $ionicLoading.show({
-  //   content: 'Loading',
-  //   animation: 'fade-in',
-  //   showBackdrop: true,
-  //   duration: 1000,
-  //   maxWidth: 200,
-  //   showDelay: 0
-  // });
-  //
-  // $scope.$on('$destroy', function(){
-  //           $scope.List_CT = null;
-  //           List_CT_Local = null;
-  //         });
-
-  var len ;
-  $scope.List_CT = [] ;
-  var AL_Color = P.ALARM.AL_0_Color ; //applique la couleur CT de base
+   $ionicLoading.show({
+   content: 'Loading', animation: 'fade-in', showBackdrop: true,
+   duration: 1000, maxWidth: 200,  showDelay: 0
+  });
 
   socket.emit(P.SOCKET.CTQ);
   socket.on(P.SOCKET.CTA, function(data){
- $scope.List_CT = data ;
-  //  $ionicLoading.hide();
+    // console.log("socket")
+  $scope.List_CT = data ;
+  // console.dir($scope.List_CT.length)
+   $ionicLoading.hide();
   });
- // console.log(parseInt(len,10)* Math.random())
-  //  console.log(List_CT_Local[0].len * Math.random())
 
-
-
-    // socket.emit('ListeCT');
-    // socket.on('ListeCT_rep', function(data){
-    //$scope.List_CT = data ;
    $scope.CT_pow = "100kW Gaz SED14";
    $scope.CT_alm = "Message d\'information caractérisant l\'alarme.Ca peut être long"
-
-    //   { localisation: 'CT 49200',
-    //       addr : '18,rue du Breil 75018 Paris',
-    //       pow : '100kW Gaz SED14',
-    //       alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être long',
-    //       color: '#6633FF' //violet
-    //     },
-    $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3QWWdY2M8JtbDSSrVriG9lIwD5anCRHo";
+   $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3QWWdY2M8JtbDSSrVriG9lIwD5anCRHo";
 
   }])
 
 .controller('ALctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$state', '$stateParams', function($rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
 
-// $scope.Selected_CT = $rootScope.Selected_CT ;
-var List_AL_Local = [];
 $scope.List_AL = []
 $scope.Synthese_PresentCount= 0 ;
 $scope.Filter_Alm ;
@@ -296,13 +250,13 @@ $scope.expand_AL = function(item) {
         if ($scope.isItemExpanded(item)) {
           $scope.shownItem = null;
         } else {
-          $scope.shownItem = item.Mnemo;
+          $scope.shownItem = item.M;
         }
       };
 
 $scope.isItemExpanded = function(item) {
   // console.log("shownitem : " + $scope.shownItem)
-        return $scope.shownItem === item.Mnemo;
+        return $scope.shownItem === item.M;
       };
 
 socket.on(P.SOCKET.OU, function(data){
@@ -333,47 +287,9 @@ console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
 
 //Reception des Alarmes unitaires depuis OPC
 socket.on(P.SOCKET.ALA, function(data){
-
-// if (!data.Mode) // Existence propriété Mode
-//   { // Arrivé des infos d'une alarmes
   // console.log(data)
-  data.AL_Color = P.ALARM.AL_0_Color ; //applique la couleur CT de base
-  if (data.TOR_CriticiteAlarme == '1')  data.AL_Color = P.ALARM.AL_1_Color ; //applique la couleur CT mineure
-  if (data.TOR_CriticiteAlarme == '2')  data.AL_Color = P.ALARM.AL_2_Color ; //applique la couleur CT majeure
-  if (data.TOR_CriticiteAlarme == '3')  data.AL_Color = P.ALARM.AL_3_Color ; //applique la couleur CT critique
-  if (data.TOR_CriticiteAlarme == '10')  data.AL_Color = P.ALARM.AL_10_Color ; //applique la couleur CT critique
-  if (data.Actif) data.Actif_Label = "Présente"
-  else data.Actif_Label  = "Disparue"
-  if (data.Ack) data.Ack_Label  = "Acquittée"
-  else data.Ack_Label  = "Non Acquitée"
-
-
-
-var almIndex = List_AL_Local.findIndex(function(obj) { obj.Mnemo== data.Mnemo});
-// console.log(almIndex)
-if (almIndex != -1 )  // -1
-List_AL_Local[almIndex] = data ;
-else
-List_AL_Local.push(data);
-
-if(data.len -1 == data.item)
-{$scope.List_AL = List_AL_Local ;
-// $ionicLoading.hide();
-}
-
-// if (data.Mode && data.Mode =="Write")
-// {
-// Mise à jour du status ACK après acquittement
-// almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
-// $scope.list_AL[almIndex].Ack = "true"
-
-// almIndex = $scope.list_AL.findIndex((obj => obj.NodeId == data.NodeId));
-// if (almIndex != -1 )  // -1
-// $scope.list_AL[almIndex].Ack = true ;
-//Console object again.
-// console.log("After update: ", $scope.list_AL[almIndex])
-
-
+$scope.List_AL = data
+$ionicLoading.hide();
    });
 
     }])
@@ -493,46 +409,45 @@ if (data.len -1 == data.item) $scope.List_CTA = List_CTA_Local ;
 
 $scope.Validate_Item = '' ;
 $scope.List_Cons = []
-var ConsIndex
-var List_Cons_Local = []
-socket.emit(P.SOCKET.CQ, { Mode : "Read"});
-socket.on((P.SOCKET.CA), function(data) {
-console.log(data)
-if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
-data.Value  = Math.round(data.Value).toFixed(2);
 
-ConsIndex = List_Cons_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
-if (ConsIndex == -1 )  // -1
-List_Cons_Local.push(data);
-else
-List_Cons_Local[ConsIndex] = data ;
-if( data.len - 1 == data.item) $scope.List_Cons = List_Cons_Local ;
+socket.emit(P.SOCKET.CQ, { M : "Read"});
+socket.on(P.SOCKET.CA, function(data) {
+// if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
+// data.Value  = Math.round(data.Value).toFixed(2);
+$scope.List_Cons = data ;
+});
+
+socket.on(P.SOCKET.CAU, function(data) {
+// if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
+// data.Value  = Math.round(data.Value).toFixed(2);
+console.log(data)
+var i = $scope.List_Cons.findIndex(function(obj) { obj.Adr == data.Adr});
+if (ci != -1 )  // -1 ==> unfound
+{$scope.List_Cons[i] = data ;
+}
 
 });
 
-// $scope.Validate(item)
-// {
-//   $scope.Validate_Item = item.Mnemo;
-// }
-
 $scope.Write= function (item)
 {
-  if(item.Value != item.Local_Value)
+  // console.log(item)
+  if(item.V != item.LV)
   {
-console.log(item)
-item.Mode = "Write";
+
+item.M = "Write";
 socket.emit(P.SOCKET.CQ, item );
 }};
 
 $scope.Analog_Change = function(item)
 {
-  if(item.Value != item.Local_Value)
+  if(item.V != item.LV)
 {// console.log(item);
-item.Mode = "Write";
+item.M = "Write";
 socket.emit(P.SOCKET.CQ, item );
 }};
 
    }])
+
 .controller('MyCtrl', ['$scope', '$cordovaNetwork', '$rootScope', function($scope, $cordovaNetwork, $rootScope) {
     document.addEventListener("deviceready", function () {
 

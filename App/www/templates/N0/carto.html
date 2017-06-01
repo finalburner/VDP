@@ -27,13 +27,13 @@
 
      <marker  animation="Animation.BOUNCE"  position="{{marker}}" title="Mobile"></marker>
       <shape name="circle" ng-repeat="item in List_CT | filter: search" no-watcher="true"
-           stroke-color="{{::item.AL_Color}}"
+           stroke-color="{{::item.AL}}"
            stroke-opacity="0.8"
            stroke-weight="2"
-           fill-color="{{::item.AL_Color}}"
+           fill-color="{{::item.AL}}"
            fill-opacity="0.8"
            title="{{::item.CT}}"
-           center="[{{::item.LAT}},{{::item.LONG}}]"
+           center="[{{::item.L}},{{::item.LO}}]"
            radius="80"
            on-click="CT_N1(this)"
            >

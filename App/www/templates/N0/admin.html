@@ -15,16 +15,16 @@
 
     <ion-list>
         <ion-item class="row animate-repeat"
-        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search track by item.Mnemo+$index" class="item col" style = "padding: 0 ;">
+        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search track by item.M+$index" class="item col" style = "padding: 0 ;">
     <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 
 
 <!-- Consigne Reglage ANALOG -->
 
 <!-- <div class="item row Cons_Row" ng-if="item.Type == 'TR'" > -->
-<form ng-submit="Analog_Change(item)" class="item row Cons_Row" ng-if="item.Type == 'TR'">
+<form ng-submit="Analog_Change(item)" class="item row Cons_Row" ng-if="item.T == 'TR'">
           <div class="col col-80" style=" padding : 17px 0 0 20px;" class="Cons_Ana">
-            {{::item.Libelle_information}}
+            {{::item.L}}
 
             <!-- <button type="submit" class="button button-block button-positive"
             style="margin: 10px 0 0 0 0 ;right: 0; position:absolute; width:40px; height:40px;"
@@ -33,8 +33,8 @@
           </div>
 
           <div class="col col-20" style="border-radius:0;Align:center;padding:0;">
-          <input type="number" style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.Local_Value"
-          placeholder="{{item.Value}}" ng-blur="Analog_Change(item)" ng-enter="Analog_Change(item)" ></input>
+          <input type="number" style="padding: 17px 0 0 20px;" ngMin="item.A0i" ngMax="item.A1" ng-model="item.LV"
+          placeholder="{{item.V}}" ng-blur="Analog_Change(item)" ng-enter="Analog_Change(item)" ></input>
         </div>
 
          <div  style="border-radius:0;Align:center;padding:0;position: absolute; left: -9999px; width: 1px; height: 1px;">
@@ -45,10 +45,10 @@
 
 
 <!-- Consigne Reglage TOR -->
-<div class ="item row Cons_Row"  ng-if="item.Type == 'TC'">
+<div class ="item row Cons_Row"  ng-if="item.T == 'TC'">
 
   <div class="col" style=" padding : 17px 0 0 20px;width:300px;" class="Cons_Ana">
-    {{::item.Libelle_information}}</div>
+    {{::item.L}}</div>
        <!-- <div class="col-80" style="font-family:'Roboto';font-size:12px; padding : 5px 0 0 20px ;">
         {{::item.Libelle_information}}</div> -->
         <!-- <ion-toggle  ng-change="Write(item)" class="Cons_Tor" ng-model="item.Local_Value" ng-checked="item.Value"
@@ -56,7 +56,7 @@
         <div class="col" style="width:60px;">
           <div class="item-toggle" >
           <label class="toggle toggle-positive ">
-                 <input type="checkbox" ng-change="Write(item)" ng-model="item.Local_Value" ng-checked="item.Value" toggle-class="toggle-calm">
+                 <input type="checkbox" ng-change="Write(item)" ng-model="item.LV" ng-checked="item.V" toggle-class="toggle-calm">
                  <div class="track" >
                    <div class="handle"></div>
                  </div>

@@ -1,8 +1,14 @@
  /*global require,console,setTimeout */
 var sql = require('mssql');
+var fs = require('fs');
 var app = require('express')();
 var crypto = require('crypto');
-var http = require('http').Server(app)
+var sslOptions = {
+  key: fs.readFileSync('./file.pem'),
+  cert: fs.readFileSync('./file.crt')
+};
+var http = require('https').createServer(sslOptions, app)
+// var server = https.createServer(sslOptions, app)
 var io = require('socket.io')(http);
 process.setMaxListeners(0);
 var OPC_Socket_ID ;
@@ -29,11 +35,12 @@ http.listen(3000, function(){
 
 process.on('uncaughtException', function(err) {
         if(err.errno === 'EADDRINUSE' && err.port === '3000')
-             console.log('Port 3000 already in use. Using Port 4000');
+            { console.log('Port 3000 already in use. Using Port 4000');
              http.close();
              http.listen(4000, function(){
                console.log('listening on *:4000');
              });
+           }
 
     });
 
@@ -130,10 +137,9 @@ console.log('CT_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
 
 //Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
 socket.on('CT_Answer',function(data) {
-console.log(data)
-console.log(' redirected from : ' + OPC_Socket_ID + ' to ' + socket.id )
-socket.to(data.info.Socket_ID).emit('', data.data) ;
-
+var info = data.pop();
+socket.to(info.Socket_ID).emit('CT_Answer', data) ;
+console.log('CT_Answer to ' + info.Socket_ID)
 });
 
 //Requete d'un client donné de la liste des alarmes
@@ -141,14 +147,16 @@ socket.on('AL_Query',function(data)
 {
   var fdata = Object.assign({ OPC_Socket_ID : OPC_Socket_ID, Socket_ID: socket.id }, data);
     socket.to(OPC_Socket_ID).emit('AL_Query', fdata )
-    console.log('Al_query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID + ' - Mode : ' + data.Mode)
+    console.log('AL_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID + ' - Mode : ' + data.Mode)
   });
 
 
 //Réponse OPC d'une requete de liste des alarmes et renvoi vers le bon client
 socket.on('AL_Answer',function(data) {
-  // console.log(data)
-  socket.to(data.Socket_ID).emit('AL_Answer', data) ;
+  var info = data.pop();
+  socket.to(info.Socket_ID).emit('AL_Answer', data) ;
+  console.log('AL_Answer redirected from : ' + OPC_Socket_ID + ' to ' + info.Socket_ID )
+
 });
 
 //Requet d'authentification SQL d'un client
@@ -237,44 +245,30 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
    data.Socket_ID = socket.id ;
    data.OPC_Socket_ID = OPC_Socket_ID;
    socket.to(OPC_Socket_ID).emit('Cons_Query',  data )
-   console.log('Consigne Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
+   console.log('Cons_Query from : ' + socket.id + ' to ' + OPC_Socket_ID )
    });
 
  //Reponse OPC pour les consignes
   socket.on('Cons_Answer', function(data){
-    if(data.Type == "TC")
-    {
-    if (data.Value) // true data
-    data.Etat = data.TOR_CodeEtat1;
-    else data.Etat = data.TOR_CodeEtat0;
-    }
-    // console.log(data)
-  socket.to(data.Socket_ID).emit('Cons_Answer', data )
-   console.log('Consigne Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+  var info = data.pop();
+  socket.to(info.Socket_ID).emit('Cons_Answer', data )
+  console.log('Cons_Answer from : ' + info.OPC_Socket_ID + ' to ' + info.Socket_ID )
       });
 
   //Reponse OPC pour les consignes
   socket.on('Cons_Answer_Update', function(data){
-   if(data.Type == "TC")
-   {
-   if (data.Value) // true data
-   data.Etat = data.TOR_CodeEtat1;
-   else data.Etat = data.TOR_CodeEtat0;
-   }
-  // console.log(data)
-   socket.to('Clients_Room').emit('Cons_Answer', data )
-    console.log('CTA_Cons Update for all ' )
+    // console.log(data)
+  socket.emit('Cons_Answer_Update', data )
+  console.log('CTA_Cons Update for all ' )
            });
 
   //Report erreur aux Clients_Room
   socket.on('Notif_All', function(data)
-  {
-    socket.to('Clients_Room').emit('Notif',data);
+  {  socket.to('Clients_Room').emit('Notif',data);
   })
 
   socket.on('Notif_Client', function(data)
-  {
-    console.log('Notif_Client ' + data.Socket_ID )
+  {  console.log('Notif_Client ' + data.Socket_ID )
    socket.to(data.Socket_ID).emit('Notif', data )
   })
 
