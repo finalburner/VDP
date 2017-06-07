@@ -3,7 +3,11 @@ controllers
 
 .controller('AppCtrl', ['$rootScope', '$scope', '$ionicModal', '$stateParams', '$timeout', 'socket', '$state', 'P', 'ConnectivityMonitor', 'Notif', 'AuthService', function($rootScope, $scope, $ionicModal, $stateParams, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
   var i = 1 ;
-
+  if(typeof google == "undefined"){
+   $rootScope.mapEnable = false;
+ }else{
+   $rootScope.mapEnable = true;
+ }
 // $state.go('app.CT'); //test only
 //   $scope.$on('$ionicView.enter', function() {
 //      // Code you want executed every time view is opened/
@@ -99,14 +103,12 @@ $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
           focusFirstInput: true
         });
 
+
 $scope.CT_N1 = function (name) //ouvre synthèse d'un CT
   {
-    // console.log(map.zoom)
-
     $rootScope.Selected_CT = name;
     $state.go('app.CTsyn');
   };
-
 
 
 //Change Selected_CT to 'null' - display alarm for ALL CTS
@@ -123,10 +125,6 @@ $scope.N1_open = function(name,color) {
           $rootScope.Selected_CT = name;
         };
 
-//fermeture du modal N1
-$scope.N1_close = function(name) {
-      $scope.modalN1.hide();
-};
 
 // Triggered in the login modal to close it
 // $scope.closeLogin = function() {
@@ -142,23 +140,30 @@ $scope.N1_close = function(name) {
 
 .controller('ConCtrl', ['$scope', 'socket', '$ionicLoading', '$rootScope', '$state', 'P', function($scope, socket, $ionicLoading, $rootScope,$state, P) {
 
+  if(!$rootScope.Selected_NomGrp || !$rootScope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
+
+
    $scope.Validate_Item = '' ;
    $scope.List_Cons = [] ;
 
-  if(!$rootScope.Selected_NomGrp || !$rootScope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
-   socket.emit(P.SOCKET.CQ , { M : "Read" , Selected_Grp : $rootScope.Selected_Grp , Selected_CT :$rootScope.Selected_CT });
+   $ionicLoading.show({ //Spinner au chargement initial
+   content: 'Loading', animation: 'fade-in', showBackdrop: true,
+   duration: 1000, maxWidth: 200,  showDelay: 0
+  });
+
+   $scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
+   { socket.emit(P.SOCKET.CQ , { Mode : "Read" , Selected_Grp : $rootScope.Selected_Grp , Selected_CT :$rootScope.Selected_CT });}
+
    socket.on(P.SOCKET.CA , function(data) {
-  //  console.log(data)
-// if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
-//    data.Value  = Math.round(data.Value).toFixed(2);
-    $scope.List_Cons = data;
-    console.log(data)
-   });
+    $scope.List_Cons = data; //Met à jour la liste
+    $ionicLoading.hide() //enleve le spinner
+    $scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinning
+  });
 
    $scope.Write= function (item)
    {
    // console.log(item)
-   item.M= "Write";
+   item.Mode = "Write";
    socket.emit(P.SOCKET.CQ, item );
    }
 
@@ -166,7 +171,7 @@ $scope.N1_close = function(name) {
    {
      if(item.V != item.LV)
    {// console.log(item);
-   item.M = "Write";
+   item.Mode  = "Write";
    socket.emit(P.SOCKET.CQ, item );
    }};
 
@@ -186,6 +191,8 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 
 .controller('CTctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$cordovaGeolocation', '$ionicSideMenuDelegate','$state', function($rootScope, $scope,socket,$ionicLoading, P, $cordovaGeolocation, $ionicSideMenuDelegate, $state ) {
 
+  $scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
+  {  socket.emit(P.SOCKET.CTQ); }
 
   $rootScope.$on('$stateChangeStart',  function(event, toState, toParams, fromState, fromParams){
   if(toState.url == "/carto")
@@ -194,8 +201,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
    $ionicSideMenuDelegate.canDragContent(true);
  });
 
-  var def  =  [48.861253, 2.329920]
-  $scope.loc = def ;
+  $scope.loc = [48.861253, 2.329920]
   var posOptions = {timeout: 10000, enableHighAccuracy: false};
 
      $cordovaGeolocation
@@ -214,25 +220,55 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
    duration: 1000, maxWidth: 200,  showDelay: 0
   });
 
-  socket.emit(P.SOCKET.CTQ);
   socket.on(P.SOCKET.CTA, function(data){
-    // console.log("socket")
-  $scope.List_CT = data ;
-  // console.dir($scope.List_CT.length)
-   $ionicLoading.hide();
+  $scope.List_CT = data ; //Met à jour la liste
+  $ionicLoading.hide(); //enleve le spinner
+  $scope.$broadcast('scroll.refreshComplete'); //Stop the ion-refresher from spinning
   });
 
-   $scope.CT_pow = "100kW Gaz SED14";
-   $scope.CT_alm = "Message d\'information caractérisant l\'alarme.Ca peut être long"
-   $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3QWWdY2M8JtbDSSrVriG9lIwD5anCRHo";
+  $scope.CT_pow = "100kW Gaz SED14";
+  $scope.CT_alm = "Message d\'information caractérisant l\'alarme.Ca peut être long"
+  $scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3QWWdY2M8JtbDSSrVriG9lIwD5anCRHo";
 
   }])
 
-.controller('ALctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$state', '$stateParams', function($rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
+.controller('ALctrl', ['$ionicModal', '$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$state', '$stateParams', function($ionicModal, $rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
+
+  //ouverture du modal filtres alarmes
+  $scope.modalm_open = function(name,color)
+  {  $scope.modalm.show(); $scope.Filter_Alm_local = $scope.Filter_Alm ;  };
+
+  $scope.modalm_close = function ()
+  {  $scope.modalm.hide(); $scope.Filter_Alm = $scope.Filter_Alm_local ;      }
+
+  $ionicModal.fromTemplateUrl('templates/N0/modalm.html', function(modal) {
+  $scope.modalm = modal;
+  }, {
+  scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
+  animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
+  focusFirstInput: true
+  });
+
+$scope.btn_voir = function(CT)   // Action boutton Alarmes->Voir
+{  if (CT) $rootScope.Selected_CT = CT ;
+   $state.go('app.CTsta')  }
 
 $scope.List_AL = []
+$scope.Filter_Alm_local = {} ;
 $scope.Synthese_PresentCount= 0 ;
-$scope.Filter_Alm ;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////                   FILTRAGE                    //////////////////////////////////////////
+if (!$scope.Filter_Alm) $scope.Filter_Alm = { ARI : 3 , AMA : 2, AMI : 1 , ADC : 10 , P : 2 , PA : 1 , D : 3 };
+// ARI : Alarme critique, AMA : alarme majeure, AMI : Alarme Mineure, ADC : Alarme Défaut com ,
+// P: Présente , PA : Présente Ack , D : Disparue
+$scope.filtercriticite = function(obj) { return (obj.C == $scope.Filter_Alm.ARI)||(obj.C == $scope.Filter_Alm.AMA)||(obj.C == $scope.Filter_Alm.AMI)||(obj.C == $scope.Filter_Alm.ADC) };
+$scope.filteretat = function(obj) { return (obj.P == $scope.Filter_Alm.P)||(obj.P == $scope.Filter_Alm.PA)||(obj.P == $scope.Filter_Alm.D) };
+$scope.filterencours= function() { $scope.Filter_Alm = { ARI : 3 , AMA : 2, AMI : 1 , ADC : 10 , P : 2 , PA : 0 , D : 0 }}
+$scope.filtertoutes = function() { $scope.Filter_Alm = { ARI : 3 , AMA : 2, AMI : 1 , ADC : 10 , P : 2 , PA : 1 , D : 3 }}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $scope.ACK = function(item)
 {
@@ -266,16 +302,18 @@ socket.on(P.SOCKET.OU, function(data){
     console.log($scope.Synthese_PresentCount)
 });
 
-$scope.$watch(['Synthese_PresentCount'], function(newValue, oldValue) {
 
-  //Demande mise à jour listes Alarmes
-socket.emit(P.SOCKET.ALQ , { Mode : 'Read' , Selected_CT : $rootScope.Selected_CT});
-console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
+$scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
+{socket.emit(P.SOCKET.ALQ , { Mode : 'Read' , Selected_CT : $rootScope.Selected_CT});}//Demande mise à jour listes Alarmes
+
+
+// $scope.$watch(['Synthese_PresentCount'], function(newValue, oldValue) {
+// console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
 // $ionicLoading.show({
 // content: 'Loading', animation: 'fade-in', showBackdrop: true,
 // duration: 1000, maxWidth: 200,  showDelay: 0
 // });
-});
+// });
 
     // var list_AL = [
     // { type: 'AL 49850',
@@ -287,20 +325,25 @@ console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
 
 //Reception des Alarmes unitaires depuis OPC
 socket.on(P.SOCKET.ALA, function(data){
-  // console.log(data)
-$scope.List_AL = data
-$ionicLoading.hide();
+$scope.List_AL = data //Met à jour la liste
+$ionicLoading.hide(); //enleve le spinner
+$scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinning
+
    });
 
     }])
 
 
-.controller('CTActrl', ['$rootScope', '$scope', 'socket', '$state', 'P', function($rootScope, $scope, socket, $state, P) {
+.controller('CTActrl', ['$ionicLoading', '$rootScope', '$scope', 'socket', '$state', 'P', function($ionicLoading, $rootScope, $scope, socket, $state, P) {
 
 
 $scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
 if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
 
+$ionicLoading.show({
+content: 'Loading', animation: 'fade-in', showBackdrop: true,
+duration: 1000, maxWidth: 200,  showDelay: 0
+});
 
 $scope.Consigne_Grp = function (NomGrp,Grp)
     {
@@ -308,7 +351,7 @@ $scope.Consigne_Grp = function (NomGrp,Grp)
       $rootScope.Selected_Grp = Grp;
       $state.go('app.CTcon');
     };
-var List_CTA_Local =  [ ];
+
 $scope.List_CTA = []
 
 $scope.expand_AL = function(item) {
@@ -322,24 +365,18 @@ $scope.expand_AL = function(item) {
           return $scope.shownItem === item;
         };
 
-socket.emit(P.SOCKET.CTAQ , { Selected_CT : $scope.Selected_CT} );
-socket.on(P.SOCKET.CTAA ,function(data){
-// console.log(data)
-var cta = List_CTA_Local.findIndex(function(obj) { obj.DesignGroupeFonctionnel == data.Libelle_groupe});
-if (cta == -1 )  // -1 ==> unfound
-List_CTA_Local.push(data);
-else
-List_CTA_Local[cta] = data ;
+$scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
+{ socket.emit(P.SOCKET.CTAQ , { Selected_CT : $scope.Selected_CT} ); }
 
-if (data.len -1 == data.item) $scope.List_CTA = List_CTA_Local ;
+socket.on(P.SOCKET.CTAA ,function(data){
+$scope.List_CTA = data ; //Met à jour la liste
+$ionicLoading.hide(); //enleve le spinner
+$scope.$broadcast('scroll.refreshComplete'); //Stop the ion-refresher from spinning
 });
 
 
-// $scope.CTA_list = CTA_List;
-
-// console.log(List_CTA)
 // $scope.labels =["1","2","3","4","5","6"];
-//
+
 // $scope.options = {
 //           scales: {
 //             yAxes: [
@@ -348,31 +385,28 @@ if (data.len -1 == data.item) $scope.List_CTA = List_CTA_Local ;
 //                 type: 'linear',
 //                 display: true,
 //                 position: 'left'
-//               }
-//             ]
-//           }
-//         };
+//               }        ]
+//           }   };
 
       }])
 
-.controller('StaCtrl', ['$scope', '$rootScope', '$state', 'socket', 'P', function($scope, $rootScope,$state,socket, P) {
+.controller('StaCtrl', ['$ionicLoading', '$scope', '$rootScope', '$state', 'socket', 'P', function($ionicLoading, $scope, $rootScope,$state,socket, P) {
 
-  $scope.Selected_CT = $rootScope.Selected_CT ;
-  if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
+  if(!$rootScope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
 
   $scope.List_Sta = [] ;
-  var List_Sta_Local = []
-  socket.emit(P.SOCKET.SQ , { Mode : "Read" , Selected_CT : $scope.Selected_CT });
+  $ionicLoading.show({
+  content: 'Loading', animation: 'fade-in', showBackdrop: true,
+  duration: 1000, maxWidth: 200,  showDelay: 0
+  });
+
+  $scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
+  {  socket.emit(P.SOCKET.SQ , { Mode : "Read" , Selected_CT : $rootScope.Selected_CT });}
+
   socket.on(P.SOCKET.SA , function(data) {
-  console.log(data)
-
-  var StaIndex = List_Sta_Local.findIndex(function(obj) { obj.Mnemo == data.Mnemo});
-  if (StaIndex == -1 )  // -1
-  List_Sta_Local.push(data);
-  else
-  List_Sta_Local[StaIndex] = data ;
-
-  if (data.len -1 == data.item ) $scope.List_Sta = List_Sta_Local ;
+  $scope.List_Sta = data //Met à jour la liste
+  $ionicLoading.hide(); //enleve le spinner
+  $scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinning
   });
 
   $scope.Write= function (item)
@@ -410,21 +444,29 @@ if (data.len -1 == data.item) $scope.List_CTA = List_CTA_Local ;
 $scope.Validate_Item = '' ;
 $scope.List_Cons = []
 
-socket.emit(P.SOCKET.CQ, { M : "Read"});
+$ionicLoading.show({
+content: 'Loading', animation: 'fade-in', showBackdrop: true,
+duration: 300, maxWidth: 200,  showDelay: 0
+});
+// socket.on(P.SOCKET.CU, function(data) {
+// // if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
+// // data.Value  = Math.round(data.Value).toFixed(2);
+// console.log(data)
+// var i = $scope.List_Cons.findIndex(function(obj) { obj.M == data.M});
+// console.log(i)
+// // if (i != -1 )  // -1 ==> unfound
+// // $scope.List_Cons[i] = data ;
+// });
+
+$scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
+{   socket.emit(P.SOCKET.CQ, { Mode : "Read"}); }
+
 socket.on(P.SOCKET.CA, function(data) {
 // if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
 // data.Value  = Math.round(data.Value).toFixed(2);
 $scope.List_Cons = data ;
-});
-
-socket.on(P.SOCKET.CAU, function(data) {
-// if( data.Type == 'TR' && data.Value && data.Value.toString().length >= 6 )
-// data.Value  = Math.round(data.Value).toFixed(2);
-console.log(data)
-var i = $scope.List_Cons.findIndex(function(obj) { obj.Adr == data.Adr});
-if (ci != -1 )  // -1 ==> unfound
-{$scope.List_Cons[i] = data ;
-}
+$ionicLoading.hide(); //enleve le spinner
+$scope.$broadcast('scroll.refreshComplete'); //Stop the ion-refresher from spinning
 
 });
 
@@ -434,7 +476,7 @@ $scope.Write= function (item)
   if(item.V != item.LV)
   {
 
-item.M = "Write";
+item.Mode = "Write";
 socket.emit(P.SOCKET.CQ, item );
 }};
 
@@ -442,7 +484,7 @@ $scope.Analog_Change = function(item)
 {
   if(item.V != item.LV)
 {// console.log(item);
-item.M = "Write";
+item.Mode = "Write";
 socket.emit(P.SOCKET.CQ, item );
 }};
 

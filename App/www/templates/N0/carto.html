@@ -18,7 +18,7 @@
    <i class="icon ion-search placeholder-icon"></i>
    <input type="text" placeholder="Recherche" ng-model="search">
  </label></div>
-
+<div ng-if="mapEnable" class="gmap_container" data-tap-disabled="true">
     <ng-map  center="{{loc}}"
      default-style="false"
      zoom = "12"
@@ -33,16 +33,14 @@
            fill-color="{{::item.AL}}"
            fill-opacity="0.8"
            title="{{::item.CT}}"
-           center="[{{::item.L}},{{::item.LO}}]"
+           center="[{{::item.LA}},{{::item.LO}}]"
            radius="80"
            on-click="CT_N1(this)"
            >
            <!-- on-click="CT_N1(this)"  -->
          </shape>
 
-
-
-    </ng-map>
+    </ng-map></div>
 
 </ion-content>
 </ion-view>

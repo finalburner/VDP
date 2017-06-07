@@ -1,4 +1,4 @@
-<ion-view view-title="Synoptique">
+<ion-view view-title="Synoptique" ng-init="Refresh()">
 
   <ion-nav-bar class="bar-light">
           <ion-nav-buttons side="left">
@@ -20,12 +20,16 @@
 
 
   <!--Bouton CT - Intervention-->
-          <div class="item button-bar row">
+          <!-- <div class="item button-bar row">
             <a class="button btn_CT" nav-transition="none" ui-sref="app.CT" >Centres Thermiques</a>
             <!-- <a class="button btn_Int" nav-transition="none" ui-sref="app.CTi" >Les interventions</a> -->
-          </div>
+          <!-- </div>  -->
 <!--Liste de CT-->
+<ion-refresher on-refresh="Refresh()">
+</ion-refresher>
+
     <ion-list >
+
         <!-- <a class = "item row CT_row" on-hold="N1(item.name)"  ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" > -->
          <a class = "item row CT_row" on-hold="N1_open(item.L,item.AL)" ng-click="CT_N1(item.L)"
           ng-repeat="item in List_CT  | filter: search  "

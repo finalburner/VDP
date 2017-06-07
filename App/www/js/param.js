@@ -1,7 +1,7 @@
 app
 .constant('P', {
   PARAM : {
-    SRV_WEB : 'https://80.14.220.219:3000',
+    SRV_WEB : 'https://80.11.8.31:3000',
     SRV_LOCAL : 'https://localhost:3000'
 
   },
@@ -11,7 +11,7 @@ app
         LA   : 'Login_Answer',
         CQ   : 'Cons_Query',
         CA   : 'Cons_Answer',
-        CAU  : 'Cons_Answer_Update',
+        CU   : 'Cons_Update',
         CC   : 'Client_Connected',
         CO   : 'Connect',
         CTQ  : 'CT_Query',
@@ -29,9 +29,9 @@ app
   { //Alarm Color
         AL_10_Color : '#D500F9', //AL DefCom
         AL_3_Color : '#F44336', //AL Critique
-        AL_2_Color : '#FF8F00', //AL Majeure
+        AL_2_Color : '#FF8E21', //AL Majeure
         AL_1_Color : '#2196F3', //AL Mineure
-        AL_0_Color : '#07F900' //Aucune Alarme Présente
+        AL_0_Color : '#000000' //Aucune Alarme Présente
 },
 
   USER_ROLES :
@@ -55,9 +55,9 @@ app
   MODAL_N1 :
   {
     GLOBAL : [
-        {name : 'Synthèse', url: 'app.CTsyn'},
-        {name :  'Etats', url: 'app.CTsta'}, //status anciennement
-        {name :  'Historique', url: 'app.CThis'}
+      {name : 'Synthèse', url: 'app.CTsyn'},
+      {name :  'Etats', url: 'app.CTsta'}, //status anciennement
+      {name :  'Historique', url: 'app.CThis'}
       ],
     LOCAL : [
      {name :  'Fiche identité', url: 'app.CTfic'},

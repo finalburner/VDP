@@ -13,6 +13,9 @@
      <input type="text" placeholder="Recherche" ng-model="search">
     </label></div>
 
+    <ion-refresher on-refresh="Refresh()">
+    </ion-refresher>
+
     <ion-list>
         <ion-item class="row animate-repeat"
         ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search track by item.M+$index" class="item col" style = "padding: 0 ;">

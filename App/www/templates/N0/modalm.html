@@ -1,0 +1,40 @@
+<ion-modal-view class="N1_menu">
+
+<ion-content>
+<div class="row N1_bar_header" ng-click="modalm_close()">
+<!-- <div class="N1_menu_color " style ="background-color: {{::modalN1.AL_Color}}"></div> -->
+<p class="N1_menu_title row " style="font-family:'Roboto'!important ;font-size:14px !important ;"></p>
+<i class="icon ion-close-round col " style="margin:0" ng-click="modalm_close()"></i>
+<!-- <a ion-button ng-click="N1_close()" class="button button-clear col col-offset-10 ion-clouse-round"> -->
+</a >
+</div>
+
+
+<ion-list>
+
+<ion-item class="modalm_div ">Criticité</ion-item>
+
+  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.ARI" ng-true-value= "3" >Critique</ion-checkbox>
+  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.AMA" ng-true-value= "2" >Majeure</ion-checkbox>
+  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.AMI" ng-true-value= "1" >Mineure</ion-checkbox>
+  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.ADC" ng-true-value= "10">Défault de communication</ion-checkbox>
+
+<ion-item class="modalm_div ">Etat</ion-item>
+
+  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.P" ng-true-value= "2">Présente</ion-checkbox>
+  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.PA" ng-true-value= "1">Présente acquitée</ion-checkbox>
+  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.D" ng-true-value= "3">Disparue non acquitée</ion-checkbox>
+
+<!-- <ion-item class="modalm_div ">Metier</ion-item>
+
+    <ion-checkbox ng-model="filter.metier">CVC</ion-checkbox>
+    <ion-checkbox ng-model="filter.yellow">Système</ion-checkbox>
+    <ion-checkbox ng-model="filter.pink">MFL</ion-checkbox> -->
+
+
+
+          </ion-list>
+<!-- </div> -->
+</ion-content>
+
+  </ion-modal-view>

@@ -216,9 +216,9 @@ console.log('CTA_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID 
 
 // Réponse du client OPC en circuit CTA
 socket.on('CTA_Answer', function(data){
-  // console.log(data)
-socket.to(data.Socket_ID).emit('CTA_Answer', data )
-console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+var info = data.pop()
+socket.to(info.Socket_ID).emit('CTA_Answer', data)
+console.log('CTA_Answer redirected from : ' + info.OPC_Socket_ID + ' to ' + info.Socket_ID )
   });
 
 // //Mise à jour OPC des températures ambiantes
@@ -235,13 +235,14 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
 
 // Réponse du client OPC status CT
     socket.on('Sta_Answer', function(data){
-    socket.to(data.Socket_ID).emit('Sta_Answer', data )
-    console.log('Sta_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data.Socket_ID )
+      var info = data.pop()
+    socket.to(info.Socket_ID).emit('Sta_Answer', data )
+    console.log('Sta_Answer redirected from : ' + info.OPC_Socket_ID + ' to ' + info.Socket_ID )
       });
 
 //Requete des consignes d'un Grp fonctionnel d'un CT
    socket.on('Cons_Query', function(data){
-    //  console.log(data)
+     console.log(data)
    data.Socket_ID = socket.id ;
    data.OPC_Socket_ID = OPC_Socket_ID;
    socket.to(OPC_Socket_ID).emit('Cons_Query',  data )
@@ -256,9 +257,9 @@ console.log('CTA_Answer redirected from : ' + data.OPC_Socket_ID + ' to ' + data
       });
 
   //Reponse OPC pour les consignes
-  socket.on('Cons_Answer_Update', function(data){
-    // console.log(data)
-  socket.emit('Cons_Answer_Update', data )
+  socket.on('Cons_Update', function(data){
+    console.log(data)
+  socket.to(data.Socket_ID).emit('Cons_Update', data )
   console.log('CTA_Cons Update for all ' )
            });
 

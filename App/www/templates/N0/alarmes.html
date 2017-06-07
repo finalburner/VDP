@@ -1,4 +1,4 @@
-<ion-view view-title="Journal des alarmes">
+<ion-view view-title="Journal des alarmes" ng-init="Refresh()">
 
   <ion-nav-bar class="bar-light">
       <!-- <ion-nav-back-button class="button-clear">
@@ -20,23 +20,20 @@
 
 
 <!--Bouton CT - Intervention-->
-        <div class="item button-bar row">
-     <a class="button btn_CT" ng-click="Filter_Alm = { Actif : 'true' } ">En cours</a>
-      <!-- <select class="button" >
-            <option>Blue</option>
-            <option selected>Green</option>
-            <option>Red</option>
-    </select> -->
-          <a class="button btn_Int" ng-click="Filter_Alm = '' ">Toutes</a>
-        <!-- </div> -->
-  </div>
-<!--Liste de AL-->
+<div class="item button-bar row">
+     <a class="button btn_CT" ng-click="filterencours()">En cours</a>
+     <a class="button btn_Int" ng-click="filtertoutes()">Toutes</a>
+     <a class="button btn_Int" ng-click="modalm_open()">Filtres</a>
+</div>
 
+<!--Liste de AL-->
+<ion-refresher on-refresh="Refresh()">
+</ion-refresher>
 <ion-list>
     <!-- <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
     ng-animate="'animate'" collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}"> -->
     <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
-  ng-repeat="item in List_AL | filter : Filter_Alm | filter : search track by item.M+$index" class="item col"  ng-click="expand_AL(item)"   >
+  ng-repeat="item in List_AL | filter : filtercriticite | filter : filteretat | filter : search track by item.M+$index | orderBy : '-item.S'   " class="item col"  ng-click="expand_AL(item)"   >
 
 <div class="col-5 AL_bar_color" style="background-color: {{::item.AL}}"></div>
 <div class="col AL_col">
@@ -47,22 +44,20 @@
           <div class="col col_arrow"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-down' : 'ion-chevron-down'"></i></div>
 </div>
 
-
-
-
+<div class="row AL_row_text"><p id="AL_Message">{{::item.S}}</p></div>
 <div class="row AL_row_text"><p id="AL_Message">{{::item.L}}</p></div>
 <div class="row AL_row_state">
-<span ng-if="item.Act">Etat : Présente</span>
-<span ng-if="!item.Act">Etat : Disparue</span>
+<span ng-if="item.P==1||item.P==2">Etat : Présente</span>
+<span ng-if="item.P==3">Etat : Disparue</span>
 </div>
 <div class="row AL_row_state">
-<span ng-if="item.Ack">Ack : Acquittée</span>
-<span ng-if="!item.Ack">Ack : non Acquittée</span>
+<span ng-if="item.P==1">Ack : Acquittée</span>
+<span ng-if="item.P==3||item.P==2">Ack : non Acquittée</span>
 </div>
 <div class="row AL_row_btn">
 <button class="button button-avis" >Créer un Avis</button>
 <button class="button button-ack" ng-click ="ACK(item)">Acquitter</button>
-  <button class="button button-voir" >Voir</button>
+<button class="button button-voir" ng-click ="btn_voir(item.loc)">Voir</button>
 </div>
 </div>
           </ion-item>

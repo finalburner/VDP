@@ -158,56 +158,52 @@ logger.error(err)
 
   //Socket query for Status list
   socket.on('Sta_Query', function(data){
-
     var OPC_Read = [] ; //requetes OPC
     var R =[] // Listes Status
 
     logger.info('Sta_Query from ' + data.Socket_ID)
   if (the_session)
    {
-      var  query = "Select Installation_technique,DesignGroupeFonctionnel,DesignObjetFonctionnel,Information,Libelle_information,Type,TOR_CodeEtat1,TOR_CodeEtat0 from dbo.SUPERVISION " ;
+   var query = "Select Installation_technique as IT,DesignGroupeFonctionnel as DGF ,DesignObjetFonctionnel as DOF,Information as I ,Libelle_information as L ,Type as T ,TOR_CodeEtat1 as T1,TOR_CodeEtat0 as T0 from dbo.SUPERVISION " ;
        query += "WHERE localisation = \'" + data.Selected_CT + "\' ";
        query += "AND NomGroupeFonctionnel = \'GENER\' AND NomObjetFonctionnel = \'SYNTH\' ";
        query += "AND Metier = \'CVC\'";
-
       var request = new sql.Request().query(query).then(function(rec) {
-        R = JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
-       var len = R.length ;
-       // console.log(R)
+      rec = JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
+       var len = rec.length ;
+
        for (var i = 0; i < len; i++) {
-          var Metier = 'CVC';
-          var NomGroupeFonctionnel = 'GENER';
-          var NomObjetFonctionnel = 'SYNTH';
-          var Mnemo = Metier + '_' + R[i].Installation_technique;
-          Mnemo +=  '_' + NomGroupeFonctionnel + R[i].DesignGroupeFonctionnel;
-          Mnemo +=  '_' + NomObjetFonctionnel + R[i].DesignObjetFonctionnel ;
-          Mnemo +=  '_' + R[i].Information ;
-          var adr = '/Application/STEGC/Paris/PT/' + R[i].Installation_technique ;
-          adr += '/Acquisition/' + Mnemo + '.Valeur';
+         var id = rec[i]
+          var Mnemo = 'CVC_' + id.IT + '_GENER' + id.DGF + '_SYNTH' + id.DOF + '_' + id.I ;
+          var adr = '/Application/STEGC/Paris/PT/' + id.IT + '/Acquisition/' + Mnemo + '.Valeur';
           var NodeId = "ns=2;s=" + adr;
-          R[i].Mnemo = Mnemo ;
           OPC_Read.push(NodeId)
+          R.push({ L : id.L , M : Mnemo })
         }
 
       the_session.readVariableValue(OPC_Read, function(err,dataValue,diagnostics) {
             if (err)
             { logger.error("OPC error");logger.error(diagnostics);logger.error(err); }
             else {
+              // console.dir(dataValue)
             for(i=0 ; i< len ; i++)
             {
-            var id = R[i] ;
             if (dataValue[i] && dataValue[i].value)
                   {
-                  id.Value =  dataValue[i].value.value
-                  if (id.Value)
-                  id.Etat= id.TOR_CodeEtat1
+                  R[i].V =  dataValue[i].value.value
+                  // console.log(dataValue[i].value.value)
+                  if (R[i].V)
+                  R[i].E= rec[i].T1
                   else
-                  id.Etat= id.TOR_CodeEtat0
+                  R[i].E= rec[i].T0
                  }
-                 var Retour = {OPC_Socket_ID : data.OPC_Socket_ID , Socket_ID: data.Socket_ID , Libelle_information : id.Libelle_information , Etat: id.Etat , len : len , item : i };
-                 socket.emit('Sta_Answer', Retour);
-                 console.log(Retour)
-               } }
+
+               }
+               R.push({OPC_Socket_ID : data.OPC_Socket_ID , Socket_ID: data.Socket_ID });
+               socket.emit('Sta_Answer', R);
+               logger.info('Sta_Answer to ' + data.Socket_ID )
+
+              }
        })
   }).catch(function(err) {
   logger.error(err)
@@ -224,99 +220,61 @@ if (the_session)
 {
 var NodeId = "ns=2;s=" ;
 var OPC_Read = []  ;
+var CTA = []
 var len ;
 var query ;
 // console.log(data)
 if (data.Selected_CT == 'null' )
 logger.info('No CT Selected')
 else {
-query = "Select distinct Libelle_groupe,DesignGroupeFonctionnel,Installation_technique from dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
+query = "Select distinct Libelle_groupe as LG,DesignGroupeFonctionnel as DGF,Installation_technique as IT from dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
 
   var request = new sql.Request().query(query).then(function(rec) {
   var recordset=JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
   if (recordset) {
-
+    // console.log(recordset)
     len = recordset.length
     for (var i = 0 ; i < len; i++) {
     var id = recordset[i];
-    var PT = id.Installation_technique;
-    var Circuit = id.Libelle_groupe;
-    var Design = id.DesignGroupeFonctionnel;
-    var AMBIA = '/STEGC/Paris/PT/' + PT + '/Acquisition/' + 'CVC_' + PT + '_CIRCU' + Design + '_TEMP3AMBIA_M01';
-    var DEPAR=  '/STEGC/Paris/PT/' + PT + '/Acquisition/' + 'CVC_' + PT + '_CIRCU' + Design + '_TEMP3DEPAR_M01';
+    var AMBIA = '/STEGC/Paris/PT/' + id.IT + '/Acquisition/CVC_' + id.IT + '_CIRCU' + id.DGF + '_TEMP3AMBIA_M01';
+    var DEPAR=  '/STEGC/Paris/PT/' + id.IT + '/Acquisition/CVC_' + id.IT + '_CIRCU' + id.DGF + '_TEMP3DEPAR_M01';
     var TEMP3_AMBIA = NodeId + '/Application' + AMBIA + '.Valeur' ;
     var TEMP3_DEPAR = NodeId + '/Application' + DEPAR + '.Valeur' ;
     // COURBE1 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
     // COURBE2 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + DEPAR + '/Evt\' ORDER BY UTC_App_DateTime DESC'
-  // console.log(id)
-   OPC_Read.push(TEMP3_AMBIA,TEMP3_DEPAR)
-  }
-  var opc_len = OPC_Read.length ;
-  // console.log(OPC_Read)
-  // console.log(len)
-  // console.log(opc_len)
-
-    the_session.readVariableValue( OPC_Read, function(err,dataValue,diagnostics) {
+    OPC_Read.push(TEMP3_AMBIA,TEMP3_DEPAR)
+    CTA.push({DGF : id.DGF , LG : id.LG})
+    }
+    // console.log(OPC_Read)
+    var opc_len = OPC_Read.length , j ;
+    if(OPC_Read){
+    the_session.readVariableValue(OPC_Read, function(err,dataValue,diagnostics) {
               if (err)
              { logger.error("OPC error");logger.error(diagnostics);logger.error(err); }
               else {
+                //  console.log(dataValue)
               for(i=0 ; i< opc_len ; i = i + 2)
               {
-                id = recordset[i/2];
-                if (dataValue[i])
-                 { // console.log(dataValue[0])
-                   if (dataValue[i].value)  {
-                     id.TEMP3_AMBIA_SRC = TEMP3_AMBIA
-                     id.TEMP3_AMBIA = dataValue[i].value.value
+                j = i/2 ;
+                if (dataValue[i] && dataValue[i].value)
+                CTA[j].TA = dataValue[i].value.value //TEMP3_AMBIA
 
-
-                      // new sql.Request().query(COURBE1).then(function(recordset) {
-                      // recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
-                      // if (recordset)
-                      // id.TEMP3_AMBIA_ARC = recordset['TriggeringValue']
-                      // });
-                   }
- }
- //Monitor TEMP3_AMBI
-// var monitem = the_subscription.monitor({
-// nodeId: opcua.resolveNodeId(TEMP3_AMBIA),
-// attributeId: opcua.AttributeIds.Value
-// },   {samplingInterval: 100,discardOldest: false,queueSize: 1 },
-// opcua.read_service.TimestampsToReturn.Both
-// )
-// // console.dir(monitem)
-// monitem.on("changed", function(dataValue){
-// id.TEMP3_AMBIA = dataValue.value.value ;
-// var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID }, id);
-// socket.emit('CTA_Answer_Update', Retour);
-// console.log(id)
-// });
-
-
-                if (dataValue[i+1])
-                { //console.log(dataValue[1])
-                  if (dataValue[i+1].value)
-                  { id.TEMP3_DEPAR_SRC = TEMP3_DEPAR
-                    id.TEMP3_DEPAR = dataValue[i+1].value.value
+                if (dataValue[i+1]  && dataValue[i+1].value)
+                CTA[j].TD = dataValue[i+1].value.value //TEMP3_DEPAR
 
                     //  new sql.Request().query(COURBE2).then(function(recordset) {
                     //  recordset=JSON.parse(JSON.stringify(recordset).replace(/"\s+|\s+"/g,'"'))
                     //  if (recordset)
                     //   d.TEMP3_DEPAR_ARC = recordset['TriggeringValue']
                     // });
-                   }
 
                 }
-// console.log(id)
-var Retour = Object.assign({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID , len : len, item : i/2  }, id );
-socket.emit('CTA_Answer', Retour);
+CTA.push({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID });
+socket.emit('CTA_Answer', CTA);
 logger.info("CTA Emit ")
-// console.log(Retour)
-
-              }
             }
 
-});
+});}
             //
             // xx the_subscription.monitor("i=155",DataType.Value,function onchanged(dataValue){
             // xx    logger.info(" temperature has changed " + dataValue.value.value);
@@ -367,9 +325,9 @@ if (the_session)
   var Actif ;
   var OPC_Read  = [];
   var ToSend = [];
-console.log(data.Selected_CT)
+
   if (!data.Selected_CT || data.Selected_CT == 'null')
-  {query  = "Select top 100 Libelle_information AS L,Installation_technique AS IT,NomGroupeFonctionnel AS NGF,"
+  {query  = "Select top 100 localisation as loc, Libelle_information AS L,Installation_technique AS IT,NomGroupeFonctionnel AS NGF,"
    query += "DesignGroupeFonctionnel AS DGF,NomObjetFonctionnel AS NOF,DesignObjetFonctionnel AS DOF,Information AS I,TOR_CriticiteAlarme AS C "
    query += "from dbo.SUPERVISION WHERE Type = 'TA' and Metier = 'CVC' "}
   else
@@ -392,13 +350,14 @@ console.log(data.Selected_CT)
                   // AlmToRead.push({ NodeId : NodeId , Mnemo : Mnemo , Libelle: id.Libelle_information, Criticite : id.C , Actif : '' , Ack : ''})
                   OPC_Read.push(NodeId + '.valeur')
                   OPC_Read.push(NodeId + '/Alm/Acknowledged')
-                  var AL =  P.ALARM.AL_0_Color ; //applique la couleur CT de base
-                  if (id.C == '1')  AL = P.ALARM.AL_1_Color ; //applique la couleur CT mineure
-                  if (id.C == '2')  AL = P.ALARM.AL_2_Color ; //applique la couleur CT majeure
-                  if (id.C == '3')  AL = P.ALARM.AL_3_Color ; //applique la couleur CT critique
-                  if (id.C == '10') AL = P.ALARM.AL_10_Color ; //applique la couleur CT critique
+                  var AL =  P.ALARM.AL_0_Color ; //applique la couleur alarme de base
+                  if (id.C == '1')  AL = P.ALARM.AL_1_Color ; //applique la couleur alarme mineure
+                  if (id.C == '2')  AL = P.ALARM.AL_2_Color ; //applique la couleur alarme majeure
+                  if (id.C == '3')  AL = P.ALARM.AL_3_Color ; //applique la couleur alarme critique
+                  if (id.C == '10') AL = P.ALARM.AL_10_Color ; //applique la couleur alarme def com
 
-                  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : id.L  })
+  if (!data.Selected_CT || data.Selected_CT == 'null')  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : id.L , C : id.C , loc : id.loc })
+  else  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : id.L , C : id.C })
 
      };
 // console.log(OPC_Read)
@@ -406,23 +365,30 @@ the_session.readVariableValue(OPC_Read, function(err,dataValue,diagnostics) {
 if (err) {
 logger.error("OPC error");logger.error(diagnostics);logger.error(err); }
 else {
+var T ;
+var Ack,Act;
  for (var i = 0 ; i < len ; i++) {
 //Gestion d'erreur OPC lecture attribut Actif
 // console.log(opc_len)
 id = recordset[i];
+
+if(dataValue[i].sourceTimestamp)
+ToSend[i].S= dataValue[i].sourceTimestamp.toLocaleString("en-GB") //date type
+
+
 if (dataValue[2*i].statusCode )
 {
   if (dataValue[2*i].statusCode._base)
   {
      id.StatusCode_Actif = dataValue[2*i].statusCode._base['name'];
      if ( id.StatusCode_Actif = 'Good' && dataValue[2*i].value)
-     ToSend[i].Act = dataValue[2*i].value.value;
+     Act = dataValue[2*i].value.value;
   }
   if (dataValue[2*i].statusCode['name'])
   {
       id.StatusCode_Actif = dataValue[2*i].statusCode['name'];
       if( id.StatusCode_Actif = 'Good' && dataValue[2*i].value)
-      ToSend[i].Act= dataValue[2*i].value.value;
+      Act= dataValue[2*i].value.value;
   }
  }
 //Gestion d'erreur OPC lecture attribut Ack
@@ -433,19 +399,21 @@ if (dataValue[2*i].statusCode )
    {
       id.StatusCode_Ack = dataValue[2*i+1].statusCode._base['name'];
       if ( id.StatusCode_Ack = 'Good' && dataValue[2*i+1].value)
-      ToSend[i].Ack = dataValue[2*i+1].value.value;
+      Ack = dataValue[2*i+1].value.value;
     }
 
   if (dataValue[2*i+1].statusCode['name'])
     {
        id.StatusCode_Ack = dataValue[2*i+1].statusCode['name'];
        if( id.StatusCode_Ack = 'Good' && dataValue[2*i+1].value)
-      ToSend[i].Ack = dataValue[2*i+1].value.value;
+      Ack = dataValue[2*i+1].value.value;
     }
 
 }
-// if(!(Ack && !Actif))
 
+if(Act&&Ack) ToSend[i].P = 1 ; //Présente Acquitée
+if(Act&&!Ack)  ToSend[i].P = 2 ; //Présente ( non Ack )
+if(!Act&&!Ack)  ToSend[i].P = 3 ; // Disparue ( non Ack )
 }
 
 // console.log(ToSend)
@@ -478,6 +446,7 @@ if( data.Mode == "Write" )
   //
   //     }
   // });
+  console.log(data)
 var methodsToCall = [];
    methodsToCall.push({
     objectId: opcua.resolveNodeId(data.N + '/Alm'),
@@ -520,7 +489,7 @@ socket.on('Cons_Query', function (data){
   logger.info('Cons_Query from ' + data.Socket_ID)
 if (the_session)
 {
-  if (data.M == "Read")
+  if (data.Mode == "Read")
   {
   // console.log(data)
   var NodeId = "ns=2;s=" ;
@@ -538,12 +507,13 @@ if (the_session)
   // console.log(query)
 }
   else
-   query = "Select Installation_technique as IT, NomGroupeFonctionnel as NGF, DesignGroupeFonctionnel AS DGF,"
+   { query = "Select Installation_technique as IT, NomGroupeFonctionnel as NGF, DesignGroupeFonctionnel AS DGF,"
    query += "NomObjetFonctionnel AS NOF,  DesignObjetFonctionnel AS DOF, Information AS I, Libelle_groupe AS LG,"
    query += "Libelle_information AS LI, Type AS T, ANA_Unite AS A, ANA_ValeurMini AS A0, ANA_ValeurMaxi AS A1 , "
    query += "TOR_CodeEtat0 AS T0, TOR_CodeEtat1 AS T1 from dbo.SUPERVISION Where Localisation =\'CT93213\' AND "
-   query += "NomGroupeFonctionnel = \'CIRCU\' AND Type IN (\'TC\' , \'TR\') AND metier = \'CVC\' order by Type "
+   query += "NomGroupeFonctionnel = \'CIRCU\' AND Type IN (\'TC\' , \'TR\') AND metier = \'CVC\' order by Type " }
 
+// console.log( query)
     var request = new sql.Request().query(query).then(function(rec) {
     var recordset=JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
     // console.log(recordset)
@@ -588,7 +558,7 @@ if (the_session)
  });
 }
 
-if ( data.M =="Write" && Write_Perm) {
+if ( data.Mode =="Write" && Write_Perm) {
   // console.log(data)
 
 if (data.T == "TC") {  var nodeToWrite = [
@@ -629,7 +599,7 @@ the_session.write(nodeToWrite, function (err, statusCodes) {
       data.V = dataValue.value.value;
       //Renvoi de la consigne unitaire vers le client
       socket.emit('Notif_Client', { Msg : data.L + ' changé à \'' + data.V + '\'', Socket_ID : data.Socket_ID})
-      socket.emit('Cons_Answer_Update', data);
+      socket.emit('Cons_Update', data);
       console.log(data)
       }
 

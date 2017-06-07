@@ -1,4 +1,4 @@
-<ion-view view-title="{{::Selected_CT}}">
+<ion-view view-title="{{::Selected_CT}}" ng-init="Refresh()">
 
   <ion-nav-bar class="bar-light">
     <ion-nav-back-button class="button-clear">
@@ -20,10 +20,12 @@
     <!-- <div class="item item-divider icon-right ion-waterdrop">
       Eau
     </div> -->
+    <ion-refresher on-refresh="Refresh()">
+    </ion-refresher>
 
 <div class="item Bib_item"  ng-repeat="item in List_Sta | filter : search" style="padding: 10px 0 0 20px;">
-{{::item.Libelle_information}}
-<p class="status">{{::item.Etat}}</p>
+{{::item.L}}
+<p class="status">{{::item.E}}</p>
 </div>
 
 
