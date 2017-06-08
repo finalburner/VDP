@@ -16,7 +16,8 @@
 {
 background-color: #F3F3F3 ;
  height: 100%;
- position : ;
+ position : relative;
+ height : 100vh !important ;
 }
 
 .Titre_Login_Sup
@@ -26,7 +27,7 @@ background-color: #F3F3F3 ;
   color : #000000 ;
   font-family: "Roboto";
   font-weight: 300 ;
-  padding : 40px 0 0px 34px ;
+  padding : 40px 10px 0px 10px ;
 }
 
 .Login_User
@@ -74,10 +75,17 @@ padding : 0 0 50px 0 !important
 {
 padding : 5px 0 0 0 !important;
 }
+
+.box
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn-connect
 {
-  margin-top: 20px !important;
-  margin-left: 34px ;
+  margin : 20px 34px 0 34px ;
   text-align: center ;
   width : 290px !important;
   background-color: #4EB371 ;
@@ -87,8 +95,7 @@ padding : 5px 0 0 0 !important;
 }
 .btn-quit
 {
-  /*margin-top: 20px !important;*/
-  margin-left: 34px ;
+  margin : 10px 34px 0 34px ;
   text-align: center ;
   width : 290px !important;
   /*background-color: #4EB371 ;*/
@@ -126,7 +133,7 @@ height: 100%;
 
 .Titre_Sup
 {
-  font-size: 32px ;
+  font-size: 25px ;
   text-align: left ;
   color : #000000 ;
   font-family: "Roboto";
@@ -170,12 +177,14 @@ height: 100%;
 
 .bar-light.bar.bar-header
 {
-padding : 0 0 0 0 ;
+padding : 0 0 0 5px ;
 }
+
 .navicon
 {
 padding : 0 0 0 10px !important;
 }
+
 .title.title-left.header-item
 {
   left : 45px !important;

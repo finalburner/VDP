@@ -1,12 +1,9 @@
 <ion-view view-title="{{::Selected_NomGrp}}" ng-init="Refresh()">
 
   <ion-nav-bar class="bar-light">
-    <ion-nav-back-button class="button-clear">
-      <!-- <i class="button icon-left ion-chevron-left button-clear button-dark" ></i> -->
-
+    <ion-nav-back-button class="button-icon  ion-arrow-left-c">
     </ion-nav-back-button>
-
-</ion-nav-bar>
+  </ion-nav-bar>
 
   <ion-content>
     <!--Barre de recherche-->
@@ -19,7 +16,7 @@
     </ion-refresher>
     <ion-list>
         <ion-item class="row animate-repeat"
-        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search track by item.M+$index" class="item col" style = "padding: 0 ;">
+        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search : false track by item.M+$index" class="item col" style = "padding: 0 ;">
     <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 
 

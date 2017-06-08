@@ -1,4 +1,4 @@
-<ion-view view-title="" >
+<ion-view view-title="" ng-init="Refresh()">
 
 
     <ion-nav-bar class="bar-light">
@@ -7,7 +7,7 @@
             </ion-nav-buttons>
             <ion-nav-buttons side="right">
                      <a ion-button nav-transition="none" ui-sref="app.carto" class="button button-icon ion-ios-location" >  </a >
-                     <a ion-button nav-transition="none" ui-sref="app.CT" class="button button-icon ion-social-windows" >  </a >
+                     <a ion-button nav-transition="none" ui-sref="app.CT" class="button button-icon ion-android-apps" >  </a >
             </ion-nav-buttons>
     </ion-nav-bar>
 
@@ -18,14 +18,21 @@
    <i class="icon ion-search placeholder-icon"></i>
    <input type="text" placeholder="Recherche" ng-model="search">
  </label></div>
-<div ng-if="mapEnable" class="gmap_container" data-tap-disabled="true">
+
     <ng-map  center="{{loc}}"
      default-style="false"
      zoom = "12"
      style="height:85vh !important;max-height:90vh;width:100%;"
-     >
-
+     street-view-control="false"
+     map-type-control="true"
+     map-type-control-options="{style:'HORIZONTAL_BAR', position:'BOTTOM_CENTER'}"
+     on-zoom-changed="zoomChanged()"
+     max-zoom="25"
+     min-zoom="10"
+         >
+<!-- disable-default-u-i="true" -->
      <marker  animation="Animation.BOUNCE"  position="{{marker}}" title="Mobile"></marker>
+
       <shape name="circle" ng-repeat="item in List_CT | filter: search" no-watcher="true"
            stroke-color="{{::item.AL}}"
            stroke-opacity="0.8"
@@ -34,13 +41,14 @@
            fill-opacity="0.8"
            title="{{::item.CT}}"
            center="[{{::item.LA}},{{::item.LO}}]"
-           radius="80"
-           on-click="CT_N1(this)"
+           radius="{{rad}}"
+           on-click="Map_CT(item.L)"
+
            >
            <!-- on-click="CT_N1(this)"  -->
          </shape>
 
-    </ng-map></div>
+    </ng-map>
 
 </ion-content>
 </ion-view>

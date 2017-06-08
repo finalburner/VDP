@@ -3,11 +3,7 @@ controllers
 
 .controller('AppCtrl', ['$rootScope', '$scope', '$ionicModal', '$stateParams', '$timeout', 'socket', '$state', 'P', 'ConnectivityMonitor', 'Notif', 'AuthService', function($rootScope, $scope, $ionicModal, $stateParams, $timeout, socket, $state, P, ConnectivityMonitor, Notif, AuthService) {
   var i = 1 ;
-  if(typeof google == "undefined"){
-   $rootScope.mapEnable = false;
- }else{
-   $rootScope.mapEnable = true;
- }
+
 // $state.go('app.CT'); //test only
 //   $scope.$on('$ionicView.enter', function() {
 //      // Code you want executed every time view is opened/
@@ -21,6 +17,7 @@ controllers
 //   if (i==5) {$state.go('app.alarmes'); }
 // },2000 ); // 5 à 10 s
 //   })
+
 // $rootScope.$on('$stateChangeStart', function (event, next) {
 //   var authorizedRoles = next.data.authorizedRoles;
 //   if (!AuthService.isAuthorized(authorizedRoles)) {
@@ -34,6 +31,7 @@ controllers
 //     }
 //   }
 // });
+
 ConnectivityMonitor.startWatching();
 socket.on(P.SOCKET.CO , function () {
 socket.emit(P.SOCKET.CC);
@@ -110,7 +108,6 @@ $scope.CT_N1 = function (name) //ouvre synthèse d'un CT
     $state.go('app.CTsyn');
   };
 
-
 //Change Selected_CT to 'null' - display alarm for ALL CTS
 $scope.JAL = function() {
    $rootScope.Selected_CT = 'null'
@@ -141,7 +138,6 @@ $scope.N1_open = function(name,color) {
 .controller('ConCtrl', ['$scope', 'socket', '$ionicLoading', '$rootScope', '$state', 'P', function($scope, socket, $ionicLoading, $rootScope,$state, P) {
 
   if(!$rootScope.Selected_NomGrp || !$rootScope.Selected_Grp)  $state.go('app.CTsyn'); //Redirect to CT
-
 
    $scope.Validate_Item = '' ;
    $scope.List_Cons = [] ;
@@ -188,8 +184,45 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
 });
 }])
 
+.controller('MapCtrl', ['$state', '$rootScope','$scope', 'NgMap', '$cordovaGeolocation' , 'socket' ,'P' , function($state, $rootScope, $scope,NgMap,$cordovaGeolocation,socket,P) {
 
-.controller('CTctrl', ['$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$cordovaGeolocation', '$ionicSideMenuDelegate','$state', function($rootScope, $scope,socket,$ionicLoading, P, $cordovaGeolocation, $ionicSideMenuDelegate, $state ) {
+    // var posOptions = {timeout: 10000, enableHighAccuracy: true};
+    //
+    //    $cordovaGeolocation
+    //    .getCurrentPosition(posOptions)
+    //    .then(function (position) {
+    //       var pos  = [ position.coords.latitude , position.coords.longitude ]
+    //       $scope.loc = pos;
+    //       $scope.marker = pos;
+    //     console.log($scope.loc)
+    //    }, function(err) {
+    //       console.log(err)
+    //    });
+
+  NgMap.getMap().then(function(map) {
+     $scope.map = map;
+   });
+
+   $scope.zoomChanged= function() {
+   $scope.rad = $scope.map.zoom * (-4) + 120
+   console.log($scope.rad)
+  }
+
+  $scope.rad = 80 ;
+  $scope.loc = [48.861253, 2.329920]
+  socket.emit(P.SOCKET.CTQ);
+  socket.on(P.SOCKET.CTA, function(data){
+  $scope.List_CT = data ; //Met à jour la liste
+  });
+
+  $scope.Map_CT = function (n,name) //ouvre synthèse d'un CT
+      {
+        $rootScope.Selected_CT = name;
+        $state.go('app.CTsyn');
+      };
+}])
+
+.controller('CTctrl', ['NgMap','$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$ionicSideMenuDelegate','$state', function(NgMap, $rootScope, $scope,socket,$ionicLoading, P, $ionicSideMenuDelegate, $state ) {
 
   $scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
   {  socket.emit(P.SOCKET.CTQ); }
@@ -201,19 +234,6 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
    $ionicSideMenuDelegate.canDragContent(true);
  });
 
-  $scope.loc = [48.861253, 2.329920]
-  var posOptions = {timeout: 10000, enableHighAccuracy: false};
-
-     $cordovaGeolocation
-     .getCurrentPosition(posOptions)
-     .then(function (position) {
-        var pos  = [ position.coords.latitude , position.coords.longitude ]
-        $scope.loc = pos;
-        $scope.marker = pos;
-      console.log($scope.loc)
-     }, function(err) {
-        console.log(err)
-     });
 
    $ionicLoading.show({
    content: 'Loading', animation: 'fade-in', showBackdrop: true,
@@ -221,6 +241,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
   });
 
   socket.on(P.SOCKET.CTA, function(data){
+    console.log(data)
   $scope.List_CT = data ; //Met à jour la liste
   $ionicLoading.hide(); //enleve le spinner
   $scope.$broadcast('scroll.refreshComplete'); //Stop the ion-refresher from spinning
@@ -334,10 +355,22 @@ $scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinni
     }])
 
 
-.controller('CTActrl', ['$ionicLoading', '$rootScope', '$scope', 'socket', '$state', 'P', function($ionicLoading, $rootScope, $scope, socket, $state, P) {
+.controller('CTActrl', ['$ionicModal','$ionicLoading', '$rootScope', '$scope', 'socket', '$state', 'P', function($ionicModal, $ionicLoading, $rootScope, $scope, socket, $state, P) {
 
+  $scope.Courbes = function(name,color)
+  {  $scope.modalT.show();
+   console.log(name + color)
+   socket.emit(P.SOCKET.CTAQ , { Selected_CT : $rootScope.Selected_CT} );
+  };
 
-$scope.Selected_CT = $rootScope.Selected_CT ; //CT selectionné
+  $ionicModal.fromTemplateUrl('templates/N1/modalT.html', function(modal) {
+  $scope.modalT = modal;
+  }, {
+  scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
+  animation: 'slide-in-up',//'slide-left-right', 'slide-in-up', 'slide-right-left'
+  focusFirstInput: true
+  });
+
 if(!$scope.Selected_CT)  $state.go('app.CT'); //Redirect to CT
 
 $ionicLoading.show({
@@ -366,7 +399,7 @@ $scope.expand_AL = function(item) {
         };
 
 $scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
-{ socket.emit(P.SOCKET.CTAQ , { Selected_CT : $scope.Selected_CT} ); }
+{ socket.emit(P.SOCKET.CTAQ , { Selected_CT : $rootScope.Selected_CT} ); }
 
 socket.on(P.SOCKET.CTAA ,function(data){
 $scope.List_CTA = data ; //Met à jour la liste

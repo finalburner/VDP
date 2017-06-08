@@ -12,7 +12,7 @@ var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 var ids ;
 var i = 0 ;
-var Write_Perm = true ; //activer le controle-commande
+var Write_Perm = false; //activer le controle-commande
 var BATCH_MONITORING = 0 ;
 var WAIT = 100;
 var SELECT = 0;
@@ -23,8 +23,8 @@ var NodeId = "ns=2;s=" ;
 
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({ level: 'debug', handleExceptions: true }), // level 7 = max ==> all messages logged
-    new (winston.transports.File)({ filename: 'logfile.log', level: 'debug' }) // level 7 = max ==> all messages logged
+    new (winston.transports.Console)({ level: 'debug', handleExceptions: true }), // level 7 = max ==> all messages logged --> console
+    new (winston.transports.File)({ filename: 'logfile.log', level: 'debug' }) // level 7 = max ==> all messages logged --> file
   ],
   exitOnError: false
 });
@@ -240,10 +240,11 @@ query = "Select distinct Libelle_groupe as LG,DesignGroupeFonctionnel as DGF,Ins
     var DEPAR=  '/STEGC/Paris/PT/' + id.IT + '/Acquisition/CVC_' + id.IT + '_CIRCU' + id.DGF + '_TEMP3DEPAR_M01';
     var TEMP3_AMBIA = NodeId + '/Application' + AMBIA + '.Valeur' ;
     var TEMP3_DEPAR = NodeId + '/Application' + DEPAR + '.Valeur' ;
-    // COURBE1 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
-    // COURBE2 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + PT + ' where Name = \'' + DEPAR + '/Evt\' ORDER BY UTC_App_DateTime DESC'
+    // var COURBE1 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + id.IT + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
+    // var COURBE2 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + id.IT + ' where Name = \'' + DEPAR + '/Evt\' ORDER BY UTC_App_DateTime DESC'
     OPC_Read.push(TEMP3_AMBIA,TEMP3_DEPAR)
     CTA.push({DGF : id.DGF , LG : id.LG})
+    // console.log(COURBE1)
     }
     // console.log(OPC_Read)
     var opc_len = OPC_Read.length , j ;

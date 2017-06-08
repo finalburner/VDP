@@ -1,11 +1,11 @@
-    <ion-content overflow-scroll="true">
-    <div class="Bandeau">
+    <ion-content scroll="false">
+    <div class="Bandeau hide-on-keyboard-open">
     PARIS
     </div>
     <div class= "User_Content">
 
 
-      <div class="row Titre_Login_Sup">Supervision STEGC</div>
+      <div class="row Titre_Login_Sup box">Supervision STEGC</div>
        <form name="loginForm" ng-submit="login(Cnx)" novalidate>
         <div class="row Login_User">Nom d'utilisateur</div>
 
@@ -21,15 +21,15 @@
         </label>
 
 
-         <div class="item item-checkbox Login_Check_Text row">
+         <div class="item item-checkbox Login_Check_Text row ">
             Je suis en permanence/astreinte
-            <label class="checkbox Login_Check_Box">
-            <input type="checkbox">
+            <label class="checkbox Login_Check_Box ">
+            <input type="checkbox"></input>
             </label>
          </div>
 
-          <div class = "row" ><button class="button btn-connect"  type="submit">Se connecter</button></div>
-          <div class = "row" ><button class=" button btn-quit">Quitter l'application</button></div>
+          <div class = "row box" ><button class="button btn-connect"  type="submit">Se connecter</button></div>
+          <div class = "row box" ><button class=" button btn-quit">Quitter l'application</button></div>
 
            <div class="row Lrow"> </div>
   </div>

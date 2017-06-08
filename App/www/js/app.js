@@ -80,7 +80,7 @@ $stateProvider
     views: {
       'menuContent': {
         templateUrl: 'templates/N0/carto.html',
-        controller: 'CTctrl'
+        controller: 'MapCtrl'
       }
     },
     data: {
