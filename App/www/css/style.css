@@ -300,6 +300,12 @@ max-width: 40px;
 .N1_menu
 {
 position:absolute;
+top : 10%
+}
+
+.NTMP_menu
+{
+position:absolute;
 top :10%;
 
 }
@@ -347,13 +353,16 @@ vertical-align:middle;
 }
 
 .expand-itemcta.active {
-  max-height: 500px;
+  /*max-height: 500px;*/
+  height: auto !important ;
+
   transition: max-height 0.3s ease-out;
 }
 .expand-itemcta{
   position: relative;
   width: 100%;
-  max-height: 50px;
+  height: 40px !important ;
+  /*max-height: 60px;*/
   transition: max-height 0.1s ease-out;
   overflow: hidden;
 }
@@ -523,7 +532,7 @@ border-color: #f6f6f6 ;
   height: auto;
   margin : 0 0 0 0;
     padding : 0 0 0 0 ;
-    height : 50px;
+    height : 38px;
 
 }
 .CTA_bar_color
@@ -551,18 +560,20 @@ border-color: #f6f6f6 ;
 }
 .CTA_row_chart
 {
-    height :150px;
     font-size:15px;
     border: 0px 0px 0px 0px;
-    padding: 0px 0 0 70px;
+    padding: 0px 0 15px 5px;
 }
 
 .CTA_chart
 {
 
-    font-size:15px;
+    font-size:10px !important ;
     border: 0px 0px 0px 0px;
     padding: 0px 0 0 0px;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
 
 

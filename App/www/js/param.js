@@ -20,9 +20,12 @@ app
         ALA  : 'AL_Answer',
         CTAQ : 'CTA_Query',
         CTAA : 'CTA_Answer',
-        OU   : 'OPC_General_Update',
+        OGU   : 'OPC_General_Update',
         SQ   : 'Sta_Query',
-        SA   : 'Sta_Answer'
+        SA   : 'Sta_Answer',
+        CHQ  : 'Cha_Query',
+        CHA  : 'Cha_Answer',
+        CHA2  : 'Cha_Answer2'
 },
 
   ALARM :

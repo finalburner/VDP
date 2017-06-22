@@ -1,9 +1,11 @@
 <ion-view view-title="{{Selected_CT}}" ng-init="Refresh()"> <!-- Laisser le titre vide -->
 
   <ion-nav-bar class="bar-light">
-    <ion-nav-back-button class="button-icon  ion-arrow-left-c">
+    <ion-nav-back-button class="button-clear">
+      <i class="icon ion-ios-arrow-back"></i>
     </ion-nav-back-button>
   </ion-nav-bar>
+
 
   <ion-content>
 
@@ -36,35 +38,39 @@
 <!-- Row 2 -->
       <div class="row CTA_row_Tmp" >
 
-<div class = "col" ng-if="item.TD" >
+<div class = "col">
+<!-- <div class = "col" ng-if="item.TD" > -->
 <div class = "row">T° de départ</div>
 <div class = "row">
-  <p class= "CTA_Tmp" >{{item.TD}}</p><div class="icon ion-arrow-graph-up-right"> </div>
+  <p class= "CTA_Tmp" >{{::item.TD}}</p><div class="icon ion-arrow-graph-up-right"> </div>
 </div>
 </div>
-
-<div class = "col" ng-if="item.TA">
+<div class = "col">
+<!-- <div class = "col" ng-if="item.TA"> -->
   <div class = "row">T° ambiante</div>
   <div class = "row">
 
-    <p class= "CTA_Tmp">{{item.TA}}</p><div class="icon ion-arrow-graph-up-right"> </div>
+    <p class= "CTA_Tmp">{{::item.TA}}</p><div class="icon ion-arrow-graph-up-right"> </div>
   </div>
 </div>
       </div>
 <!-- Row 3 : Chart -->
-  <!-- <div class="row CTA_row_chart">
-        <div class="CTA_chart"> -->
- <!-- item item-text-wrap -->
-<!-- <canvas id="line" class="chart chart-line ng-isolate-scope" chart-data=item.chart chart-labels="labels" chart-options="options" width="200" height="130" style="display: block; width: 200px; height: 130px;" chart-dataset-override="datasetOverride" ></canvas>
-          </div>
-        </div> -->
+<div ng-if="isItemExpanded(item)" class="row CTA_row_chart ">
+
+<div ng-if="chart.length!=0" class="CTA_chart box">
+<canvas id="line" class="chart chart-line" chart-data="chart" chart-labels="labels"
+  chart-options="options" chart-colors ="colors"
+  chart-dataset-override="datasetOverride"  height="80" width="320">
+</canvas></div>
+
+</div>
 
 <!-- Row 4 : Btn-->
 
       <div class="row CTA_row_btn" >
 
       <button class="col button button-small button-light" >Fiche identité</boutton>
-        <button class="col button button-small button-light" ng-click="Courbes(item.LG,item.DGF)">Courbes</boutton>
+        <!-- <button class="col button button-small button-light" ng-click="Courbes(item.LG,item.DGF)">Courbes</boutton> -->
           <button class="col button button-small button-positive" ng-click="Consigne_Grp(item.LG,item.DGF)">Consignes</boutton>
       </div>
                 </ion-item>

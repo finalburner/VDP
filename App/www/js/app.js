@@ -6,10 +6,13 @@
 // 'starter.controllers' is found in controllers.js
 // angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngCordova','ngMap','ngMaterial'])
 var app = angular.module('starter', ['ionic', 'starter.controllers', 'btford.socket-io','ngAnimate','ngMap']) ;
-var controllers = angular.module('starter.controllers', ['angularUUID2','ngCordova']);
+var controllers = angular.module('starter.controllers', ['angularUUID2','ngCordova','chart.js']);
 
 app
-.config(function($stateProvider, $urlRouterProvider,P) {
+.config(function($stateProvider, $urlRouterProvider,P,$ionicConfigProvider) {
+$ionicConfigProvider.backButton.previousTitleText(false);
+$ionicConfigProvider.backButton.icon('ion-chevron-left');
+$ionicConfigProvider.backButton.text('')
 $stateProvider
     .state('app', {
     url: '/app',

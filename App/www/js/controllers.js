@@ -102,9 +102,10 @@ $ionicModal.fromTemplateUrl('templates/N1/modalN1.html', function(modal) {
         });
 
 
-$scope.CT_N1 = function (name) //ouvre synthèse d'un CT
+$scope.CT_N1 = function (CT,PT) //ouvre synthèse d'un CT
   {
-    $rootScope.Selected_CT = name;
+    $rootScope.Selected_CT = CT;
+    $rootScope.Selected_PT = PT;
     $state.go('app.CTsyn');
   };
 
@@ -114,12 +115,13 @@ $scope.JAL = function() {
 };
 
 //ouverture du modal N1
-$scope.N1_open = function(name,color) {
+$scope.N1_open = function(CT,color,PT) {
           $scope.modalN1.show();
-          $scope.modalN1.name= name;
+          $scope.modalN1.name= CT;
           $scope.modalN1.AL_Color= color;
           $scope.modalN1.animation =  "slide-left-right";
-          $rootScope.Selected_CT = name;
+          $rootScope.Selected_CT = CT;
+          $rootScope.Selected_PT = PT;
         };
 
 
@@ -215,7 +217,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
   $scope.List_CT = data ; //Met à jour la liste
   });
 
-  $scope.Map_CT = function (n,name) //ouvre synthèse d'un CT
+  $scope.Map_CT = function (event,name) //ouvre synthèse d'un CT
       {
         $rootScope.Selected_CT = name;
         $state.go('app.CTsyn');
@@ -232,7 +234,7 @@ $scope.Live_Update.push({ id : data.id , value : data.value });
    $ionicSideMenuDelegate.canDragContent(false);
   if(fromState.url == "/carto")
    $ionicSideMenuDelegate.canDragContent(true);
- });
+ })
 
 
    $ionicLoading.show({
@@ -275,7 +277,6 @@ $scope.btn_voir = function(CT)   // Action boutton Alarmes->Voir
    $state.go('app.CTsta')  }
 
 $scope.List_AL = []
-$scope.Filter_Alm_local = {} ;
 $scope.Synthese_PresentCount= 0 ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,8 +317,8 @@ $scope.isItemExpanded = function(item) {
         return $scope.shownItem === item.M;
       };
 
-socket.on(P.SOCKET.OU, function(data){
-
+socket.on(P.SOCKET.OGU, function(data){
+   console.log(data)
   if (data.id == 'Synthese.PresentCount')
   $scope.Synthese_PresentCount = data.value;
     console.log($scope.Synthese_PresentCount)
@@ -327,43 +328,26 @@ socket.on(P.SOCKET.OU, function(data){
 $scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
 {socket.emit(P.SOCKET.ALQ , { Mode : 'Read' , Selected_CT : $rootScope.Selected_CT});}//Demande mise à jour listes Alarmes
 
-
 // $scope.$watch(['Synthese_PresentCount'], function(newValue, oldValue) {
 // console.log("OPC Present NBR :" + $scope.Synthese_PresentCount)
-// $ionicLoading.show({
-// content: 'Loading', animation: 'fade-in', showBackdrop: true,
-// duration: 1000, maxWidth: 200,  showDelay: 0
+$ionicLoading.show({
+content: 'Loading', animation: 'fade-in', showBackdrop: true,
+duration: 1000, maxWidth: 200,  showDelay: 0
+});
 // });
-// });
-
-    // var list_AL = [
-    // { type: 'AL 49850',
-    //   date : 'hh:mm:ss - dd/mm/yyy',
-    //   etat : 'Présente',
-    //   alarm : 'Message d\'information caractérisant l\'alarme.Ca peut être un long message',
-    //     color: '#003DF5' // Bleue
-    // },
 
 //Reception des Alarmes unitaires depuis OPC
 socket.on(P.SOCKET.ALA, function(data){
 $scope.List_AL = data //Met à jour la liste
 $ionicLoading.hide(); //enleve le spinner
 $scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinning
-
    });
-
     }])
 
 
 .controller('CTActrl', ['$ionicModal','$ionicLoading', '$rootScope', '$scope', 'socket', '$state', 'P', function($ionicModal, $ionicLoading, $rootScope, $scope, socket, $state, P) {
 
-  $scope.Courbes = function(name,color)
-  {  $scope.modalT.show();
-   console.log(name + color)
-   socket.emit(P.SOCKET.CTAQ , { Selected_CT : $rootScope.Selected_CT} );
-  };
-
-  $ionicModal.fromTemplateUrl('templates/N1/modalT.html', function(modal) {
+$ionicModal.fromTemplateUrl('templates/N1/modalT.html', function(modal) {
   $scope.modalT = modal;
   }, {
   scope: $scope,  /// GIVE THE MODAL ACCESS TO PARENT SCOPE
@@ -392,6 +376,9 @@ $scope.expand_AL = function(item) {
             $scope.shownItem = null;
           } else {
             $scope.shownItem = item;
+            socket.emit(P.SOCKET.CHQ , { Selected_CT : $rootScope.Selected_CT , Selected_PT : $rootScope.Selected_PT , DGF : item.DGF} )
+console.log($scope.chart);$scope.chart.length = 0 ;console.log($scope.chart);
+
           }
         };
         $scope.isItemExpanded = function(item) {
@@ -399,29 +386,52 @@ $scope.expand_AL = function(item) {
         };
 
 $scope.Refresh = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
-{ socket.emit(P.SOCKET.CTAQ , { Selected_CT : $rootScope.Selected_CT} ); }
+{   socket.emit(P.SOCKET.CTAQ , { Selected_CT : $rootScope.Selected_CT , Selected_PT : $rootScope.Selected_PT } ); }
 
 socket.on(P.SOCKET.CTAA ,function(data){
+  // console.log(data)
 $scope.List_CTA = data ; //Met à jour la liste
 $ionicLoading.hide(); //enleve le spinner
 $scope.$broadcast('scroll.refreshComplete'); //Stop the ion-refresher from spinning
 });
 
+$scope.colors = ['#45b7cd', '#ff6384']
+$scope.labels =["1","2","3","4","5","6","7","8","9","10","11","12"];
+var data1_present, data2_present;
+var Min1,Max1,Min2,Max2 ;
+$scope.chart = []
 
-// $scope.labels =["1","2","3","4","5","6"];
+//Reception des courbes
+socket.on(P.SOCKET.CHA, function(data){
+$scope.chart.splice(0,0,data)
+Max1=  Math.max(data)
+Min1 =  Math.min(data)
+});
 
-// $scope.options = {
-//           scales: {
-//             yAxes: [
-//               {
-//                 id: 'y-axis-1',
-//                 type: 'linear',
-//                 display: true,
-//                 position: 'left'
-//               }        ]
-//           }   };
+socket.on(P.SOCKET.CHA2, function(data){
+$scope.chart.splice(1,0,data)
+Max2=  Math.max(data)
+Min2 =  Math.min(data)
+});
 
-      }])
+
+$scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2'}]
+$scope.options = { scales: {  yAxes: [   {
+                id: 'y-axis-1',
+                type: 'linear',
+                display: true,
+                position: 'left' } ,{
+                id: 'y-axis-2',
+                type: 'linear',
+                display: true,
+                position: 'right'
+                }    ]   }   };
+}])
+// ,
+// ticks: {
+// suggestedMin: Math.min(Min1,Min2),
+// suggestedMax: Math.max(Max1,Max2)
+// }
 
 .controller('StaCtrl', ['$ionicLoading', '$scope', '$rootScope', '$state', 'socket', 'P', function($ionicLoading, $scope, $rootScope,$state,socket, P) {
 

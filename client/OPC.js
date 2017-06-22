@@ -6,13 +6,30 @@ const sql = require('mssql');
 const sleep = require('system-sleep');
 const opcua = require("node-opcua");
 var io = require('socket.io-client');
-var client = new opcua.OPCUAClient({keepSessionAlive: true});
+// var crypto_utils = require("lib/misc/crypto_utils");
+
+var options = {
+    //  securityMode: MessageSecurityMode.SIGNANDENCRYPT,
+    //  securityPolicy: SecurityPolicy.Basic128Rsa15,
+    //  requestedSessionTimeout: 10000,
+    //  applicationName: "NodeOPCUA-Client",
+    //  endpoint_must_exist: false,
+    //  certificateFile: "file.crt",
+    //  privateKeyFile: "file.pem",
+    //  serverCertificate: crypto_utils.readCertificate("file.crt"),
+     connectionStrategy: {
+      maxRetry: 100000,
+      initialDelay: 1000,
+      maxDelay: 10000},
+     keepSessionAlive: true
+  };
+var client = new opcua.OPCUAClient(options);
 // var endpointUrl = "opc.tcp://" + require("os").hostname() + ":4334/UA/Server";
 var endpointUrl = "opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer";
 var the_session, the_subscription;
 var ids ;
 var i = 0 ;
-var Write_Perm = false; //activer le controle-commande
+var Write_Perm = false ; //activer le controle-commande
 var BATCH_MONITORING = 0 ;
 var WAIT = 100;
 var SELECT = 0;
@@ -214,8 +231,51 @@ logger.error(err)
     // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
    });
 
+
+socket.on('Cha_Query', function (data){
+console.log(data)
+logger.info('Cha_Query from ' + data.Socket_ID)
+if (data.Selected_PT == 'null' || !data.Selected_PT)
+logger.info('No PT Selected')
+else
+{
+var x = []
+var y = []
+var AMBIA = '/STEGC/Paris/PT/' + data.Selected_PT + '/Acquisition/CVC_' + data.Selected_PT + '_CIRCU' + data.DGF + '_TEMP3AMBIA_M01';
+var DEPAR = '/STEGC/Paris/PT/' + data.Selected_PT + '/Acquisition/CVC_' + data.Selected_PT + '_CIRCU' + data.DGF + '_TEMP3DEPAR_M01';
+var query = 'SELECT TOP 20 TriggeringValue as v FROM ARCHIVES.dbo.Mesure_' + data.Selected_PT  + ' where Name = \'' + DEPAR + '/Evt\' ORDER BY UTC_App_DateTime DESC '
+var query2 = 'SELECT TOP 20 TriggeringValue as v FROM ARCHIVES.dbo.Mesure_' + data.Selected_PT  + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
+//// TEMPRATURE DEPART
+var request = new sql.Request().query(query).then(function(rec) {
+var rec=JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
+if(rec.length)
+{
+for (var i=0; i<rec.length; i++) // to Array
+x.push(parseInt(rec[i].v)) // to Array
+x.push({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID });
+socket.emit('Cha_Answer', x);
+console.log(x)
+}})
+
+// TEMPERATURE AMBIANTE
+var request = new sql.Request().query(query2).then(function(rec2) {
+var rec2=JSON.parse(JSON.stringify(rec2).replace(/"\s+|\s+"/g,'"'))
+
+if(rec2.length)
+{
+for (var j=0; j<rec2.length; j++) // to Array
+y.push(parseInt(rec2[j].v)) // to Array
+y.push({ OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID });
+socket.emit('Cha_Answer2', y);
+console.log(y) }
+})
+}
+});
+
+
 socket.on('CTA_Query', function (data){
-  logger.info('CTA_query from ' + data.Socket_ID)
+logger.info('CTA_query from ' + data.Socket_ID)
+
 if (the_session)
 {
 var NodeId = "ns=2;s=" ;
@@ -224,11 +284,11 @@ var CTA = []
 var len ;
 var query ;
 // console.log(data)
-if (data.Selected_CT == 'null' )
+if (data.Selected_CT == 'null' || !data.Selected_CT )
 logger.info('No CT Selected')
 else {
-query = "Select distinct Libelle_groupe as LG,DesignGroupeFonctionnel as DGF,Installation_technique as IT from dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
-
+query = "Select distinct Libelle_groupe as LG,DesignGroupeFonctionnel as DGF from dbo.SUPERVISION Where localisation =\'" + data.Selected_CT + "\' AND NomGroupeFonctionnel = 'CIRCU' AND Metier = 'CVC'"
+console.log(query)
   var request = new sql.Request().query(query).then(function(rec) {
   var recordset=JSON.parse(JSON.stringify(rec).replace(/"\s+|\s+"/g,'"'))
   if (recordset) {
@@ -236,8 +296,8 @@ query = "Select distinct Libelle_groupe as LG,DesignGroupeFonctionnel as DGF,Ins
     len = recordset.length
     for (var i = 0 ; i < len; i++) {
     var id = recordset[i];
-    var AMBIA = '/STEGC/Paris/PT/' + id.IT + '/Acquisition/CVC_' + id.IT + '_CIRCU' + id.DGF + '_TEMP3AMBIA_M01';
-    var DEPAR=  '/STEGC/Paris/PT/' + id.IT + '/Acquisition/CVC_' + id.IT + '_CIRCU' + id.DGF + '_TEMP3DEPAR_M01';
+    var AMBIA = '/STEGC/Paris/PT/' + data.Selected_PT + '/Acquisition/CVC_' + data.Selected_PT + '_CIRCU' + id.DGF + '_TEMP3AMBIA_M01';
+    var DEPAR=  '/STEGC/Paris/PT/' + data.Selected_PT + '/Acquisition/CVC_' + data.Selected_PT + '_CIRCU' + id.DGF + '_TEMP3DEPAR_M01';
     var TEMP3_AMBIA = NodeId + '/Application' + AMBIA + '.Valeur' ;
     var TEMP3_DEPAR = NodeId + '/Application' + DEPAR + '.Valeur' ;
     // var COURBE1 = 'SELECT TOP 5 TriggeringValue  FROM dbo.Evenements_' + id.IT + ' where Name = \'' + AMBIA + '/Evt\' ORDER BY UTC_App_DateTime DESC '
@@ -645,6 +705,11 @@ var config_ARCHIVES = {
     }
 }
 
+function OPC_connect()
+{
+
+
+}
 
 async.series([
 
@@ -687,26 +752,69 @@ async.series([
             } else {
                 logger.info("OPC connected !");
             }
-            return callback(err);
+          callback(err);
         });
+
+                   client.on("timed_out_request ", function () {
+                      logger.info("timed_out_request ");
+                   });
+                   client.on("start_reconnection", function () {
+                       logger.info("start_reconnection not working so aborting");
+                       the_session.close(function (err) {
+                         if(!err) {
+                             logger.info("OPC session Closed" , endpointUrl );
+                         }
+                       })
+                       client.disconnect(function (err) {
+                         if(!err) {
+                             logger.info("OPC Disconnected" , endpointUrl );
+                         }
+                       })
+
+                   });
+
+                   client.on("connection_reestablished", function () {
+                       logger.info("connection_reestablished ");
+                       client.connect(endpointUrl,function (err) {
+                           if(err) {
+                               logger.info(" cannot connect to endpoint :" , endpointUrl );
+                           } else {
+                               logger.info("OPC connected !");
+                           }
+                       });
+                       client.createSession( function(err,session) {
+                           if(!err)
+                             { the_session = session;
+                               logger.info("Session Ok !");
+                               callback(err);
+                             }
+                       });
+
+                   });
+                   client.on("close", function () {
+                       logger.info("close and abort");
+                                          });
+                   client.on("backoff", function (nb, delay) {
+                       logger.info("  connection failed for the", nb,
+                               " time ... We will retry in ", delay, " ms");
+                   });
+
     },
 
     // step 2 : createSession
     function(callback) {
         client.createSession( function(err,session) {
-            if(err)   callback(err);
-              else
+            if(!err)
               { the_session = session;
                 logger.info("Session Ok !");
-            }
-
+                callback(err);
+              }
         });
     },
     function(callback) {
 
     //subscription to general OPC parameters ( Alarms Nbr , ....)
-
-       init_OPC_sub=new opcua.ClientSubscription(the_session,{
+      var  init_OPC_sub=new opcua.ClientSubscription(the_session,{
         requestedPublishingInterval: 1000,
         requestedLifetimeCount: 10,
          requestedMaxKeepAliveCount: 2,
@@ -714,6 +822,7 @@ async.series([
            publishingEnabled: true,
            priority: 8
        });
+      var id ;
        for (var i = 0, len = sub_param.length; i < len; i++) {
        id = sub_param[i];
               var nodeId = "ns=2;s=" + id.adr;
@@ -734,11 +843,14 @@ async.series([
               //  console.log(nodeId.toString() , "\t value : ",dataValue.value.value.toString());
               });
     };
+
+  logger.info('Subscription Finished');
   callback(err);
   },
     function(callback) {
 // souscription à toutes les variables OPC
-       the_subscription=new opcua.ClientSubscription(the_session,{
+
+       var the_subscription=new opcua.ClientSubscription(the_session,{
            requestedPublishingInterval: 100,
         //   requestedLifetimeCount: 10,
         //   requestedMaxKeepAliveCount: 2,
@@ -746,7 +858,6 @@ async.series([
            publishingEnabled: true,
            priority: 10
        });
-
 
        // install monitored item
        for (var i = 0, len = ids.length; i < len; i++) {
@@ -782,7 +893,7 @@ async.series([
           i=0;
           }
     };
-    logger.info('Subscription Finished');
+    logger.info('Global Subscription Finished');
 
   },
 

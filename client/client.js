@@ -210,7 +210,7 @@ socket.on('OPC_General_Update',function(data) {
 
 //Requete d'un client donné de la liste des circuits d'un CT
 socket.on('CTA_Query', function(data){
-socket.to(OPC_Socket_ID).emit('CTA_Query', {Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID , Selected_CT : data.Selected_CT })
+socket.to(OPC_Socket_ID).emit('CTA_Query', {Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID , Selected_CT : data.Selected_CT , Selected_PT : data.Selected_PT })
 console.log('CTA_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
       });
 
@@ -219,6 +219,23 @@ socket.on('CTA_Answer', function(data){
 var info = data.pop()
 socket.to(info.Socket_ID).emit('CTA_Answer', data)
 console.log('CTA_Answer redirected from : ' + info.OPC_Socket_ID + ' to ' + info.Socket_ID )
+  });
+
+//Requete d'un client donné de la liste des circuits d'un CT
+socket.on('Cha_Query', function(data){
+socket.to(OPC_Socket_ID).emit('Cha_Query', {Socket_ID : socket.id , OPC_Socket_ID : OPC_Socket_ID , Selected_CT : data.Selected_CT, Selected_PT : data.Selected_PT , DGF : data.DGF })
+console.log('Cha_Query redirected from : ' + socket.id + ' to ' + OPC_Socket_ID )
+        });
+// Réponse du client OPC en circuit CTA
+socket.on('Cha_Answer', function(data){
+var info = data.pop()
+socket.to(info.Socket_ID).emit('Cha_Answer', data)
+console.log('Cha_Answer redirected from : ' + info.OPC_Socket_ID + ' to ' + info.Socket_ID )
+  });
+socket.on('Cha_Answer2', function(data){
+var info = data.pop()
+socket.to(info.Socket_ID).emit('Cha_Answer', data)
+console.log('Cha_Answer2 redirected from : ' + info.OPC_Socket_ID + ' to ' + info.Socket_ID )
   });
 
 // //Mise à jour OPC des températures ambiantes

@@ -275,3 +275,52 @@ nodemon client
 nodemon opc 
 nodemon opc 
 nodemon opc 
+ionic serve
+ionic serve -d 
+ionic serve -d 
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+ionic run android
+
+cd .. 
+dir
+cd .. 
+dir
+cd node_modules/node-opcua/bin
+crypto_create_CA createCA
+dir
+node crypto_create_CA createCA
+node crypto_create_CA createCA
+node crypto_create_CA createCA
+node crypto_create_CA certificate
+ionic serve
+nodemon client
+ionic run android
+ ../App
+cd ../App
+dir
+ionic run android
+ionic run android
+ionic run android
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 
+nodemon opc 

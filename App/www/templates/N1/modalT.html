@@ -1,4 +1,6 @@
-<ion-modal-view class="N1_menu">
+  <!-- ///////////////// Modale Températures par  Circuit \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\-->
+  <!-- N'est plus utilisé - Remplacé par la courbe température dans le graphe CT  -->
+<ion-modal-view class="NTMP_menu">
 
 <ion-content>
 <div class="row N1_bar_header" ng-click="modalT.hide()">
@@ -9,32 +11,20 @@
 </a >
 </div>
 
+<div class="row CTA_row_chart">
+      <div class="CTA_chart">
+<!-- item item-text-wrap -->
+ <!-- <canvas id="line" class="chart chart-line ng-isolate-scope"
+ chart-data=chart chart-labels=labels chart-options="options" width="300" height="150"
+  ></canvas> -->
+  <canvas id="line" class="chart chart-line" chart-data="chart"
+  chart-labels="labels" chart-series="series" chart-options="options"
+  chart-dataset-override="datasetOverride" chart-click="onClick">
+</canvas>
 
-<ion-list>
+        </div>
+      </div>
 
-<ion-item class="modalm_div ">Criticité</ion-item>
-
-  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.ARI" ng-true-value= "3" >Critique</ion-checkbox>
-  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.AMA" ng-true-value= "2" >Majeure</ion-checkbox>
-  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.AMI" ng-true-value= "1" >Mineure</ion-checkbox>
-  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.ADC" ng-true-value= "10">Défault de communication</ion-checkbox>
-
-<ion-item class="modalm_div ">Etat</ion-item>
-
-  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.P" ng-true-value= "2">Présente</ion-checkbox>
-  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.PA" ng-true-value= "1">Présente acquitée</ion-checkbox>
-  <ion-checkbox ng-checked="true" ng-model="Filter_Alm_local.D" ng-true-value= "3">Disparue non acquitée</ion-checkbox>
-
-<!-- <ion-item class="modalm_div ">Metier</ion-item>
-
-    <ion-checkbox ng-model="filter.metier">CVC</ion-checkbox>
-    <ion-checkbox ng-model="filter.yellow">Système</ion-checkbox>
-    <ion-checkbox ng-model="filter.pink">MFL</ion-checkbox> -->
-
-
-
-          </ion-list>
-<!-- </div> -->
 </ion-content>
 
   </ion-modal-view>
