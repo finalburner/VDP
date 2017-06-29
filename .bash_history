@@ -324,3 +324,25 @@ nodemon opc
 nodemon opc 
 nodemon opc 
 nodemon opc 
+npm init 
+npm install http-server --save
+http-server -a localhost -p 8000
+npm install live-server serve
+npm install live-server --save
+live-server
+bower install --save angular-ui-calendar
+bower install
+live-server
+live-server
+live-server
+grunt serve
+live-server
+live-server
+cd ../php
+cd .. 
+cd php
+live-server
+nodemon server.js
+nodemon server.js
+nodemon server.js
+nodemon server.js

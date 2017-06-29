@@ -35,10 +35,10 @@ http.listen(3000, function(){
 
 process.on('uncaughtException', function(err) {
         if(err.errno === 'EADDRINUSE' && err.port === '3000')
-            { console.log('Port 3000 already in use. Using Port 4000');
+            { console.log('Port 3000 already in use. Using Port 3001');
              http.close();
-             http.listen(4000, function(){
-               console.log('listening on *:4000');
+             http.listen(3001, function(){
+               console.log('listening on *:3001');
              });
            }
 

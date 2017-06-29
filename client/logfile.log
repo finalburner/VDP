@@ -22789,3 +22789,187 @@
 {"level":"info","message":"connection_reestablished ","timestamp":"2017-06-22T07:59:09.603Z"}
 {"level":"info","message":" cannot connect to endpoint : opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer","timestamp":"2017-06-22T07:59:09.610Z"}
 {"level":"info","message":"Session Ok !","timestamp":"2017-06-22T07:59:10.124Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-06-26T14:09:44.538Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-06-26T14:09:44.706Z"}
+{"level":"info","message":"Socket connected <<>> Id :PeVxFgETkM9bHSnaAAAm","timestamp":"2017-06-26T14:09:44.838Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-06-26T14:09:44.922Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-26T14:09:45.391Z"}
+{"level":"info","message":"Subscription Finished","timestamp":"2017-06-26T14:09:45.406Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-06-26T15:10:32.717Z"}
+{"level":"info","message":"Socket connected <<>> Id :jBPHI9dx5W_CICi7AAAo","timestamp":"2017-06-26T15:10:32.885Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-06-26T15:10:32.890Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-06-26T15:10:33.126Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-26T15:10:33.151Z"}
+{"level":"info","message":"Subscription Finished","timestamp":"2017-06-26T15:10:33.155Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-06-26T15:10:39.673Z"}
+{"level":"info","message":"Socket connected <<>> Id :Y3-r6sT8ukKk93LfAAAp","timestamp":"2017-06-26T15:10:39.835Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-06-26T15:10:39.840Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-06-26T15:10:39.887Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-26T15:10:39.958Z"}
+{"level":"info","message":"Subscription Finished","timestamp":"2017-06-26T15:10:39.963Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-06-26T15:11:53.588Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-06-26T15:11:53.800Z"}
+{"level":"info","message":"Socket connected <<>> Id :j8UtaQtkgjOy_pvoAAAq","timestamp":"2017-06-26T15:11:53.817Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-06-26T15:11:53.932Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-26T15:11:53.968Z"}
+{"level":"info","message":"Subscription Finished","timestamp":"2017-06-26T15:11:53.975Z"}
+{"level":"info","message":"Connected to client on 3000","timestamp":"2017-06-26T15:13:38.842Z"}
+{"level":"info","message":"Socket connected <<>> Id :7axici-NX3ZY91X8AAAB","timestamp":"2017-06-26T15:13:38.999Z"}
+{"level":"info","message":"MS SQL connected success","timestamp":"2017-06-26T15:13:38.999Z"}
+{"level":"info","message":"OPC connected !","timestamp":"2017-06-26T15:13:39.061Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-26T15:13:39.077Z"}
+{"level":"info","message":"Subscription Finished","timestamp":"2017-06-26T15:13:39.077Z"}
+{"level":"info","message":"CT_query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:17.253Z"}
+{"level":"info","message":"CT_Answer to fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:19.268Z"}
+{"level":"info","message":"CT_query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:20.441Z"}
+{"level":"info","message":"CT_Answer to fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:20.675Z"}
+{"level":"info","message":"CT_query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:20.690Z"}
+{"level":"info","message":"CT_Answer to fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:20.925Z"}
+{"level":"info","message":"CTA_query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:27.991Z"}
+{"level":"info","message":"CTA Emit ","timestamp":"2017-06-26T15:14:28.099Z"}
+{"level":"info","message":"Cha_Query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:29.122Z"}
+{"level":"info","message":"Cha_Query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:29.824Z"}
+{"level":"info","message":"Cha_Query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:30.618Z"}
+{"level":"info","message":"CT_query from fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:31.694Z"}
+{"level":"info","message":"CT_Answer to fKHwyanTVNorMEBDAAAA","timestamp":"2017-06-26T15:14:31.936Z"}
+{"level":"info","message":"CT_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:29:57.252Z"}
+{"level":"info","message":"CT_Answer to pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:29:57.817Z"}
+{"level":"info","message":"CTA_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:29:59.699Z"}
+{"level":"info","message":"CTA Emit ","timestamp":"2017-06-27T09:29:59.730Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:01.434Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:02.249Z"}
+{"level":"info","message":"CT_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:03.142Z"}
+{"level":"info","message":"CT_Answer to pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:03.402Z"}
+{"level":"info","message":"CTA_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:07.817Z"}
+{"level":"info","message":"CTA Emit ","timestamp":"2017-06-27T09:30:07.849Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:08.914Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:10.233Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:12.020Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:13.033Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:13.957Z"}
+{"level":"info","message":"CT_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:17.251Z"}
+{"level":"info","message":"CT_Answer to pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:17.510Z"}
+{"level":"info","message":"CTA_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:20.171Z"}
+{"level":"info","message":"CTA Emit ","timestamp":"2017-06-27T09:30:20.201Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:21.095Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:21.682Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:22.883Z"}
+{"level":"info","message":"CT_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:23.833Z"}
+{"level":"info","message":"CT_Answer to pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:24.083Z"}
+{"level":"info","message":"CTA_query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:26.741Z"}
+{"level":"info","message":"CTA Emit ","timestamp":"2017-06-27T09:30:26.773Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:27.541Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:28.067Z"}
+{"level":"info","message":"Cha_Query from pNIiLGsGND9kKOMaAAEy","timestamp":"2017-06-27T09:30:29.573Z"}
+{"level":"info","message":"start_reconnection not working so aborting","timestamp":"2017-06-28T07:40:08.489Z"}
+{"level":"info","message":"  connection failed for the 0  time ... We will retry in  1000  ms","timestamp":"2017-06-28T07:40:08.489Z"}
+{"level":"info","message":"  connection failed for the 1  time ... We will retry in  2000  ms","timestamp":"2017-06-28T07:40:09.504Z"}
+{"level":"info","message":"  connection failed for the 2  time ... We will retry in  4000  ms","timestamp":"2017-06-28T07:40:11.513Z"}
+{"level":"info","message":"  connection failed for the 3  time ... We will retry in  8000  ms","timestamp":"2017-06-28T07:40:15.518Z"}
+{"level":"info","message":"  connection failed for the 4  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:40:23.535Z"}
+{"level":"info","message":"  connection failed for the 5  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:40:33.547Z"}
+{"level":"info","message":"  connection failed for the 6  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:40:43.560Z"}
+{"level":"info","message":"  connection failed for the 7  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:40:53.569Z"}
+{"level":"info","message":"  connection failed for the 8  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:41:03.573Z"}
+{"level":"info","message":"close and abort","timestamp":"2017-06-28T07:41:08.510Z"}
+{"level":"info","message":"OPC Disconnected opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer","timestamp":"2017-06-28T07:41:08.510Z"}
+{"level":"info","message":"  connection failed for the 9  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:41:13.578Z"}
+{"level":"info","message":"  connection failed for the 10  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:41:23.593Z"}
+{"level":"info","message":"  connection failed for the 11  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:41:33.594Z"}
+{"level":"info","message":"  connection failed for the 12  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:41:43.603Z"}
+{"level":"info","message":"  connection failed for the 13  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:41:53.609Z"}
+{"level":"info","message":"  connection failed for the 14  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:42:03.617Z"}
+{"level":"info","message":"  connection failed for the 15  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:42:13.633Z"}
+{"level":"info","message":"  connection failed for the 16  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:42:23.648Z"}
+{"level":"info","message":"  connection failed for the 17  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:42:33.660Z"}
+{"level":"info","message":"  connection failed for the 18  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:42:43.672Z"}
+{"level":"info","message":"  connection failed for the 19  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:42:53.688Z"}
+{"level":"info","message":"  connection failed for the 20  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:43:03.695Z"}
+{"level":"info","message":"  connection failed for the 21  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:43:13.700Z"}
+{"level":"info","message":"  connection failed for the 22  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:43:23.706Z"}
+{"level":"info","message":"  connection failed for the 23  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:43:33.719Z"}
+{"level":"info","message":"  connection failed for the 24  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:43:43.721Z"}
+{"level":"info","message":"  connection failed for the 25  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:43:53.726Z"}
+{"level":"info","message":"  connection failed for the 26  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:44:03.742Z"}
+{"level":"info","message":"  connection failed for the 27  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:44:13.753Z"}
+{"level":"info","message":"  connection failed for the 28  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:44:23.760Z"}
+{"level":"info","message":"  connection failed for the 29  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:44:33.765Z"}
+{"level":"info","message":"  connection failed for the 30  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:44:43.770Z"}
+{"level":"info","message":"  connection failed for the 31  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:44:53.777Z"}
+{"level":"info","message":"  connection failed for the 32  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:45:03.786Z"}
+{"level":"info","message":"  connection failed for the 33  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:45:13.795Z"}
+{"level":"info","message":"  connection failed for the 34  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:45:23.809Z"}
+{"level":"info","message":"  connection failed for the 35  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:45:33.818Z"}
+{"level":"info","message":"  connection failed for the 36  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:45:43.827Z"}
+{"level":"info","message":"  connection failed for the 37  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:45:53.828Z"}
+{"level":"info","message":"  connection failed for the 38  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:46:03.833Z"}
+{"level":"info","message":"  connection failed for the 39  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:46:13.844Z"}
+{"level":"info","message":"  connection failed for the 40  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:46:23.845Z"}
+{"level":"info","message":"  connection failed for the 41  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:46:33.855Z"}
+{"level":"info","message":"  connection failed for the 42  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:46:43.860Z"}
+{"level":"info","message":"  connection failed for the 43  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:46:53.875Z"}
+{"level":"info","message":"  connection failed for the 44  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:47:03.886Z"}
+{"level":"info","message":"  connection failed for the 45  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:47:13.902Z"}
+{"level":"info","message":"  connection failed for the 46  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:47:23.917Z"}
+{"level":"info","message":"  connection failed for the 47  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:47:33.930Z"}
+{"level":"info","message":"  connection failed for the 48  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:47:43.938Z"}
+{"level":"info","message":"  connection failed for the 49  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:47:53.947Z"}
+{"level":"info","message":"  connection failed for the 50  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:48:03.957Z"}
+{"level":"info","message":"  connection failed for the 51  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:48:13.973Z"}
+{"level":"info","message":"  connection failed for the 52  time ... We will retry in  10000  ms","timestamp":"2017-06-28T07:48:23.987Z"}
+{"level":"info","message":"Socket connected <<>> Id :ny7c40JtS8ixWRq3AAEz","timestamp":"2017-06-28T07:48:28.255Z"}
+{"level":"info","message":"connection_reestablished ","timestamp":"2017-06-28T07:48:34.004Z"}
+{"level":"info","message":" cannot connect to endpoint : opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer","timestamp":"2017-06-28T07:48:34.013Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-28T07:48:34.022Z"}
+{"level":"info","message":"start_reconnection not working so aborting","timestamp":"2017-06-28T08:01:35.613Z"}
+{"level":"info","message":"  connection failed for the 0  time ... We will retry in  1000  ms","timestamp":"2017-06-28T08:01:35.613Z"}
+{"level":"info","message":"  connection failed for the 1  time ... We will retry in  2000  ms","timestamp":"2017-06-28T08:01:36.628Z"}
+{"level":"info","message":"  connection failed for the 2  time ... We will retry in  4000  ms","timestamp":"2017-06-28T08:01:38.644Z"}
+{"level":"info","message":"  connection failed for the 3  time ... We will retry in  8000  ms","timestamp":"2017-06-28T08:01:42.651Z"}
+{"level":"info","message":"  connection failed for the 4  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:01:50.661Z"}
+{"level":"info","message":"  connection failed for the 5  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:02:00.662Z"}
+{"level":"info","message":"  connection failed for the 6  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:02:10.675Z"}
+{"level":"info","message":"  connection failed for the 7  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:02:20.684Z"}
+{"level":"info","message":"  connection failed for the 8  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:02:30.693Z"}
+{"level":"info","message":"close and abort","timestamp":"2017-06-28T08:02:35.620Z"}
+{"level":"info","message":"OPC Disconnected opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer","timestamp":"2017-06-28T08:02:35.620Z"}
+{"level":"info","message":"  connection failed for the 9  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:02:40.700Z"}
+{"level":"info","message":"  connection failed for the 10  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:02:50.701Z"}
+{"level":"info","message":"  connection failed for the 11  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:03:00.714Z"}
+{"level":"info","message":"  connection failed for the 12  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:03:10.730Z"}
+{"level":"info","message":"  connection failed for the 13  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:03:20.739Z"}
+{"level":"info","message":"  connection failed for the 14  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:03:30.745Z"}
+{"level":"info","message":"  connection failed for the 15  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:03:40.752Z"}
+{"level":"info","message":"  connection failed for the 16  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:03:50.762Z"}
+{"level":"info","message":"  connection failed for the 17  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:04:00.777Z"}
+{"level":"info","message":"  connection failed for the 18  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:04:10.789Z"}
+{"level":"info","message":"  connection failed for the 19  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:04:20.802Z"}
+{"level":"info","message":"  connection failed for the 20  time ... We will retry in  10000  ms","timestamp":"2017-06-28T08:04:30.809Z"}
+{"level":"info","message":"Socket connected <<>> Id :_30bnU9xAlrrq59mAAE0","timestamp":"2017-06-28T08:04:40.551Z"}
+{"level":"info","message":"connection_reestablished ","timestamp":"2017-06-28T08:04:40.817Z"}
+{"level":"info","message":" cannot connect to endpoint : opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer","timestamp":"2017-06-28T08:04:40.817Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-28T08:04:40.833Z"}
+{"level":"info","message":"start_reconnection not working so aborting","timestamp":"2017-06-28T09:50:31.904Z"}
+{"level":"info","message":"  connection failed for the 0  time ... We will retry in  1000  ms","timestamp":"2017-06-28T09:50:31.904Z"}
+{"level":"info","message":"  connection failed for the 1  time ... We will retry in  2000  ms","timestamp":"2017-06-28T09:50:32.920Z"}
+{"level":"info","message":"  connection failed for the 2  time ... We will retry in  4000  ms","timestamp":"2017-06-28T09:50:34.927Z"}
+{"level":"info","message":"  connection failed for the 3  time ... We will retry in  8000  ms","timestamp":"2017-06-28T09:50:38.934Z"}
+{"level":"info","message":"  connection failed for the 4  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:50:46.936Z"}
+{"level":"info","message":"  connection failed for the 5  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:50:56.938Z"}
+{"level":"info","message":"  connection failed for the 6  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:51:06.939Z"}
+{"level":"info","message":"  connection failed for the 7  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:51:16.941Z"}
+{"level":"info","message":"  connection failed for the 8  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:51:26.944Z"}
+{"level":"info","message":"close and abort","timestamp":"2017-06-28T09:51:31.907Z"}
+{"level":"info","message":"OPC Disconnected opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer","timestamp":"2017-06-28T09:51:31.907Z"}
+{"level":"info","message":"  connection failed for the 9  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:51:36.958Z"}
+{"level":"info","message":"  connection failed for the 10  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:51:46.965Z"}
+{"level":"info","message":"  connection failed for the 11  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:51:56.981Z"}
+{"level":"info","message":"  connection failed for the 12  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:52:06.990Z"}
+{"level":"info","message":"  connection failed for the 13  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:52:17.002Z"}
+{"level":"info","message":"  connection failed for the 14  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:52:27.007Z"}
+{"level":"info","message":"  connection failed for the 15  time ... We will retry in  10000  ms","timestamp":"2017-06-28T09:52:37.011Z"}
+{"level":"info","message":"  connection failed for the 16  time ... We will retry in  10000  ms","timestamp":"2017-06-28T12:18:53.659Z"}
+{"level":"info","message":"Socket connected <<>> Id :LDh8LttqN_PEJVOfAAE1","timestamp":"2017-06-28T12:18:58.712Z"}
+{"level":"info","message":"connection_reestablished ","timestamp":"2017-06-28T12:19:03.736Z"}
+{"level":"info","message":" cannot connect to endpoint : opc.tcp://10.18.10.1:9080/CODRA/ComposerUAServer","timestamp":"2017-06-28T12:19:03.736Z"}
+{"level":"info","message":"Session Ok !","timestamp":"2017-06-28T12:19:04.168Z"}
