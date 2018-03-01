@@ -1,0 +1,10 @@
+<ion-popover-view class="popover2" >
+       <ion-pane>
+         <ion-list>
+               <ion-item   ng-repeat="item in pop_N2.GLOBAL" ng-click="!{{item.droit}} || popN2_close(item)"
+                ng-style = " (item.CT_Color == '{{::P.ALARM.AL_10_Color}}' || item.dev === true || !{{item.droit}}) ? { color : '#929292'} : {color :'#444'}"
+                style="font-family:'Roboto'!important ;font-size:16px !important ;" ng-class="(item.Vue != 3) ?'popover2_item':'popover2_item_end'">
+                 {{::item.name}}</ion-item>
+               </ion-list>
+       </ion-pane>
+</ion-popover-view>

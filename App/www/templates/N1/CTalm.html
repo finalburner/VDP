@@ -1,0 +1,112 @@
+<ion-view view-title="CT {{::titre}}" ng-init="Refresh2()" style="margin:0px!important">
+
+  <ion-nav-bar class="bar-light">
+    <ion-nav-back-button class="button-clear">
+      <i class="icon ion-ios-arrow-back"></i>
+    </ion-nav-back-button>
+          <ion-nav-buttons side="right">
+            <div class="row btn-popN1 button " ng-click= "popN1_open($event)" >
+              <div class= "col-80 text_N1">{{::titre_vue}}</div>
+                <div class="col-20 arrow_N1"><i class="icon AL_bar_icon" ng-class="popN1isOpen ? 'ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i></div>
+            </div>
+          </ion-nav-buttons>
+  </ion-nav-bar>
+
+<ion-content >
+
+
+<!--Barre de recherche-->
+<div class="recherche">
+ <label class="item item-input search-row ">
+ <i class="icon ion-search placeholder-icon"></i>
+ <input type="text" placeholder="Recherche" ng-model="search" ng-click="search = ''">
+</label></div>
+
+
+<!--Bouton CT - Intervention-->
+<div class="item button-bar row">
+     <a class="button btn_CT"  ng-click="filterencours()">Présentes</a>
+     <a class="button btn_Int" ng-click="filtertoutes()">Toutes</a>
+     <a class="button btn_Int" ng-click="modalm_open()">Filtres</a>
+</div>
+
+<!--Liste de AL-->
+<ion-refresher on-refresh="Refresh2()">
+</ion-refresher>
+<ion-list can-swipe="true" >
+    <!-- <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
+    ng-animate="'animate'" collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}"> -->
+    <ion-item class="row AL_Item"
+  ng-repeat="item in List_AL | filter : filtercriticite | filter : filteretat | filter : search | orderBy: '-S' track by item.M+$index  "   >
+<div class = "row " style = "padding : 0" >
+<div class="col AL_bar_color" style="background-color: {{item.AL}}"></div>
+<div class="col AL_col AL_type" ng-click="DEBUG_AL(item)">
+
+              <!-- <div class="col AL_type" > -->
+               <div class ="row" style="padding-top: 0px" ng-if="item.S"> {{item.S}} - CT{{item.LO}} - {{item.E}} </div>
+               <div class ="row" style="padding-top: 0px" ng-if="!item.S"> CT{{item.LO}}  </div>
+               <div class ="row"> {{item.LG}} </div>
+               <div class ="row" > {{item.L}} </div>
+              <!-- </div> -->
+</div>
+</div>
+              <!-- <div class="col "><p class="AL_date">{{::item.date}}</p></div> -->
+            <!-- <div class="col col_arrow"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i></div> -->
+  <!-- <div class= "row" style="padding-top : 7px;">
+  <div class ="col"  >
+  <div class="row AL_row_state">
+  <span ng-if="item.P==1||item.P==2">Etat : Présente</span>
+  <span ng-if="item.P==3">Etat : Disparue</span>
+  </div>
+  <div class="row AL_row_state">
+  <span ng-if="item.P==1">Ack : Acquittée</span>
+  <span ng-if="item.P==3||item.P==2">Ack : non Acquittée</span>
+  </div>
+  </div>
+  <div class="col AL_row_text" style= "padding:7px 0 0 0 ; margin-left:20px" ><p id="AL_Message">{{::item.S}}</p></div>
+  <div class="row AL_row_text"><p id="AL_Message">{{::item.M}}</p></div>
+  </div> -->
+  <!-- <div class="row AL_row_btn ">
+  <button class="button button-avis button-light" >Créer un Avis</button>
+  <button class="button button-ack button-light" ng-click ="ACK(item)">Acquitter</button>
+  <button class="button button-voir button-light" ng-click ="btn_voir(item.loc)">Voir</button>
+</div> -->
+
+<!-- <div class="row AL_row_btn "> -->
+<!-- <ion-option-button class="button button-avis button-light" >Créer un Avis</ion-option-button> -->
+<ion-option-button class="button button-ack button-light" ng-click ="ACK(item)">Acquitter</ion-option-button>
+<ion-option-button class="button button-voir button-light" ng-disabled="!$root.droit.FSVEF" ng-click ="btn_voir(item.LO)">Voir</ion-option-button>
+<!-- </div> -->
+<!-- <ion-option-button class="button-light icon ion-heart"></ion-option-button>
+  <ion-option-button class="button button-avis button-light" >Créer un Avis</ion-option-button>
+<ion-option-button class="button-light icon ion-email"></ion-option-button>
+<ion-option-button class="button-assertive icon ion-trash-a"></ion-option-button> -->
+          </ion-item>
+</ion-list>
+
+      <!-- <ion-list ng-controller="ALctrl">
+        <div ng-repeat="item in list_AL">
+          <ion-item class="item-stable row "
+                    ng-click="toggleGroup(group)"
+                    ng-class="{active: isGroupShown(group)}">
+                    <div class="col-5 CT_bar_color"></div>
+                    <div class="col">{{item.type}}</div>
+                    <div class="col">{{item.date}}</div>
+            <div class="col"><i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i></div>
+       </ion-item>
+       <ion-item class="item-accordion"
+
+                    ng-show="isGroupShown(group)">
+            {{item}}
+          </ion-item>
+    </div>
+
+          <!-- <ion-item class="item-accordion"
+                    ng-show="isGroupShown(group)">
+            {{::item.name}}
+          </ion-item> -->
+
+      <!--  -->
+
+  </ion-content>
+</ion-view>

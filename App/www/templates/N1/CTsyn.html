@@ -1,78 +1,119 @@
-<ion-view view-title="{{Selected_CT}}" ng-init="Refresh()"> <!-- Laisser le titre vide -->
+<ion-view view-title="CT{{::Selected_CT}}" ng-init="Refresh()"> <!-- Laisser le titre vide -->
 
-  <ion-nav-bar class="bar-light">
+  <ion-nav-bar class="bar-light" >
     <ion-nav-back-button class="button-clear">
       <i class="icon ion-ios-arrow-back"></i>
     </ion-nav-back-button>
+    <ion-nav-title ng-click="$ionicGoBack()">fdsf
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+      <div class="row btn-popN1 button " ng-click= "popN1_open($event)" >
+        <div class= "col-80 text_N1">{{::titre_vue}}</div>
+          <div class="col-20 arrow_N1"><i class="icon AL_bar_icon" ng-class="popN1isOpen ? 'ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i></div>
+      </div>
+    </ion-nav-buttons>
   </ion-nav-bar>
 
+  <ion-content viewport-watch>
 
-  <ion-content>
-
-    <div class="recherche">
+    <div  style ="font-family:'Roboto';min-height:20px!important;padding:0 10px 0 10px ; ">
+    <div style='float: left;font-size: 12px;font-weight:500;color: #315286;'>{{$root.CT_Adresse}}</div>
+    <div ng-if="$root.TMP_EXT" style='float: right;font-size: 12px;font-weight:500;color: #315286;'>T° Ext {{$root.TMP_EXT}} °C</div>
+    </div>
+    <!-- <div class="recherche">
      <label class="item item-input search-row ">
      <i class="icon ion-search placeholder-icon"></i>
-     <input type="text" placeholder="Recherche" ng-model="search">
-    </label></div>
+     <input type="text" placeholder="Recherche" ng-model="search"  ng-click="search = ''">
+    </label></div> -->
 
 
-      <p ng-if="List_CTA.length == 0" style="text-align: center;margin-top:100px;font-size:18px">Pas de Circuit pour l'instant </p>
+
+      <p ng-if="List_CTA.length == 0" style="text-align: center;margin-top:100px;font-size:18px">Pas de circuit pour l'instant</p>
 <!-- Infinite SCROLL Directive Injected HERE - No remarqble performance -->
       <!-- <ion-list infinite-scroll="addMoreItems()" infinite-scroll-distance="2" > -->
       <ion-refresher on-refresh="Refresh()">
       </ion-refresher>
 
-      <ion-list>
-          <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive'"
-           ng-repeat="item in List_CTA | filter: search track by item.DGF+$index "
+<ion-list>
+<!-- <ion-item ng-if="List_GF.length == 0 "  ><p class="RAF">Rien à afficher</p></ion-item> -->
 
-         class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}">
+<ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive';"
+           ng-repeat="item in List_GF | filter: search track by $index "
+           class="item row GF_item"  ng-click="expand_AL(item)"   >
 
-      <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
-<!-- Row 1 -->
-      <div class="row CTA_bar">
-
-                  <div class="col CTA_type">{{::item.LG}}</div>
-                  <div class="col "><p class="CTA_date">{{::item.date}}</p></div>
-      </div>
+<!-- <div class ="col col-5 CT_bar_color" style="background-color:{{::item.AL}};"></div> -->
+<div class="col GF_bar_color" style="background-color: {{item.COLOR}};"></div>
+<div class ="col " style="padding : 0 0 10px 5px">
+  <!-- Row 1 -->
+<div class="row CTA_bar">
+<div class="col CTA_type">{{item.LG}}</div>
+<div class="col col_arrow" style="padding-top:5px"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i></div>
+</div>
 <!-- Row 2 -->
-      <div class="row CTA_row_Tmp" >
+<div class="row CTA_row_Tmp" ng-if="CT_Color !='#D500F9'">
 
-<div class = "col">
+<!-- T1 -->
+<div class = "col" style ="padding: 0 "  ng-if="showTmp(item.T1)">
 <!-- <div class = "col" ng-if="item.TD" > -->
-<div class = "row">T° de départ</div>
-<div class = "row">
-  <p class= "CTA_Tmp" >{{::item.TD}}</p><div class="icon ion-arrow-graph-up-right"> </div>
-</div>
-</div>
-<div class = "col">
-<!-- <div class = "col" ng-if="item.TA"> -->
-  <div class = "row">T° ambiante</div>
-  <div class = "row">
+    <div class = "row">
+    <p class = "GF_TMP_T" ng-if="item.NGF == 'CHAUD' || item.NGF == 'ECHAN' || item.NGF == 'GENER' || item.NGF =='PRODU' || item.NGF == 'CIRCU' || item.NGF =='EAUCS'">T° Départ</p>
+    <p class = "GF_TMP_T" ng-if="item.NGF == 'CTAIR' ">T° Soufflage</p>
+    </div>
 
-    <p class= "CTA_Tmp">{{::item.TA}}</p><div class="icon ion-arrow-graph-up-right"> </div>
+    <div class = "row">
+    <p class= "GF_Tmp" >{{item.T1}} °C </p><div class="icon ion-arrow-graph-up-right"> </div>
+    </div>
+</div>
+
+<!-- T2 -->
+<div class = "col" style ="padding: 0 " ng-if="showTmp(item.T2)" >
+<!-- <div class = "col" ng-if="item.TA"> -->
+  <div class = "row">
+  <p class = "GF_TMP_T2" ng-if="item.NGF == 'CHAUD' || item.NGF == 'ECHAN'">Cons. Calculée</p>
+  <p class = "GF_TMP_T2" ng-if="item.NGF == 'GENER' || item.NGF == 'PRODU'">T° Extérieure</p>
+  <p class = "GF_TMP_T2" ng-if="item.NGF == 'CIRCU' ">T° Ambiante</p>
+  <p class = "GF_TMP_T2" ng-if="item.NGF == 'EAUCS' ">T° Bouclage</p>
+  <p class = "GF_TMP_T2" ng-if="item.NGF == 'CTAIR' ">T° Reprise</p>
+  </div>
+  <div class = "row">
+  <p class= "GF_Tmp">{{item.T2}} °C </p><div class="icon ion-arrow-graph-up-right"> </div>
   </div>
 </div>
-      </div>
-<!-- Row 3 : Chart -->
-<div ng-if="isItemExpanded(item)" class="row CTA_row_chart ">
 
-<div ng-if="chart.length!=0" class="CTA_chart box">
-<canvas id="line" class="chart chart-line" chart-data="chart" chart-labels="labels"
+</div>
+<!-- Row 3 : Chart -->
+<div class="row CTA_row_chart " >
+
+<ion-spinner ng-if="showSpiner(item)" style="margin:10px 40%!important" icon="android"></ion-spinner>
+
+<div ng-if="showGraphs(item)" style="margin:5px auto 0 auto!important"  class="CTA_chart box">
+
+<canvas  id="line" class="chart chart-line" chart-data="chart" chart-labels="labels"
   chart-options="options" chart-colors ="colors"
-  chart-dataset-override="datasetOverride"  height="80" width="320">
-</canvas></div>
+  chart-dataset-override="datasetOverride"  height="130" width="320">
+</canvas>
+<!--  -->
+<!--
+        <ion-spinner icon="dots" class="spinner-dark"></ion-spinner>
+        <ion-spinner icon="lines" class="spinner-calm"></ion-spinner> -->
+<!-- <ion-spinner icon="android"></ion-spinner> -->
+<!-- <ion-spinner ng-if ="loaded" icon="circles" class="spinner-energized"></ion-spinner> -->
+
+</div>
 
 </div>
 
 <!-- Row 4 : Btn-->
 
-      <div class="row CTA_row_btn" >
+<div class="row CTA_row_btn" >
 
-      <button class="col button button-small button-light" >Fiche identité</boutton>
-        <!-- <button class="col button button-small button-light" ng-click="Courbes(item.LG,item.DGF)">Courbes</boutton> -->
-          <button class="col button button-small button-positive" ng-click="Consigne_Grp(item.LG,item.DGF)">Consignes</boutton>
-      </div>
+<button class="col button button-small button-light"  ng-disabled ="CT_Color == '#D500F9' || !$root.droit.FRVDSCC" ng-click="Consigne_Grp(item.LG,item.NGF,item.DGF)">Consignes</boutton>
+<button class="col button button-small button-light"  ng-disabled ="CT_Color == '#D500F9'" ng-click="Fonc_Grp(item.LG,item.NGF,item.DGF)" >Fonctionnement</boutton>
+<button class="col button button-small button-light"  ng-disabled ="CT_Color == '#D500F9' || !$root.droit.FPHVS" ng-if ="item.NGF =='CIRCU' || item.NGF == 'CTAIR' " ng-click="PH_open(item.PT,item.NGF,item.DGF,item.LG)" >Prog. Hor.</boutton>
+<!-- <button class="col button button-small button-light" ng-click="Courbes(item.LG,item.DGF)">Courbes</boutton> -->
+<!-- <button class="col button button-small button-light" >Consistance</boutton> -->
+</div>
+</div>
                 </ion-item>
       </ion-list>
   </ion-content>

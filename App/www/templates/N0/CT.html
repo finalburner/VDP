@@ -1,55 +1,87 @@
-<ion-view view-title="Synoptique" ng-init="Refresh()">
+<ion-view view-title="{{titre}}" ng-init="Refresh()">
 
-  <ion-nav-bar class="bar-light">
+  <ion-nav-bar class="bar-light N2">
           <ion-nav-buttons side="left">
                   <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
           </ion-nav-buttons>
-          <ion-nav-buttons side="right">
-                   <a ion-button nav-transition="none" ui-sref="app.carto" class="button button-icon icon-blue ion-ios-location" >  </a >
-                   <a ion-button nav-transition="none" ui-sref="app.CT" class="button button-icon ion-android-apps" >  </a >
+          <ion-nav-buttons side="right"  >
+
+                   <a ion-button nav-transition="none" ng-if="$root.droit.FSVC" ui-sref="app.carto" class="button button-icon icon-blue ion-ios-location">  </a >
+                   <!-- <a ion-button nav-transition="none" ng-if="!$root.droit.VC" class="button button-icon icon-blue ion-ios-location">  </a > -->
+                   <a ion-button nav-transition="none" ng-if="$root.droit.FSVC" ui-sref="app.CT" class="button button-icon ion-android-apps" >  </a >
+
           </ion-nav-buttons>
   </ion-nav-bar>
+  <ion-header-bar class="bar-subheader" style="padding:0!important">
 
-<ion-content>
+        <div class="recherche" style="width:100%">
+         <label class="item item-input search-row ">
+         <i class="icon ion-search placeholder-icon"></i>
+         <input type="text" placeholder="Recherche" ng-model="search" ng-change="filter(search)"  ng-click="filter('');search = ''" ng-model-options="{debounce: 200}">
+        </label>
+      </div>
+  </ion-header-bar>
 
-  <div class="recherche">
-   <label class="item item-input search-row ">
-   <i class="icon ion-search placeholder-icon"></i>
-   <input type="text" placeholder="Recherche" ng-model="search">
- </label></div>
+<ion-content class="has-subheader has-header">
 
 
   <!--Bouton CT - Intervention-->
           <!-- <div class="item button-bar row">
             <a class="button btn_CT" nav-transition="none" ui-sref="app.CT" >Centres Thermiques</a>
-            <!-- <a class="button btn_Int" nav-transition="none" ui-sref="app.CTi" >Les interventions</a> -->
+            <! <a class="button btn_Int" nav-transition="none" ui-sref="app.CTi" >Les interventions</a> -->
           <!-- </div>  -->
 <!--Liste de CT-->
-<ion-refresher on-refresh="Refresh()">
+<ion-refresher on-refresh="Refresh2()">
 </ion-refresher>
 
+<!-- <ion-header-bar class="bar-light bar-subheader">
+      <input type="search"
+             placeholder="Filter contacts..."
+             ng-model="search"
+             ng-focus="searchFocused = true"
+             ng-blur="searchFocused = false"
+             ng-change="scrollTop()"
+             class="full-width">
+      <button ng-if="search.length"
+              class="button button-icon ion-android-close input-button"
+              ng-click="clearSearch()">
+      </button> -->
+
     <ion-list >
-
         <!-- <a class = "item row CT_row" on-hold="N1(item.name)"  ng-click="CT_N1(item.name)" ng-repeat="item in list_CT" > -->
-         <a class = "item row CT_row" on-hold="N1_open(item.L,item.AL,item.I)" ng-click="CT_N1(item.L,item.I)"
-          ng-repeat="item in List_CT  | filter: search  "
-          ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
-
+    <div>
+       <a  id="{{::item.L}}" class = "item row CT_row" on-hold="N1_open(item.L,item.AL,item.I, item.A, item.C)" ng-click="CT_N1(item.L, item.I, item.AL, item.A, item.C)"
+           collection-repeat="item in Filtered "
+          on-finish-render=""   >
             <!--div style="background-color: #C2A5A5 !important"-->
-          <div class ="col-5 CT_bar_color" style="background-color:{{::item.AL}};"></div>
+          <div class ="col-5 CT_bar_color" style="background-color:{{item.AL}};"></div>
 
         <div class= "col col_CT" >
             <div class= "row CT_tit" >
-           <p class = "CT_tit_p" >{{::item.L}}</p></div>
-            <div class= "row CT_loc" >
-             <p class = "CT_loc_p">{{::item.A}} </p></div>
-            <div class= "row CT_pow" >
-           <p class = "CT_pow_p">  {{::CT_pow}} </p></div>
+              <div class= "col col-33" style="padding:0">
+           <p class = "CT_tit_p" >CT<span ng-bind="item.L"></span></p></div>
+           <!-- <div class= "col col-20" style="padding:0"></div> -->
+           <div class= "col" style="padding:0">
+            <div class= "row" style="max-height:18px ;  padding:0; float: right;text-align: right;right : 5px!important">
+              <div ng-if="item.S" style = "position: absolute;color:#FFFFFF;background-color:#4A4A4A;font-size:10px;padding:0 5px 0 5px;float: right!important;text-align: right;clear:right;right : 51px!important"><span ng-bind="item.S"></span></div>
+              <!-- // contrat -->
+              <div ng-if="item.R" style = "position: absolute;color:#FFFFFF;background-color:#4EB371;font-size:10px;padding:0 5px 0 5px;float: right!important;text-align: right;clear:right; right : 10px!important"><span ng-bind="item.R"></span></div>
+              </div>
+              </div>
+              </div>
 
-            <div class= "row CT_ala" >
-<p  class = "CT_alm_p">{{::CT_alm}}   </p> </div>
+            <div class= "row CT_loc">
+             <p class = "CT_loc_p"><span ng-bind="item.A"></span> <span ng-bind="item.C"></span> <span ng-bind="item.V"></span> </p></div>
+            <div class= "row CT_pow">
+           <p class = "CT_pow_p"><span ng-bind="item.D"></span></p>
+            </div>
+
+             <!-- {{item.R}} {{item.S}} -->
+            <div class= "row CT_ala" ></div>
+<!-- <p  class = "CT_alm_p">{{::CT_alm}}   </p> </div> -->
     </div>
   </a>
+</div>
       </ion-list>
 </ion-content>
 </ion-view>

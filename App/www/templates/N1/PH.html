@@ -1,0 +1,49 @@
+<ion-view view-title="{{::titre_vue}}" ng-init="Refresh1()"> <!-- Laisser le titre vide -->
+
+  <ion-nav-bar class="bar-light" >
+    <ion-nav-buttons side="left">
+            <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
+    </ion-nav-buttons>
+
+  </ion-nav-bar>
+
+
+  <ion-content >
+
+    <div class="recherche2">
+     <label class="item item-input search-row ">
+     <i class="icon ion-search placeholder-icon"></i>
+     <input type="text" placeholder="Recherche" ng-model="search"  ng-click="search = ''">
+    </label></div>
+
+
+      <!-- <p ng-if="List_CTA.length == 0" style="text-align: center;margin-top:100px;font-size:18px">Pas de circuit pour l'instant </p> -->
+<!-- Infinite SCROLL Directive Injected HERE - No remarqble performance -->
+      <!-- <ion-list infinite-scroll="addMoreItems()" infinite-scroll-distance="2" > -->
+      <ion-refresher on-refresh="Refresh1()">
+      </ion-refresher>
+
+      <ion-list>
+          <ion-item  style= "padding:0" ng-class="isItemExpanded(item) ? 'expand-itemct active' : 'expand-itemct inactive'"
+           ng-repeat="item in List_CT | filter: search track by $index "
+
+         class="item col"  ng-click="expand_CT(item)"   ng-class="{active: isItemExpanded(item)}">
+
+         <div class="row PH_CT_bar">
+
+                     <div class="col PH_CT_Type">CT {{::item.CT}}</div>
+                     <div class="col PH_arrow" style="padding-top:5px"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i></div>
+         </div>
+         <div ng-if="isItemExpanded(item)" ng-repeat="GF in item.GF" >
+          <div class = "row PH_GF" ng-click="PH_CT_GF(item.CT,GF.LG,GF.NGF,GF.DGF,GF.ID)" > {{::GF.LG}} </div>
+          </div>
+
+
+
+             <!-- <li ng-repeat="GF in item.GF"> {{::GF.LG}}</li> -->
+
+       </ion-item>
+ </ion-list>
+  </ion-content>
+
+</ion-view>

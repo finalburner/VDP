@@ -1,7 +1,4 @@
-App/www/js/lodash.js
 SQL
-App/www/lib/ngCordova/.bower.json
-App/www/lib/ngCordova/bower.json
-App/www/lib/ngCordova/dist/ng-cordova-mocks.js
 Fuse
 client/logfile.log
+*.exe

@@ -1,36 +1,52 @@
-    <ion-content scroll="false">
+    <ion-content scroll="false" ng-init="init_login()" >
     <div class="Bandeau hide-on-keyboard-open">
     PARIS
     </div>
+    <form name="loginForm" ng-submit="login()" novalidate>
+
     <div class= "User_Content">
 
+      <div class="row Titre_Login_Sup box">Authentification</div>
 
-      <div class="row Titre_Login_Sup box">Supervision STEGC</div>
-       <form name="loginForm" ng-submit="login(Cnx)" novalidate>
+
         <div class="row Login_User">Nom d'utilisateur</div>
-
-
-       <label class="item item-input row Login_User_Input" >
-          <input type="text" id="user" ng-model="Cnx.username" value= "Eiffage" tabindex="1">
-        </label>
+          <label class="item item-input row Login_User_Input" >
+          <input type="text" id="user" ng-model="$root.Cnx.username" value= "VDP" tabindex="1" ng-blur="login_blur()"  autofocus>
+          </label>
 
           <div class="row Login_Pass">Mot de passe</div>
 
-        <label class="item item-input row Login_Pass_Input">
-          <input type="password" id="pass" ng-model="Cnx.password"  ng-pattern="/[\w\d]{1,15}/i" data-dependency="user" tabindex="2" >
-        </label>
+        <div class="item item-input row Login_Pass_Input">
+          <input type="password" ng-click="!Authorize_Cnx && login_blur()" ng-if='!IspasswordShown' id="pass" ng-model="$root.Cnx.password" ng-pattern="/[\w\d]{1,15}/i" data-dependency="user" tabindex="2" required>
+          <input type="text" ng-click="!Authorize_Cnx && login_blur()" ng-if='IspasswordShown' id="pass" ng-model="$root.Cnx.password" ng-pattern="/[\w\d]{1,15}/i" data-dependency="user" tabindex="2" required>
+          <button ng-click="switchPassword()" ng-if='!IspasswordShown'class="button button-clear btn-show-pwd no-animate"  type="button"><i class="ion-eye" ></i></button>
+          <button ng-click="switchPassword()" ng-if='IspasswordShown'class="button button-clear btn-show-pwd no-animate"  type="button"><i class="ion-eye-disabled" ></i></button>
 
+        </div>
 
-         <div class="item item-checkbox Login_Check_Text row ">
+         <div  class="item item-checkbox Login_Check_Text row ">
             Je suis en permanence/astreinte
             <label class="checkbox Login_Check_Box ">
-            <input type="checkbox"></input>
+            <input ng-disabled="!AST" type="checkbox" ng-model = "$root.Cnx.AST_Checked" ></input>
             </label>
          </div>
 
-          <div class = "row box" ><button class="button btn-connect"  type="submit">Se connecter</button></div>
-          <div class = "row box" ><button class=" button btn-quit">Quitter l'application</button></div>
+          <div class = "row box" ><button ng-disabled="!Authorize_Cnx"  class="button btn-connect"  type="submit">Se connecter</button></div>
+          <div class = "row box" ><button class=" button btn-quit"  type="button" ng-click ="quit()">Quitter l'application</button></div>
+          <div class = "row box " style="height:calc(100% - 605px)" ></div>
 
-           <div class="row Lrow"> </div>
-  </div>
+          <div class = "row box " style="padding: 10px 0 1px 0!important" > <!--  ; -->
+          <img src="img/logo.png" height="100" >
+          </div>
+
+          <div class = "row box " style="padding-bottom:0;font-family:'Roboto'; font-size:10px;font-weight:500" > <!--  ; -->
+          v{{$root.APK}}
+          </div>
+
+
+
+
+
+        </div>
+      </form>
 </ion-content>

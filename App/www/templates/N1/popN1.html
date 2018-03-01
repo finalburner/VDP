@@ -1,0 +1,10 @@
+<ion-popover-view class='popover' style ="max-height:265px!important">
+       <ion-pane>
+         <ion-list>
+               <ion-item  ng-repeat="item in pop_N1" ng-click="!{{item.droit}} || popN1_close(item)"
+               style="font-family:'Roboto'!important ;font-size:16px !important"
+                ng-style = "(( item.AL == '#D500F9' && item.dc == true ) || item.dev === true || !{{item.droit}} ) ? { color : '#929292'} : {color :'#444'}">
+                 {{::item.name}}</ion-item>
+               </ion-list>
+       </ion-pane>
+</ion-popover-view>

@@ -29,6 +29,7 @@ app
 //     });
 //   }])
 //
+
 .config(function($provide) { // To comment
 
   $provide.decorator('$state', function($delegate) {
@@ -43,23 +44,64 @@ app
 })
 
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$rootScope) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-      cordova.plugins.Keyboard.disableScroll(false);
 
-    }
-    if (window.StatusBar) {
+      if (window.device)
+      {
+        $rootScope.device = device;
+      //  $rootScope.isKeyboardHide = true;
+      }
+      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      // for form inputs)
+     if (window.cordova) {
+          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+          cordova.plugins.Keyboard.disableScroll(true);
+
+          // Describe your logic which will be run each time when keyboard is about to be shown.
+          // window.addEventListener('native.keyboardshow', (event) => {
+          //     $rootScope.isKeyboardHide = false;
+          //     console.log($rootScope.isKeyboardHide )
+          //     // console.log(event.keyboardHeight);
+          //  });
+          //
+          //  window.addEventListener('native.keyboardhide', (event) => {
+          //      $rootScope.isKeyboardHide = true;
+          //     console.log($rootScope.isKeyboardHide )
+          //
+          //   });
+
+      }
+
+     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
-    }
-  });
+     }
+
+
+    });
 })
 
+.run(function($ionicPickerI18n) {
+    $ionicPickerI18n.weekdays = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+    $ionicPickerI18n.months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"];
+    $ionicPickerI18n.ok = "Valider";
+    $ionicPickerI18n.cancel = "Annuler";
+    $ionicPickerI18n.okClass = "button-positive";
+    $ionicPickerI18n.cancelClass = "button-stable";
+    $ionicPickerI18n.arrowButtonClass = "button-positive";
+  })
 
+.run(function($rootScope) {
+      $rootScope.once = function(e, func) {
+          var unhook = this.$on(e, function() {
+              unhook();
+              func.apply(this, arguments);
+          });
+      };
+
+
+  })
 
 
 // .run(function($ionicPlatform, $ionicPopup, $cordovaNetwork) {

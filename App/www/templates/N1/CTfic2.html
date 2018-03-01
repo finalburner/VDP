@@ -1,0 +1,207 @@
+<ion-view view-title="CT{{::Selected_CT}}" ng-init="Refresh2()"> <!-- Laisser le titre vide -->
+
+  <ion-nav-bar class="bar-light" >
+    <ion-nav-back-button class="button-clear">
+      <i class="icon ion-ios-arrow-back"></i>
+    </ion-nav-back-button>
+    <ion-nav-buttons side="right" >
+      <div class="row btn-popN1 button " ng-click= "popN1_open($event)" >
+        <div class= "col-80 text_N1">{{::titre_vue}}</div>
+          <div class="col-20 arrow_N1"><i class="icon AL_bar_icon" ng-class="popN1isOpen ? 'ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i></div>
+      </div>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+
+
+<ion-content >
+    <!-- <ion-list infinite-scroll="addMoreItems()" infinite-scroll-distance="2" > -->
+<!-- <ion-refresher on-refresh="Refresh1()">
+</ion-refresher> -->
+<!--
+    <div class="recherche">
+     <label class="item item-input search-row ">
+     <i class="icon ion-search placeholder-icon"></i>
+     <input type="text" placeholder="Recherche" ng-model="search"  ng-click="search = ''">
+    </label></div> -->
+
+
+      <!-- <p ng-if="List_CTA.length == 0" style="text-align: center;margin-top:100px;font-size:18px">Pas de circuit pour l'instant </p> -->
+<!-- Infinite SCROLL Directive Injected HERE - No remarqble performance -->
+
+
+
+<ion-list>
+  <ion-item  class="fic" ng-class="isItemExpanded(item) ? 'expand-itemfic active' : 'expand-itemfic inactive'"
+        ng-repeat="item in Liste track by item.id+$index"  ng-click="expand_AL(item)" >
+
+<div class= "row row_fic_titre">
+<div class="col fic_compt" >
+<p ng-if="List_Fic[1] && item.id == 2" >{{List_Fic[1].length}}</p>
+<p ng-if="List_Fic[2] && item.id == 3" >{{List_Fic[2].length}}</p>
+</div>
+<div class="col fic_titre" >
+ {{::item.T}}</div>
+<div class="col fic_arrow"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i></div>
+</div>
+
+<div class="row" style="padding : 10px 0 0 0 ">
+<div class="row" style="padding : 0" ng-show="shownItem == 1" >
+
+  <div class = "col fic_col">
+    <div class = "row fic_row">NUMERO CT</div>
+    <div class = "row fic_row">DESIGNATION</div>
+    <div class = "row fic_row">POSTE TECH.</div>
+    <div class = "row fic_row">ADRESSE</div>
+    <div class = "row fic_row">PUISS.</div>
+    <div class = "row fic_row">CONTRAT OBJ.</div>
+    <div class = "row fic_row">TYPE ENERGIE</div>
+    <div class = "row fic_row">ETAT ADMINI.</div>
+    <div class = "row fic_row">TYPE CT</div>
+    <div class = "row fic_row">CT SUPERVISE</div>
+    <div class = "row fic_row">CT SIGNALE</div>
+  </div>
+
+<div class = "col fic_col_data">
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_NUM_CT}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_DESC_CT}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_NUM_PT}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_ADRESSE}} {{::List_Fic[0].CTH_VILLE}} {{::List_Fic[0].CTH_CODE_POSTALE}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_PUISSANCE_CT}} (KWH) </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTR_LBL}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].NRG_LBL}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].STA_LBL}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTT_LBL}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_SUPERVISE}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_SIGNALE}} </p></div>
+</div>
+
+</div>
+
+<div class="row" style="padding : 0" ng-if="shownItem == 2" >
+
+<div class = "col fic_col2">
+<div class = "row fic_row2">EQUIP.</div>
+<div class = "row fic_row2">NUMERO</div>
+<div class = "row fic_row2">ADRESSE</div>
+<div class = "row fic_row2">CHEF</div>
+<div class = "row fic_row2">N° TEL</div>
+<div class = "row fic_row2">TYPE EQ</div>
+<div class = "row fic_row2">SER. FONC.</div>
+<div class = "row fic_row2">SER. GEST.</div>
+<div class = "row fic_row2">COLLECT.</div>
+<div class = "row fic_row2">CP CONF.</div>
+</div>
+
+<ion-slide-box  class ="col fic_col_data2" style="padding : 0; border-top: 1px solid #979797;" on-slide-changed="slideHasChanged($index)" >
+    <ion-slide ng-repeat="item in List_Fic[1]">
+      <!-- <div class = "col "> -->
+      <div class = "row fic_data2 "><p>{{::item.EQP_DESIGNATION}}</p></div>
+      <div class = "row fic_data2"><p>{{::item.EQP_NUM}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.EQP_ADRESSE}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.EQP_CONTACT}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.EQP_CONTACT_TEL}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.EQT_DESIGNATION}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.EQP_SERVICE_FON}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.EQP_SERVICE_GES}} </p></div>
+      <div class = "row fic_data2"><p>{{::item._LBL}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.EQP_NB_CAPTEUR}} </p></div>
+
+    <!-- </div> -->
+    </ion-slide>
+  </ion-slide-box>
+</div>
+<div class="row" style="padding : 0" ng-if="shownItem == 3" >
+
+<div class = "col fic_col2">
+<div class = "row fic_row2">ROLE</div>
+<div class = "row fic_row2">PER. EXP.</div>
+<div class = "row fic_row2">GRP. EXP.</div>
+<div class = "row fic_row2">RESP. TEC.</div>
+<div class = "row fic_row2">RESP. ADM.</div>
+<div class = "row fic_row2">HO</div>
+<div class = "row fic_row2">HNO</div>
+<div class = "row fic_row2">REF. INT.</div>
+</div>
+
+<ion-slide-box  class ="col fic_col_data2" style="height: 310px;padding : 0; border-top: 1px solid #979797;" on-slide-changed="slideHasChanged($index)" >
+    <ion-slide ng-repeat="item in List_Fic[2]">
+      <!-- <div class = "col "> -->
+      <div class = "row fic_data2"><p>{{::item.RXP_LBL}}</p></div>
+      <div class = "row fic_data2"><p>{{::item.GRE_PERIMETRE_COD}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.GRE_EXP_COD}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.GRE_RESP_TECHNIQUE}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.GRE_RESP_ADM}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.CONTACT_HO}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.CONTACT_HNO}} </p></div>
+      <div class = "row fic_data2"><p>{{::item.GRE_REF_INTERNE}} </p></div>
+
+    <!-- </div> -->
+    </ion-slide>
+  </ion-slide-box>
+</div>
+<div class="row" style="padding : 0" ng-if="shownItem == 4 " >
+
+<div class = "col fic_col2">
+<div class = "row fic_row2">P1</div>
+<div class = "row fic_row2">P2</div>
+<div class = "row fic_row2">P3</div>
+<div class = "row fic_row2">P4</div>
+<div class = "row fic_row2">DATE REV.</div>
+<div class = "row fic_row2">REM. REN.</div>
+<div class = "row fic_row2">DATE REN.</div>
+<div class = "row fic_row2">DESC. REN.</div>
+</div>
+
+<div class = "col fic_col_data">
+  <div class = "row fic_data"><p>{{::List_Fic[0].P1}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].P2}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].P3}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].P4}}</p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_DAT_PREV_RENOV}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_RMQ_PREV_RENOV}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_DAT_DER_RENOV}} </p></div>
+  <div class = "row fic_data"><p>{{::List_Fic[0].CTH_RMQ_DER_RENOV}} </p></div>
+
+</div>
+
+</div>
+</div>
+  <!-- <div class = "row fic_row">
+  <div class = "col fic_col">SER. FONC.</div>
+  <div class = "col fic_data">{{::item.EQP_SERVICE_FON}} </div>
+  </div> -->
+  <!-- <ion-view  title="Tour Slides" > -->
+    <!-- <ion-content direction="x" > -->
+
+  	<!-- </ion-content> -->
+  <!-- </ion-view> -->
+
+</ion-item>
+</ion-list>
+
+
+      <!-- <ion-list>
+          <ion-item  style= "padding:0" ng-class="isItemExpanded(item) ? 'expand-itemct active' : 'expand-itemct inactive'"
+           ng-repeat="item in List_Fic | filter: search track by item.CT+$index "
+
+         class="item col"  ng-click="expand_CT(item)"   ng-class="{active: isItemExpanded(item)}">
+
+         <div class="row PH_CT_bar">
+
+                     <div class="col PH_CT_Type">CT {{::item.CT}}</div>
+                     <div class="col PH_arrow" style="padding-top:5px"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i></div>
+         </div>
+         <!
+         <div ng-if="isItemExpanded(item)" ng-repeat="GF in item.GF" >
+          <div class = "row PH_GF" ng-click="PH_CT_GF(item.CT,GF.LG,GF.NGF,GF.DGF)" > {{::GF.LG}} </div>
+          </div> -->
+
+
+
+             <!-- <li ng-repeat="GF in item.GF"> {{::GF.LG}}</li> -->
+
+       <!-- </ion-item>
+ </ion-list> -->
+  </ion-content>
+
+</ion-view>

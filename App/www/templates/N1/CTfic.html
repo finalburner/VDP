@@ -1,33 +1,44 @@
-<ion-view view-title="Status">
-  <ion-nav-bar class="bar-light">
-    <ion-nav-back-button class="button-clear">
-      <i class="button icon-left ion-chevron-left button-clear button-dark"></i>
+<ion-view view-title="{{::titre_vue}}" ng-init="Refresh1()"> <!-- Laisser le titre vide -->
 
-    </ion-nav-back-button>
+  <ion-nav-bar class="bar-light" >
+    <ion-nav-buttons side="left">
+            <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
+    </ion-nav-buttons>
 
-</ion-nav-bar>
+  </ion-nav-bar>
 
-  <ion-content>
-    <div class="recherche col">
-    <label class="item item-input row ">
-    <i class="icon ion-search placeholder-icon"></i>
-    <input type="text" placeholder="Search" ng-model="search">
-  </label></div>
 
-  <div class="list">
-    <ion-list>
-        <ion-item ng-repeat="item in Live_Update"  item="item" href="#{{item.id}}">
-        <div class ="col">
-          <div class="row OPC">{{item.id}}</div>
-          <div class="row "> {{item.value}}</div>
-        </div>
-        </ion-item>
-    <ion-infinite-scroll distance="20"
-                         on-infinite="loadMoreData()"
-                         ng-if="!moredata"
-                         > </ion-infinite-scroll>
-    </ion-list>
+  <ion-content >
 
-  </div>
+    <div class="recherche2">
+     <label class="item item-input search-row ">
+     <i class="icon ion-search placeholder-icon"></i>
+     <input type="text" placeholder="Recherche" ng-model="search"  ng-click="search = ''">
+    </label></div>
+
+
+      <ion-refresher on-refresh="Refresh1()">
+      </ion-refresher>
+
+      <ion-list>
+          <ion-item  style= "padding:0" ng-class="isCTExpanded(item) ? 'expand-itemct active' : 'expand-itemct inactive'"
+           collection-repeat="item in List_CT | filter: search track by $index "   class="item col"  ng-click="expand_CT(item)"  >
+ <!-- ng-class="{active: isCTExpanded(item)} -->
+         <div class="row PH_CT_bar">
+
+                     <div class="col PH_CT_Type" ng-click="FIC_CT(item.L)">CT {{::item.L}}</div>
+                     <!-- <div class="col PH_arrow" style="padding-top:5px"><i class="icon AL_bar_icon" ng-class="isCTExpanded(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i></div> -->
+         </div>
+         <!-- <div ng-if="isItemExpanded(item)" ng-repeat="GF in item.GF" >
+          <div class = "row PH_GF" ng-click="PH_CT_GF(item.CT,GF.LG,GF.NGF,GF.DGF)" > {{::GF.LG}} </div>
+          </div> -->
+
+
+
+             <!-- <li ng-repeat="GF in item.GF"> {{::GF.LG}}</li> -->
+
+       </ion-item>
+ </ion-list>
   </ion-content>
+
 </ion-view>

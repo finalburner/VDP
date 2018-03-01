@@ -11,48 +11,58 @@
     PARIS
     </div>
 
-<div class="Menu" >
+<div class="Menu" ng-init="init_login()" >
 
   <div class="row Titre_Sup box">Supervision STEGC</div>
 
   <div class="row Menu_item_row">
   <a ion-button menu-close nav-transition="none" ui-sref="app.CT"
-   class="button button-dark button-clear Titre2">Synoptiques</a>
-  </div>
-
-   <div class="row Menu_item_row">
-  <a  ion-button menu-close nav-transition="none" ui-sref="app.biblio"
-  class="button button-dark button-clear Titre2">Bibliothèque</a>
+   class="button button-dark button-clear Titre2">Accueil</a>
   </div>
 
   <div class="row Menu_item_row">
-  <a  ion-button menu-close ui-sref="app.rapport"
-  class="button button-dark button-clear Titre2">Qr Code</a></div>
-
-  <div class="row Menu_item_row">
-  <a  ion-button menu-close ui-sref="app.alarmes" ng-click="JAL()"
+  <a  ion-button menu-close ui-sref="app.alarmes" ng-disabled="!$root.droit.FAVAASE" ng-click="JAL()"
   class="button button-dark button-clear Titre2">Journal des alarmes</a>
 </div>
 
-<div class="row Menu_item_row">
-  <a  ion-button menu-close ui-sref="app.admin"
-   class="button button-dark button-clear Titre2 ">Administration</a>
-</div>
-
-  <div class="row" ng-switch on="currentUser.role" >
-    <div ng-switch-when="userRoles.admin">Administrateur</div>
-    <div ng-switch-when="userRoles.editor">Exploitant</div>
-    </div>
-
-  <div class="row">
-    <button menu-close class="button button-light button-block button-cnx"
-    ng-show='currentUser' >Connexion</button>
-
-    <button menu-close class="button button-light button-block button-cnx"
- ng-hide='currentUser' ng-click="unlog()">Déconnexion</button>
-
+   <div class="row Menu_item_row">
+  <a  ion-button menu-close nav-transition="none"  ng-disabled="!$root.droit.FFIVS" ui-sref="app.CTfic"
+  class="button button-dark button-clear Titre2">Fiche d'identité</a>
   </div>
 
+  <div class="row Menu_item_row">
+ <a  ion-button menu-close nav-transition="none"  ng-disabled="!$root.droit.FPHVS" ui-sref="app.PH"
+ class="button button-dark button-clear Titre2">Programmes horaires</a>
+ </div>
+<!--
+ <div class="row Menu_item_row">
+<a  ion-button nav-transition="none"class="button button-dark button-clear Titre2" style="color : #929292 !important">Rapports</a>
+</div>
+
+<div class="row Menu_item_row">
+<a  ion-button nav-transition="none" class="button button-dark button-clear Titre2" style="color : #929292 !important">Bibliothèque</a>
+</div> -->
+
+<div class="row Menu_item_row">
+<a  ion-button  menu-close nav-transition="none"
+ class="button button-dark button-clear Titre2"  ui-sref="app.admin">Administration</a>
+ <!-- ng-disabled="$root.profil_COD != 'ADMFON'" -->
+ <!-- class="button button-dark button-clear Titre2" style="color : #929292 !important">Administration</a> -->
+
+</div>
+
+
+<div class="row" style="margin:10px 0 0 0;height:15px;justify-content: center;" >
+    <p >{{$root.name}} </p>
+</div>
+<div class="row" style="margin:10px 0 0 0;height:15px;justify-content: center;" >
+    <p >{{$root.profil}} </p>
+</div>
+
+  <div class="row" >
+    <button style="margin-top:20px!important"  menu-close class="button button-light button-block button-cnx" ng-click="unlog()">Déconnexion</button>
+
+  </div>
 </div>
 
   </ion-side-menu>

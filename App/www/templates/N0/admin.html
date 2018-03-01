@@ -1,4 +1,4 @@
-<ion-view view-title="admin">
+<ion-view view-title="Administration" ng-init = "$root.Refresh_admin()">
   <ion-nav-bar class="bar-light">
           <ion-nav-buttons side="left">
                   <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
@@ -6,79 +6,86 @@
   </ion-nav-bar>
 
   <ion-content>
-    <!--Barre de recherche-->
-    <div class="recherche">
-     <label class="item item-input search-row ">
-     <i class="icon ion-search placeholder-icon"></i>
-     <input type="text" placeholder="Recherche" ng-model="search">
-    </label></div>
 
-    <ion-refresher on-refresh="Refresh()">
+    <ion-refresher on-refresh="Refresh_admin()">
     </ion-refresher>
 
-    <ion-list>
-        <ion-item class="row animate-repeat"
-        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search track by item.M+$index" class="item col" style = "padding: 0 ;">
-    <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
+    <ul class ="list">
+
+    <li class="item ">
+    Connexion internet : {{$root.network}}
+    <span ng-if="$root.Connected" class="item-note">
+    Connecté
+    </span>
+    <span ng-if="!$root.Connected"class="item-note">
+    Déconnecté
+    </span>
+    </li>
+
+    <li class="item ">
+    Connexion Srv Mobilite
+    <span ng-if="$root.Socket_Connected" class="item-note">
+    Connecté
+    </span>
+    <span ng-if="!$root.Socket_Connected"class="item-note">
+    Déconnecté
+    </span>
+    </li>
 
 
-<!-- Consigne Reglage ANALOG -->
+   <li class="item ">
+    Connexion OPC
+    <span class="item-note">
+    {{$root.STATUS.SQL.CODE}}
+    </span>
+   </li>
 
-<!-- <div class="item row Cons_Row" ng-if="item.Type == 'TR'" > -->
-<form ng-submit="Analog_Change(item)" class="item row Cons_Row" ng-if="item.T == 'TR'">
-          <div class="col col-80" style=" padding : 17px 0 0 20px;" class="Cons_Ana">
-            {{::item.L}}
+    <li class="item ">
+    Connexion SQL
+    <span class="item-note">
+    {{$root.STATUS.OPC.CODE}}
+    </span>
+    </li>
 
-            <!-- <button type="submit" class="button button-block button-positive"
-            style="margin: 10px 0 0 0 0 ;right: 0; position:absolute; width:40px; height:40px;"
-            ng-click="Analog_Change()">Valider</button> -->
+    <!-- <li class="item item-toggle">
+    Serveur VDP - Eiffage
+     <label class="toggle toggle-assertive">
+       <input type="checkbox" ng-model = "$storage.Srv_Connect" ng-disabled="!bascule" ng-checked="$storage.Srv_Connect" ng-change="change()">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+     </li> -->
 
-          </div>
-
-          <div class="col col-20" style="border-radius:0;Align:center;padding:0;">
-          <input type="number" style="padding: 17px 0 0 20px;" ngMin="item.A0i" ngMax="item.A1" ng-model="item.LV"
-          placeholder="{{item.V}}" ng-blur="Analog_Change(item)" ng-enter="Analog_Change(item)" ></input>
-        </div>
-
-         <div  style="border-radius:0;Align:center;padding:0;position: absolute; left: -9999px; width: 1px; height: 1px;">
-        <button type="submit" class="button button-block button-positive" style="margin: 10px 0 0 0 0 ;left : -100px"
-        ng-click="Analog_Change(item)">Valider</button>
-      </div>
-        </form>
-
-
-<!-- Consigne Reglage TOR -->
-<div class ="item row Cons_Row"  ng-if="item.T == 'TC'">
-
-  <div class="col" style=" padding : 17px 0 0 20px;width:300px;" class="Cons_Ana">
-    {{::item.L}}</div>
-       <!-- <div class="col-80" style="font-family:'Roboto';font-size:12px; padding : 5px 0 0 20px ;">
-        {{::item.Libelle_information}}</div> -->
-        <!-- <ion-toggle  ng-change="Write(item)" class="Cons_Tor" ng-model="item.Local_Value" ng-checked="item.Value"
-        toggle-class="toggle-calm">{{::item.Libelle_information}}</ion-toggle> -->
-        <div class="col" style="width:60px;">
-          <div class="item-toggle" >
-          <label class="toggle toggle-positive ">
-                 <input type="checkbox" ng-change="Write(item)" ng-model="item.LV" ng-checked="item.V" toggle-class="toggle-calm">
-                 <div class="track" >
-                   <div class="handle"></div>
-                 </div>
-               </label></div>
-
-        </div>
-<!--
-            div class="row"  <p align="center">  {{item.Etat}} </p></div> -->
+      <li class="item " modal-select="" ng-model="selected_Srv" options="selectables" hide-reset='true'
+      cancel-button="Retour" on-select="Srv_Change(newValue, oldValue)" modal-title="Sélection de serveur" >
+                Sélection de serveur
+                <div class="option">
+                  {{option.name}}
+                </div>
+                <span class="item-note">
+                {{selected_Srv.name}}
+                </span>
+                </li>
+          </li>
 
 
-          <!-- <div class="row ">    {{item.date}}</div> -->
-</div>
+     <li class="item ">
+     Version du Serveur
+     <span class="item-note">
+     {{$root.STATUS.Version}}
+     </span>
+     </li>
+
+     <li class="item ">
+     Version APK
+     <span class="item-note">
+     {{APK}}
+     </span>
+    </li>
 
 
-    <!-- <div class="row "><p id="AL_Message">{{item.Libelle_information}}</p></div> -->
-    <!-- <div class="row ">Valeur : {{item.Value}}</div> -->
-    <!-- </div> -->
+  </ul>
 
-              </ion-item>
-    </ion-list>
   </ion-content>
 </ion-view>

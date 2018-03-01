@@ -1,83 +1,133 @@
-<ion-view view-title="{{::Selected_NomGrp}}" ng-init="Refresh()">
+<ion-view view-title="{{::titre}}" ng-init="Refresh()">
 
-  <ion-nav-bar class="bar-light">
-    <ion-nav-back-button class="button-clear">
-      <i class="icon ion-ios-arrow-back"></i>
-    </ion-nav-back-button>
+  <!-- <ion-nav-bar class="bar-light" ng-click="$ionicGoBack()"> -->
+    <ion-nav-bar class="bar-light">
+      <ion-nav-back-button class="button-clear">
+        <i class="icon ion-ios-arrow-back"></i>
+      </ion-nav-back-button>
   </ion-nav-bar>
-  
-  <ion-content>
-    <!--Barre de recherche-->
-    <div class="recherche">
-     <label class="item item-input search-row ">
-     <i class="icon ion-search placeholder-icon"></i>
-     <input type="text" placeholder="Recherche" ng-model="search">
-    </label></div>
-    <ion-refresher on-refresh="Refresh()">
-    </ion-refresher>
-    <ion-list>
-        <ion-item class="row animate-repeat"
-        ng-animate="'animate'" ng-repeat="item in List_Cons | filter: search : false track by item.M+$index" class="item col" style = "padding: 0 ;">
-    <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 
+  <div class = "bar bar-subheader bar-light">
+     <!-- <h2 class = "title">Sub Header</h2> -->
+     <div class="row btn-popN2 button " ng-click= "popN2_open($event)" >
+       <div class= "col-80 text_N1">{{::titre_vue}}</div>
+         <div class="col-20 arrow_N1"><i class="icon AL_bar_icon" ng-class="popN2isOpen ? 'ion-android-arrow-dropup' : 'ion-android-arrow-dropdown'"></i></div>
+     </div>
+  </div>
+
+  <ion-content class="withsubheader">
+      <ion-refresher on-refresh="Refresh()">
+      </ion-refresher>
+
+  <div ng-if="data.values.length!=0  && Vue == 2 && $root.Selected_NomGrp == 'CIRCU'">
+    <!-- Vue consignes -->
+
+   <!-- <canvas id="line" class="chart chart-line" chart-data="chart" chart-labels="labels"
+      chart-options="options" chart-colors ="colors"
+      chart-dataset-override="datasetOverride"  height="200" width="300">
+    </canvas> -->
+   <nvd3 options="options" data="data" ></nvd3>
+  </div>
+
+    <ion-item-group ng-repeat="(key,value) in List_Cons ">
+      <ion-item class="item item-divider" ng-if= "Vue == 2 && value.length && key == 'CONSI00001'"color="blue">Consignes</ion-item>
+      <ion-item class="item item-divider" ng-if= "Vue == 2 && value.length && key == 'CONSI00002'"color="blue">Ambiance</ion-item>
+      <ion-item class="item item-divider" ng-if= "Vue == 2 && value.length && key == 'CONSI00003'"color="blue">Eléments généraux</ion-item>
+      <ion-item class="item item-divider" ng-if= "Vue == 3 && value.length && key == 'CONSI00004'"color="blue">Mise au point</ion-item>
+      <ion-item class="item item-divider" ng-if= "Vue == 3 && value.length && key == 'CONSI00005'"color="blue">Optimisation</ion-item>
+        <ion-item ng-if="key == 'nb' && value == 0" ><p class="RAF">Rien à afficher</p></ion-item>
+        <ion-item ng-if="key != 'nb'" class="row animate-repeat"
+        ng-animate="'animate'" ng-repeat =" item in value track by item.M+$index" class="item col" style = "padding: 0 ;" >
+    <!-- <div class="col-5 AL_bar_color" style="background-color: {{item.color}};"></div> -->
 
 <!-- Consigne Reglage ANALOG -->
 
-<!-- <div class="item row Cons_Row" ng-if="item.Type == 'TR'" > -->
-<form ng-submit="Analog_Change(item)" class="item row Cons_Row" ng-if="item.T == 'TR'">
-          <div class="col col-80" style=" padding : 17px 0 0 20px;" class="Cons_Ana">
-            {{::item.L}}
+<form ng-submit="Confirm(item,key)" class="item row Cons_Row" ng-if="(item.T == 'TR' || item.T == 'TM') && item.I !='M99' && Vue != 1 ">
+          <div class="col col-80" style="overflow: auto; padding : 19px 0 0 10px;margin-right:5px" class="Cons_Ana">
+            {{::item.L }}
+          </div>
+          <div class="col col-10" style="border-radius:0;Align:center;padding:0;">
+            <!-- <input type="number" ng-blur="Confirm(item)" style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.LV" -->
+          <input select-on-click ng-if="(item.V || item.V == 0) && (($root.droit.FRMDSCC && $root.Vue == 2 ) || ($root.droit.FRMDMP && $root.Vue == 3))" type="text"  style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.LV"
+          placeholder="{{item.V}}" ng-enter="Confirm(item,key)"  ng-blur="Confirm(item,key)"
+          ng-style = "item.V.toString().length == 3 && { 'padding-left' : '10px' } || item.V.toString().length > 3 && { 'padding-left' : '5px' }" ></input>
 
-            <!-- <button type="submit" class="button button-block button-positive"
-            style="margin: 10px 0 0 0 0 ;right: 0; position:absolute; width:40px; height:40px;"
-            ng-click="Analog_Change()">Valider</button> -->
-
+          <input disabled select-on-click ng-if="(item.V || item.V == 0) && ((!$root.droit.FRMDSCC && $root.Vue == 2 ) || (!$root.droit.FRMDMP && $root.Vue == 3))" type="text"  style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.LV"
+          placeholder="{{item.V}}" ng-enter="Confirm(item,key)"  ng-blur="Confirm(item,key)"
+          ng-style = "item.V.toString().length == 3 && { 'padding-left' : '10px' } || item.V.toString().length > 3 && { 'padding-left' : '5px' }" ></input>
           </div>
 
-          <div class="col col-20" style="border-radius:0;Align:center;padding:0;">
-          <input type="number" ng-click = "Validate_Item = item" style="padding: 17px 0 0 20px;" ngMin="item.ANA_ValeurMini" ngMax="item.ANA_ValeurMax" ng-model="item.LV"
-          placeholder="{{item.V}}" ng-enter="Analog_Change(item)" ></input>
-        </div>
 
-         <!-- <div class = "col col-20"  style="border-radius:0;Align:center;padding:0">
-        <button type="submit" class="button button-block button-positive" style="margin: 10px 0 0 0 0 ;left : -100px"
-        ng-click="Analog_Change()">Valider</button>
-      </div> -->
-        </form>
 
+          <div ng-if="item.V || item.V == 0" class ="col col-10" style="padding: 17px 0 0 5px" >{{item.A}}</div>
+          <p class="status" style = "padding : 9px 15px 0 0 " ng-if="!item.V && item.V != 0">??</p>
+         <div  style="position: absolute; left: -9999px; width: 1px; height: 1px;"><button ng-click="Confirm(item,key)"  type="submit">valider</button></div>
+</form>
+
+<!-- CAS ANALOG Vue fonctionnement -->
+<div  class="item row Cons_Row" ng-if="(item.T == 'TR' || item.T == 'TM') && item.I !='M99' && Vue == 1 ">
+                  <div class="col col-80" style="overflow: auto; padding : 19px 0 0 10px;" class="Cons_Ana">
+                    {{::item.L }}
+                  </div>
+                  <p class="status" style = "padding : 9px 0 0 0 " ng-if="item.V || item.V == 0 " >{{item.V}}   {{item.A}}</p>
+                  <p class="status" style = "padding : 9px 15px 0 0 " ng-if="!item.V && item.V != 0">??</p>
+</div>
+
+<!-- CAS ANALOG MODE DE FONCTIONNEMENT -->
+<div class="item row Cons_Row" ng-if="(item.T == 'TR' || item.T == 'TM') && item.I =='M99'">
+            <div class="col col-80" style="overflow: auto; padding : 19px 0 0 10px;" class="Cons_Ana">
+                    {{::item.L }}
+            <p class="status" style = "padding : 9px 0 0 0 " ng-if="item.E " >{{::item.E}}</p>
+            <p class="status" style = "padding : 9px 15px 0 0 " ng-if="!item.E ">??</p>
+            </div>
+</div>
 
 <!-- Consigne Reglage TOR -->
-<div class ="item row Cons_Row"  ng-if="item.T == 'TC'">
-
-  <div class="col" style=" padding : 17px 0 0 20px;width:300px;" class="Cons_Ana">
+<div class ="item row Cons_Row"  ng-if="Vue != 1 && (item.T == 'TC' || item.T == 'TS' || item.T == 'TA')">
+  <div class="col col-80" style="overflow: auto;padding : 17px 0 0 10px;width:300px;" class="Cons_Ana" >
     {{::item.L}}</div>
        <!-- <div class="col-80" style="font-family:'Roboto';font-size:12px; padding : 5px 0 0 20px ;">
         {{::item.Libelle_information}}</div> -->
         <!-- <ion-toggle  ng-change="Write(item)" class="Cons_Tor" ng-model="item.Local_Value" ng-checked="item.Value"
         toggle-class="toggle-calm">{{::item.Libelle_information}}</ion-toggle> -->
-        <div class="col" style="width:60px;">
+        <div class="col col-20" style="max-width:100px;">
           <div class="item-toggle" >
-          <label class="toggle toggle-positive ">
-                 <input type="checkbox" ng-change="Write(item)" ng-model="item.LV" ng-checked="item.V" toggle-class="toggle-calm">
+          <label class="toggle toggle-positive " >
+                 <input type="checkbox" ng-if="($root.droit.FRMDSCC && $root.Vue == 2 ) || ($root.droit.FRMDMP && $root.Vue == 3 )"  ng-change="Confirm(item,key)" ng-model="item.LV" ng-checked="item.V" toggle-class="toggle-calm">
+                 <input type="checkbox" ng-if="(!$root.droit.FRMDSCC && $root.Vue == 2 ) || (!$root.droit.FRMDMP && $root.Vue == 3) "    ng-change="Confirm(item,key)" ng-model="item.LV" ng-checked="item.V" toggle-class="toggle-calm" disabled>
                  <div class="track" >
                    <div class="handle"></div>
                  </div>
                </label></div>
 
         </div>
-<!--
-            div class="row"  <p align="center">  {{item.Etat}} </p></div> -->
 
+</div>
 
-          <!-- <div class="row ">    {{item.date}}</div> -->
+<!-- ETAT FONCTIONNEMENT ( A PART EXCEPTIONS) -->
+<div class ="item row Cons_Row"
+ ng-if="Vue == 1  && (item.T == 'TC' || item.T == 'TS' || item.T == 'TA') && item.GRP != 'FONCT00001' ">
+
+  <div class="col" style="overflow: auto;padding : 19px 0 0 10px;width:300px;" class="Cons_Ana">
+    {{::item.L}}
+  <p class="status" style = "padding : 9px 0 0 0 " ng-if="item.V " >{{::item.T1}}</p>
+  <p class="status" style = "padding : 9px 0 0 0 " ng-if="!item.V" >{{::item.T0}}</p>
+</div>
 </div>
 
 
-    <!-- <div class="row "><p id="AL_Message">{{item.Libelle_information}}</p></div> -->
-    <!-- <div class="row ">Valeur : {{item.Value}}</div> -->
-    <!-- </div> -->
+<!-- ETAT FONCTIONNEMENT ( FONCTIONNEMENT ETE HIVER ) -->
+<div class ="item row Cons_Row"  ng-if="Vue == 1  && (item.T == 'TC' || item.T == 'TS' || item.T == 'TA' ) && item.GRP == 'FONCT00001' && item.V">
+  <div class="col" style="overflow: auto;padding : 19px 0 0 10px;width:300px;" class="Cons_Ana">
+    {{::item.L}}
+  <p class="status" style = "padding : 9px 0 0 0 " ng-if="item.V " >{{::item.T1}}</p>
+
+</div>
+</div>
+
+
 
               </ion-item>
-    </ion-list>
+    </ion-item-group>
   </ion-content>
 </ion-view>

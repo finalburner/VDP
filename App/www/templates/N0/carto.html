@@ -1,4 +1,4 @@
-<ion-view view-title="" ng-init="Refresh()">
+<ion-view view-title="{{titre}}" ng-init="Refresh()">
 
 
     <ion-nav-bar class="bar-light">
@@ -6,7 +6,8 @@
                     <button class="button button-icon button-clear button-positive ion-navicon navicon" menu-toggle="left"></button>
             </ion-nav-buttons>
             <ion-nav-buttons side="right">
-                     <a ion-button nav-transition="none" ui-sref="app.carto" class="button button-icon ion-ios-location" >  </a >
+                    <a ion-button nav-transition="none" ng-if="$root.droit.VC" ui-sref="app.carto" class="button button-icon icon-blue ion-ios-location">  </a >
+                    <a ion-button nav-transition="none" ng-if="!$root.droit.VC" class="button button-icon icon-blue ion-ios-location">  </a >
                      <a ion-button nav-transition="none" ui-sref="app.CT" class="button button-icon ion-android-apps" >  </a >
             </ion-nav-buttons>
     </ion-nav-bar>
@@ -16,7 +17,7 @@
   <div class="recherche">
    <label class="item item-input search-row ">
    <i class="icon ion-search placeholder-icon"></i>
-   <input type="text" placeholder="Recherche" ng-model="search">
+   <input type="text" placeholder="Recherche" ng-model="search" ng-change="filter(search)"  ng-click="search = ''">
  </label></div>
 
     <ng-map  center="{{loc}}"
@@ -31,19 +32,18 @@
      min-zoom="10"
          >
 <!-- disable-default-u-i="true" -->
-     <marker  animation="Animation.BOUNCE"  position="{{marker}}" title="Mobile"></marker>
+     <marker  animation="Animation.BOUNCE"  position="{{::marker}}" title="Mobile"></marker>
 
-      <shape name="circle" ng-repeat="item in List_CT | filter: search" no-watcher="true"
+      <shape name="circle" ng-repeat="item in Filtered " no-watcher="true"
            stroke-color="{{::item.AL}}"
            stroke-opacity="0.8"
-           stroke-weight="2"
+           stroke-weight="3"
            fill-color="{{::item.AL}}"
            fill-opacity="0.8"
-           title="{{::item.CT}}"
+           title="{{::item.L}}"
            center="[{{::item.LA}},{{::item.LO}}]"
-           radius="{{rad}}"
-           on-click="Map_CT(item.L)"
-
+           radius="{{::item.rad}}"
+           on-click="N1_open_carto(item.L, item.AL, item.I, item.A, item.C)"
            >
            <!-- on-click="CT_N1(this)"  -->
          </shape>

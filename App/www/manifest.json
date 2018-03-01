@@ -1,7 +1,7 @@
 
 {
-  "name": "My Ionic App",
-  "short_name": "My Ionic App",
+  "name": "CT VDP",
+  "short_name": "VDP",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{

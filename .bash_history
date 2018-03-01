@@ -1,348 +1,500 @@
-nodemon
-nodemon
-dir
+cordova run android --prod
+npm uninstall cordova-minify-v2
+npm uninstall cordova-minify-v2 --save
+cordova build android 
+cordova run android --prod
+cordova run android --prod
+
+cordova run android --prod
+npm install cordova-minify-v2 --save
+npm install imagemin --save
+npm install find-file --save
+npm install imagemin --save
+npm install cordova-minify-v2 --save
+npm install clean-css --save
+cordova run android --prod
+cordova run android --prod
+cordova run android --prod
+npm install cordova-minify-v2 --save-dev
+npm uninstall cordova-minify-v2
+npm uninstall cordova-minify-v2
+cordova run android --prod
+cordova run android --prod
+cordova run android --prod
+cordova build android --prod --release
+cordova run android --prod --release
+cordova run android --prod --release
+cordova platform add windows
+cordova run windows
+cordova build windows
+cordova platform add windows
+cordova build windows --verbose
+cd .. 
+cd.. 
+cd .. 
+mkdir corwin
+cd corwin
+cordova create test 
+ls
+cd test
+ls
+cd .. 
+cd . .
 cd ..
-dir
-node
-nodemon
-nom
-npm
-npm list -g
-a corn
-acorn
-after
-ajv
-ionic info
-ionic serve
-npm install -g minify-all
-cd ..
-cd ..
-dir 
-cd VDP_Mobile
-dir 
-node mini.js
-npm install -g minify-all
-node mini.js
-npm install minify-all
-node mini.js
-node mini.js
-node mini.js
-cd ../..
-dir
-cd vdp_mobile
-cd client 
-nodemon client
-nodemon client
+cordova create corwin
+cordova platform add windows
+cd corwin
+cordova platform add windows
+cordova run
+cordova platform rm windows
+cordova build android
+cd .. 
+cd vdp 
+cd app 
+cordova build android
+cordova run android
+cordova run android --build
+cordova run android --prod
+cordova run android --prod --release
+cordova run android --prod 
+cordova build android --prod 
+cordova run android --prod 
+cordova run android --prod 
+cordova plugin rm cordova-plugin-client-certificate-addictic
+cordova run android --prod 
+cordova platform rm windows
+cordova plugin rm cordova-plugin-client-certificate-addictic
+cordova run android --prod 
+cordova build android --prod 
+cordova build android --prod --release
+cordova build android --prod --release
+cordova build android --prod --release
+cordova build android --prod 
+cordova run android --prod 
+cordova run android --prod -lc
+cordova run android 
+cordova run help
+cordova help
+cordova run android -l -c
+cordova run android -l -c
+cordova run android -l -c
+cordova run android -l -c
+cordova run android --prod 
+cordova run android --prod 
 cd .. 
 cd .. 
-dir 
-cd VDP_Mobile
-dir
-cd client
-nodemon opc 
-ionic serve
-ionic run android
-ionic run android
-ionic serve
-ionic serve --address 10.18.10.28
-ionic run android
-npm install uglifyjs
-npm install uglify-js
-npm install node-minify
-ionic serve 
-ionic run android
-npm install grunt-ng-annotate --save-dev
-sudo npm install -g grunt-cli
-npm install -g grunt-cli
-npm install grunt-contrib-uglify --save-dev
-cd gunt
-cd grunt
+cd ph 
+build-pj
+build-ph
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+node opc.js
+node opc.js
+node opc.js
+node opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+cordova run android
+cordova prepare android
+cordova run android
+cordova build android
+cordova run android
+cordova run android
+cordova build android
+cordova build android
+cordova run android
+cordova run android
+cordova run android
+cordova run android
+cordova run android
+cordova run android
+cd .; 
 cd .. 
-cd grunt 
-dir 
-node Gruntfile
-nodemon Gruntfile.js
+cd arp 
+nodemon arp.js
+npm install arpjs
+nodemon arp.js
+npm install arpjs
+npm install arpjs --verbose -f
+nodemon arp.js
+npm install -g kickthemout
+nodemon arp.js
+kickthemout
+npm install -g kickthemout
+kickthemout
+npm install -g 
+npm install -g libpcap-dev
+npm install -g libpcap
+node-gyp rebuild[A
+npm install -g node-gyp
+node-gyp rebuild
+npm install -g libpcap
+npm install libpcap --save
+npm install kickthemout --save
+npm install kickthemout --save --verbose
+npm install kickthemout --save --verbose
+npm install kickthemout --save --verbose
+npm install init
 npm init
-sudo npm install -g grunt-ng-annotate
- npm install -g 
- npm install -g grunt
-sudo npm install -g grunt-ng-annotate
-npm install -g grunt-ng-annotate
-npm install -g grunt@0.4.5
-npm install -g grunt-ng-annotate
-nodemon Gruntfile.js
-grunt
-npm install
-grunt
-npm install -g grunt
-grunt
-npm install -g grunt-ng-annotate
-grunt
-npm install -g grunt-ng-annotate --save-dev
-npm install grunt-ng-annotate --save-dev
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-cd //
-dir
-cd pa110280
-dir
-dir
-ionic serve
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-dir
-cd .. 
-dir
-grunt
-grunt
-grunt
-npm install
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-npm install 
-grunt
-grunt
-grunt7
-grunt7
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-grunt
-cd .. 
-grunt
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-grunt
-grunt
-cd ../App
-ionic run android
-ionic serve
-ionic serve
-ionic serve
-ionic serve
-ionic serve --address 192.168.101.103
-ionic run android
-dir
-nodemon client
-cd ../App
-ionic run android
-cd .. 
-cd client
-nodemon client
-nodemon client
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-
-nodemon opc
-nodemon opc
-cd ..
-cd App
-grunt
-npm install -g grunt-ng-annotate
-npm install -g grunt-contrib-uglify
-grunt
-
-npm install grunt-ng-annotate
-npm install grunt-contrib-uglify
-grunt
-cd ..
-grunt
-grunt
-ionic serve 
-ionic serve 
-quit
-quit
-ionic serve 
-npm install -g windows-build-tools
-quit
+npm install --verbose
+npm install --ve
+npm install kickthemout --save --verbose
+npm install kickthemout --save --verbose
+npm install kickthemout --save --verbose
+node ph
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
+node client.js
 nodemon client.js
+nodemon client.js
+nodemon client.js
+nodemon client.js
+nodemon client.js
+nodemon client.js
+build-client
+build-opc
+node opc.js
+build-opc
+build-opc
+node opc.js
 nodemon client
-ionic serve
-npm install -g node-opcua
-ionic serve
 nodemon client
-npm version mssql
-npm info mssql version
+nodemon client
+nodemon client
+nodemon client
 nodemon client
 nodemon opc
-npm install pkg
-dir
-pkg opc.js
-npm install -g pkg 
-pkg opc.js
-pkg opc.js --targets win-x64
-pkg opc.js --targets win-x64
 nodemon opc
-cd ../App 
-ionic serve
-npm install debug -g --save
-nodemon opc 
-nodemon client 
-ionic serve
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+build-opc
+nodemon opc.js
+node opc.js
+build-opc
+nodemon opc.js
+nodemon opc.js
+build-opc
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+build-opc
+nodemon client
+build-client
+nodemon client
+nodemon client
+ionic run android --release --prod
+ionic run android --release --prod
+ionic run android --release --prod --verbose
+ionic build android --release --prod --verbose
+ionic run android --release --prod --verbose
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.j
+nodemon ihm.j
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+nodemon ihm.js
+node ihm.js
+nodemon client
+nodemon client
+nodemon client
+nodemon client
+node ihm
+node ihm.js
+node ihm
+node ihm
+node ihm
+node ihm
+node ihm
+node ihm
+node ihm
+cordova build android --release
+cordova build android --release
+cordova run android --release
+nodemon client.js
+build-client
+build-opc
+nodemon opc
+nodemon opc
+cordova build android --release
+cordova run android --release
+cordova run android
+cordova run android
+cordova run android
+cordova run android
+cordova run android
+cordova run android
+cordova build android
+cordova run android
+cordova run android
+nodemon ihm
+nodemon ihm
+nodemon ihm
+build-opc
+nodemon ihm
+nodemon ihm
+cordova run android --release
+cordova run android --release
+cordova run android --release
+nodemon opc.js
+nodemon opc.js
+cordova run android --release
+cordova run android --release --verbose
 cd .. 
 cd client
-dir 
-pkg win-x64 client.js
-pkg client.js 
-pkg client.js -t node6-win-x64
-pkg opc.js -t node6-win-x64
+node client
+node client
+node client
+node client
+node client
+nodemon opc.js
+nodemon opc.js
+build-opc
+nodemon opc.js
+nodemon opc.js
+nodemon opc.js
+nodemon client
+build-client
+nodemon client
+build-client
+nodemon client
+nodemon client
+nodemon client
+nodemon client
+nodemon client
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+build-opc
+nodemon opc
+build-opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+nodemon opc
+cordova build android --release
+cordova build android --release
+cordova run android --release
+cordova run android --release
+cordova run android --release
+cordova run android --release
+nodemon ihm 
+nodemon ihm 
+cd .; 
+cd ihm
+builg-ihm
+build-ihm
+cordova run android
+cordova build android
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android 
+cordova run android --release
+cordova build android --release
+node client
+node client
+node client
+node client
+node client
+node opc.js
+node opc.js
+node opc.js
+node opc.js
+node ihm
+build-ihm
+cordova run android 
+build-ihm
+node ihm
+build-ihm
 cd .. 
-npm install node-opcua --save
+cd ph
+node ph
+node ph
+build-ph
 cd .. 
-cd Vdp/client
-dir 
-pkg opc.js -t node6-win-x64
-pkg --help
-pkg --help -d
-pkg opc.js -t node6-win-x64 -d
-cd ../app
-ionic serve
-cd ../client
-cd .
-cd..
-cd .. 
-grunt
+cd VDP
+ls
 cd client
-cd grunt 
-pkg opc.js -t node6-win-x64 -d
-pkg opc.js -t node6-win-x64 
+node client
+build-client
+node opc
+build-opc
+node opc
+node client
+build-client
+build-opc
+node opc
+build-opc
+node client
+build-client
+node opc
+node ph
+build-ph
+node ihm
+build-ihm
+build-client
+build-client
+node client
+build-client
+node opc
+build-opc
+node client
+node opc
+cd .. 
+cd app 
+ionic package build ios
+ionic package build ios
+cordova platform add ios
+ject...
+Creating Cordova project for the iOS platform:
+        Path: platforms\ios
+security find-identity -v -p codesigning
+cordova build ios
+npm install -g xcodebuild
+cordova build ios
+ionic upload
+ionic upload
+ionic upload
+npm install -g ionic@1.3.5
+npm install -g ionic@1.4
+ionic login 
+ionic login 
+ionic login 
+ionic link --pro-id f0e97a91
 cd ..
-npm install -*g npm-check
-npm install  npm-check
-npm-check
-npm-check
+ionic link --pro-id f0e97a91
 cd .. 
-npm-check
-npm install  npm-check -g
-npm-check
-npm-check -u
-npm-check -u
-npm-check -u
-npm-check -u
-npm-check -u
-npm-check -u
-npm-check -u
-npm-check -u
-npm-check -u
-cd client
-npm-check -u
-npm-check -u
-npm-check -u
-  $ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365
-  $ openssl req -x509 -newke rsa:2048 -keyout key.pem -out cert.pem -days 365
-openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365
-dir
-dir
-nodemon client
-nodemon client
-nodemon opc 
-nodemon opc 
+mkdir ionic
+cd ionic 
+ionic
+ionic start
+ionic setup
+ionic start myApp tabs
+ionic start myApp tabs --v1
+cd ../vdp/app
+ls
+ionic link --pro-id f0e97a91
+ionic start
+cd ..
+cd .. 
+cd .. 
+cd dekstop/ionic
+cd desktop/ionic
+ionic start
+cd .. 
+cd vdp
+cd app 
+ls
+ionic link --pro-id f0e97a91
+ionic
+ionic link
+ionic package
 ionic serve
-nodemon client
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon opc
-nodemon client
-nodemon opc 
-nodemon opc 
-nodemon opc 
-ionic serve
-ionic serve -d 
-ionic serve -d 
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-ionic run android
-
-cd .. 
-dir
-cd .. 
-dir
-cd node_modules/node-opcua/bin
-crypto_create_CA createCA
-dir
-node crypto_create_CA createCA
-node crypto_create_CA createCA
-node crypto_create_CA createCA
-node crypto_create_CA certificate
-ionic serve
-nodemon client
-ionic run android
- ../App
-cd ../App
-dir
-ionic run android
-ionic run android
-ionic run android
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-nodemon opc 
-npm init 
-npm install http-server --save
-http-server -a localhost -p 8000
-npm install live-server serve
-npm install live-server --save
-live-server
-bower install --save angular-ui-calendar
-bower install
-live-server
-live-server
-live-server
-grunt serve
-live-server
-live-server
-cd ../php
-cd .. 
-cd php
-live-server
-nodemon server.js
-nodemon server.js
-nodemon server.js
-nodemon server.js
+ionic link --pro-id f0e97a91
+ionic io init
+ionic -v
+npm uninstall -g ionic
+npm install -g ionic@1.7.6
+npm install -g ionic@1.7.6 --verbose
+ionic -v
+ionic 
+npm install -g ionic@1.7.6 --verbose
+cd ..
+cd ..
+npm install -g ionic@1.7.6 --verbose
+npm install -g ionic@1.7.6 
+npm install -g ionic@latest
+npm install -g ionic@latest
+cd vdp/app
+ionic -v
+ionic --version

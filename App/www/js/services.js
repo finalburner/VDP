@@ -1,20 +1,43 @@
 app
 
-.factory('AuthService', ['socket', 'Session', 'P', function (socket, Session, P) {
+.service('Notif', ['socket', '$cordovaToast','$ionicLoading', function (socket,$cordovaToast,$ionicLoading) { //Service de notification
+  socket.on('Notif', function(data) {
+      $ionicLoading.hide() //enleve le spinner
+      if (window.cordova)  $cordovaToast.show(data.Msg, "short", "bottom");
+      else console.log(data.Msg)
+  });
+
+   this.Show = function(Msg) {
+      if (window.cordova)  $cordovaToast.show(Msg, "short", "bottom");
+      else console.log(Msg)
+  	}
+
+}])
+
+.factory('AuthService', ['$ionicLoading','$localStorage','$rootScope','$http', 'Session', 'P' , 'Notif', function ($ionicLoading, $localStorage, $rootScope, $http, Session, P , Notif) {
   var authService = {};
+  var SRV ;
 
   authService.login = function (Cnx) {
-    var promise = new Promise(function(resolve, reject) {
-    socket.emit(P.SOCKET.LQ, Cnx)
-    socket.on(P.SOCKET.LA, function(data) {
-    resolve(data.user);
-    Session.create(data.id, data.user.id, data.user.role);
-  });
-});
-  return promise;
-}
+  var promise = new Promise(function(resolve, reject) {
 
-  authService.isAuthenticated = function () {
+     SRV = $localStorage.Srv_url
+
+     $http.post(SRV + '/login' , Cnx )
+     .then(function(data) {
+            $ionicLoading.hide();
+            resolve(data.data);
+            //store local session user
+    },function(error) {
+      console.log(error);
+      $ionicLoading.hide();
+      Notif.Show(error.data.message);
+     });
+     });
+      return promise;
+      }
+
+    authService.isAuthenticated = function () {
     return !!Session.userId; //false si null
   };
 
@@ -31,87 +54,115 @@ app
 }])
 
 .service('Session', function () {
-  this.create = function (sessionId, userId, userRole) {
-    this.id = sessionId;
-    this.userId = userId;
-    this.userRole = userRole;
+  this.create = function (token, name, username, userRights, AST) {
+    this.token = token;
+    this.name = name;
+    this.username = username;
+    this.userRights = userRights;
+    this.AST = AST;
   };
   this.destroy = function () {
-    this.id = null;
-    this.userId = null;
-    this.userRole = null;
+    this.token = null;
+    this.name = null;
+    this.username = null;
+    this.userRights = null;
+    this.AST = null;
   };
 })
 
-.factory('socket', ['socketFactory','P', function (socketFactory,P) {
+.factory('socket', ['socketFactory','P','$localStorage', function (socketFactory,P,$localStorage) {
   // console.log(window.cordova)
-  if (window.cordova) { // Mobile APP
-    var mySocket = socketFactory({
+   if(window.cordova)
+   {  var URL = $localStorage.Srv_url || P.PARAM.SRV[0].url
+      var mySocket = socketFactory({
       prefix: '',
-      ioSocket: io.connect(P.PARAM.SRV_WEB, {secure: true , rejectUnauthorized: false})
-    //  ioSocket: io.connect('http://localhost:3000')
-    });
+      ioSocket: io.connect(URL, {secure: true , rejectUnauthorized: true, transports: ['websocket'] })
+      });
   }
-  else { // Desk APP
-    var mySocket = socketFactory({
-      prefix: '',
-     ioSocket: io.connect(P.PARAM.SRV_LOCAL, {secure: true , rejectUnauthorized: false })
-    });
+  else
+  {  var URL = $localStorage.Srv_url || P.PARAM.SRV_LOCAL[0].url
+     var mySocket = socketFactory({
+     prefix: '',
+     ioSocket: io.connect(URL, {secure: true , rejectUnauthorized: false })
+     });
   }
-  //mySocket.forward('temp');
+
   return mySocket
-}])
-
-.factory('Notif', ['socket', '$cordovaToast', function (socket,$cordovaToast) { //Service de notification
-
-socket.on('Notif', function(data) {
-  // console.log(data)
-  if (window.cordova)  $cordovaToast.show(data.Msg, "short", "bottom");
-  else console.log(data.Msg)
-});
-this.Show = function(Msg) {
-    if (window.cordova)  $cordovaToast.show(Msg, "short", "bottom");
-    else console.log(data.Msg)
-		}
-return 0 ;
 
 }])
 
-.factory('ConnectivityMonitor', ['$rootScope', '$cordovaNetwork', '$cordovaToast', function($rootScope, $cordovaNetwork,$cordovaToast){
 
-  return {
-    isOnline: function(){
-      if(ionic.Platform.isWebView()){
-        return $cordovaNetwork.isOnline();
-      } else {
-        return navigator.onLine;
-      }
-    },
-    isOffline: function(){
-      if(ionic.Platform.isWebView()){
-        return !$cordovaNetwork.isOnline();
-      } else {
-        return !navigator.onLine;
-      }
-    },
-    startWatching: function(){
-      if(ionic.Platform.isWebView()){
-          $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-          $cordovaToast.show("Connecté", "short", "bottom")
-          });
-          $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
-          $cordovaToast.show("Déconnecté", "short", "bottom")
-          });
-        }
-        else {
-          window.addEventListener("online", function(e) {
-              $cordovaToast.show("Connecté", "short", "bottom")
-          }, false);
+.service('ConnectivityMonitor', ['P','socket','$rootScope', '$cordovaNetwork', '$cordovaToast','$ionicLoading', function(P,socket,$rootScope, $cordovaNetwork,$cordovaToast,$ionicLoading)
+{
 
-          window.addEventListener("offline", function(e) {
-              $cordovaToast.show("Déconnecté", "short", "bottom")
-          }, false);
-        }
+    // console.log($cordovaNetwork)
+    ionic.Platform.ready(function() {
+      if (window.device)
+      {
+      $rootScope.Connected = $cordovaNetwork.isOnline()
+      $rootScope.network = $cordovaNetwork.getNetwork()
     }
-  }
+    })
+      // listen for Online event
+      $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+          $ionicLoading.hide()
+          $rootScope.Connected = true;
+          socket.emit(P.SOCKET.SRVQ);
+          $rootScope.network = $cordovaNetwork.getNetwork();
+          $cordovaToast.show("Connecté", "short", "bottom")
+          $rootScope.$apply();
+      })
+
+      // listen for Offline event
+      $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+
+          $ionicLoading.show({
+              template: 'Attente de connexion internet'
+           });
+
+          $rootScope.Connected = false;
+          if ($rootScope.STATUS)
+          {
+            $rootScope.STATUS.SQL.CODE = ""
+            $rootScope.STATUS.OPC.CODE = ""
+          }
+          $rootScope.network = $cordovaNetwork.getNetwork();
+          $cordovaToast.show("Déconnecté", "short", "bottom")
+          $rootScope.$apply();
+      })
+
+
 }])
+// .service("ApkAutoUpdater", function($q,$ionicPlatform){
+//   setTimeout(function() {
+//
+//    // $ionicPlatform.ready(function() {
+//     var self = this;
+//
+//     var plugin;
+//
+//     if(typeof cordova != "undefined" &&
+//         typeof cordova.plugins.ApkAutoUpdater !== "undefined"){
+//         var plugin = cordova.plugins.ApkAutoUpdater;
+//         console.info("-- ApkAutoUpdater loaded");
+//     }
+//     // })
+//     /**
+//      *  Install an apk from the passed url
+//      * @param String strUrl Url to download the apk from http://exmple.de/test.apk
+//      */
+//     this.updateFromUrl = function(strUrl) {
+//         var defer = $q.defer();
+//
+//         if(strUrl){
+//             plugin.updateFromUrl(strUrl, defer.resolve,  defer.reject);
+//         }
+//         return defer.promise;
+//     };
+//
+//
+//     return this;
+//
+//   }, 2000);
+//
+// });

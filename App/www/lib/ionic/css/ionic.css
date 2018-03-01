@@ -4049,7 +4049,8 @@ a.subdued {
         line-height: 32px; }
     .bar .button.back-button, .bar button.back-button {
       display: block;
-      margin-right: 5px;
+      padding : 8px 0 0 7px !important;
+      border : 0;
       padding: 0;
       white-space: nowrap;
       font-weight: 400; }
@@ -4080,8 +4081,7 @@ a.subdued {
   .bar .buttons.pull-right,
   .bar .title + .buttons {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    right: 8px;
     bottom: 5px; }
 
 .platform-android .nav-bar-has-subheader .bar {
@@ -4306,7 +4306,7 @@ a.subdued {
 
 .bar-subheader {
   top: 44px;
-  height: 44px; }
+  height: 50px; }
   .bar-subheader .title {
     height: 43px;
     line-height: 44px; }
@@ -5414,8 +5414,8 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   display: block;
   margin-top: 12px;
   margin-left: -110px;
-  height: 280px;
-  width: 220px;
+  height: 420px;
+  width: 298px;
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
   opacity: 0; }
@@ -7447,8 +7447,8 @@ ion-slides {
   stroke: #444;
   fill: #444; }
   .spinner svg {
-    width: 28px;
-    height: 28px; }
+    width: 35px;
+    height: 35px; }
   .spinner.spinner-light {
     stroke: #fff;
     fill: #fff; }
@@ -8575,9 +8575,9 @@ progress {
  * --------------------------------------------------
  */
 .button {
-  border-color: #f6f6f6;
-  background-color: #f8f8f8;
-  /*color: #444;*/
+  border-color: transparent ;
+  background-color: #f7f7f7;
+  color: #000000;
   position: relative;
   display: inline-block;
   margin: 0;
@@ -8591,7 +8591,7 @@ progress {
   text-align: center;
   text-overflow: ellipsis;
   font-size: 12px;
-  font-weight: bold ;
+  font-weight: 500;
   font-family : "Roboto" ;
   line-height: 42px;
   cursor: pointer; }
@@ -8631,8 +8631,11 @@ progress {
     margin-bottom: 10px; }
   .button.button-light {
     border-color: transparent;
-    background-color: #fff;
-    color: #444; }
+    background-color: #F7F7F7;
+    color: #00000;
+    border : 0;
+    border-bottom : 1px solid #9B9B9B !important;
+  }
     .button.button-light:hover {
       color: #444;
       text-decoration: none; }
@@ -9031,7 +9034,7 @@ a.button {
   overflow: hidden;
   padding: 0 16px;
   width: 0;
-  border-width: 1px 0px 1px 1px;
+  border-width: 1px 1px 1px 1px;
   border-radius: 0;
   text-align: center;
   text-overflow: ellipsis;
