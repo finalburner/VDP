@@ -1,4 +1,4 @@
-<ion-view view-title="CT {{::titre}}" ng-init="Refresh2()" style="margin:0px!important">
+<ion-view view-title="{{titre}}" ng-init="Refresh2()" style="margin:0px!important">
 
   <ion-nav-bar class="bar-light">
     <ion-nav-back-button class="button-clear">
@@ -16,7 +16,7 @@
 
 
 <!--Barre de recherche-->
-<div class="recherche">
+<div class="recherche2">
  <label class="item item-input search-row ">
  <i class="icon ion-search placeholder-icon"></i>
  <input type="text" placeholder="Recherche" ng-model="search" ng-click="search = ''">
@@ -24,10 +24,10 @@
 
 
 <!--Bouton CT - Intervention-->
-<div class="item button-bar row">
+<div class="item button-bar row" style="padding:3px">
      <a class="button btn_CT"  ng-click="filterencours()">Présentes</a>
-     <a class="button btn_Int" ng-click="filtertoutes()">Toutes</a>
-     <a class="button btn_Int" ng-click="modalm_open()">Filtres</a>
+     <a class="button btn_CT" ng-click="filtertoutes()">Toutes</a>
+     <a class="button btn_CT" ng-click="modalm_open()">Filtres</a>
 </div>
 
 <!--Liste de AL-->

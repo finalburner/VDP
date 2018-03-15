@@ -1,4 +1,4 @@
-<ion-view view-title="{{::titre_vue}}" ng-init="Refresh1()">
+<ion-view view-title="{{titre_vue}}" ng-init="Refresh1()">
 
   <ion-nav-bar class="bar-light">
           <ion-nav-buttons side="left">
@@ -6,22 +6,23 @@
           </ion-nav-buttons>
   </ion-nav-bar>
 
+  <ion-header-bar class="bar-subheader col" style="height:100px!important;padding:0!important;top:47px!important">
+    <!--Barre de recherche-->
+    <div class="recherche2 row">
+         <label class="item item-input search-row " style="width:100%">
+         <i class="icon ion-search placeholder-icon"></i>
+         <input type="text" placeholder="Recherche"  ng-model="search" ng-click="search = ''" >
+         </label>
+    </div>
+    <!--Bouton CT - Intervention-->
+    <div class="item button-bar row" style="padding:7px 0 5px 10px">
+         <a class="button btn_Int" ng-click="filterencours()">Présentes</a>
+         <a class="button btn_Int" ng-click="filtertoutes()">Toutes</a>
+         <a class="button btn_Int" ng-click="modalm_open()">Filtres</a>
+    </div>
+  </ion-header-bar>
 
-<ion-content >
-<!--Barre de recherche-->
-<div class="recherche">
- <label class="item item-input search-row ">
- <i class="icon ion-search placeholder-icon"></i>
- <input type="text" placeholder="Recherche" ng-model="search" ng-click="search = ''">
-</label></div>
-
-
-<!--Bouton CT - Intervention-->
-<div class="item button-bar row">
-     <a class="button btn_CT" ng-click="filterencours()">Présentes</a>
-     <a class="button btn_Int" ng-click="filtertoutes()">Toutes</a>
-     <a class="button btn_Int" ng-click="modalm_open()">Filtres</a>
-</div>
+<ion-content style="top:146px!important">
 
 <!--Liste de AL-->
 <ion-refresher on-refresh="Refresh1()">
@@ -30,13 +31,13 @@
     <!-- <ion-item class="row AL_Item" ng-class="isItemExpanded(item) ? 'expand-item active' : 'expand-item inactive'"
     ng-animate="'animate'" collection-repeat="item in list_AL | filter : Filter_Alm | filter : search track by item.Mnemo" class="item col"  ng-click="expand_AL(item)"   ng-class="{active: isItemExpanded(item)}"> -->
     <ion-item  on-swipe-right="" class="row AL_Item"
-    ng-repeat="item in List_AL | filter : filtercriticite | filter : filteretat | filter : search | orderBy: '-S' track by item.M+$index  "   >
+    collection-repeat="item in List_AL | filter : filtercriticite | filter : filteretat | filter : search | orderBy: '-S'  track by $index "   >
     <div class = "row " style = "padding : 0" >
     <div class="col AL_bar_color" style="background-color: {{item.AL}}"></div>
     <div class="col AL_col AL_type">
 
               <!-- <div class="col AL_type" > -->
-                <div class ="row" style="padding-top: 0px" ng-if="item.S"> {{item.S}} - CT{{item.LO}} - {{item.E}} </div>
+                <div class ="row" style="padding-top: 5px" ng-if="item.S"> {{item.S}} - CT{{item.LO}} - {{item.E}} </div>
                 <div class ="row" style="padding-top: 0px" ng-if="!item.S"> CT{{item.LO}}  </div>
                 <div class ="row"> {{item.LG}} </div>
                 <div class ="row" > {{item.L}} </div>

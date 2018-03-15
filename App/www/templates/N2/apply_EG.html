@@ -1,0 +1,28 @@
+<ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive">
+          <p class="ph_modal_title">Application exception globale</p>
+
+          <button class="button button-clear button-primary" style="right:10px!important;position:absolute" ng-click="close_edit_modal()">Revenir</button>
+        </ion-header-bar>
+<ion-content class="padding">
+
+
+  <div class="list" style="height:500px">
+       <ion-checkbox ng-repeat="item in LIST_EG"
+                     ng-model="item.C"
+                     ng-change="apply_EG_State(item);"
+                     ng-true-value="true"
+                     ng-true-value="false"
+
+                     >
+         {{ item.label }}
+       </ion-checkbox>
+  </div>
+
+
+  <button style="font-size: 15px!important" class="button button-full button-positive" ng-click="Add_EL()" ng-disabled = "add_EL.heureFin.toTimeString() <= add_EL.heureDebut.toTimeString()  || myForm.$invalid">Ajouter</button>
+
+
+  </ion-content>
+
+</ion-modal-view>

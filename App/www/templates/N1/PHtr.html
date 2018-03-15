@@ -1,4 +1,4 @@
-<ion-view view-title="{{::titre_vue}}" ng-init="Refresh2()"> <!-- Laisser le titre vide -->
+<ion-view view-title="{{titre_vue}}" ng-init="Refresh2()"> <!-- Laisser le titre vide -->
 
   <ion-nav-bar class="bar-light" >
     <ion-nav-back-button class="button-clear">
@@ -6,7 +6,7 @@
     </ion-nav-back-button>
   </ion-nav-bar>
 
-  <div class = "bar bar-subheader-ph bar-light col">
+  <div class = "bar bar-light col" ng-class="{'bar-subheader-ph': vue == 1 ,'bar-subheader-ph2': vue == 2}">
      <!-- <h2 class = "title">Sub Header</h2> -->
 <div class="row" >
      <div class="btn-popN2 button " ng-click= "pop_PH_open($event)" >
@@ -19,11 +19,21 @@
 <button class="col col-10 button button-small button-selector" ng-click="previous_week()"> < </button>
 <button class="col col-80 button button-small button-selector "  style="font-weight:500"> {{interval}}</button>
 <button class="col col-10 button button-small button-selector " ng-click="next_week()" > > </button>
-
-</div>
 </div>
 
-  <ion-content class="withsubheader2">
+<div class="row" >
+    <div class="col">
+      <div ng-if='vue == 1' style="display: flex; justify-content: center;"> <button ng-disabled="!$root.droit.FPHMSC"  class="button button-positive" ng-click="open_add_modal()">Ajouter une exception</button></div>
+      <div ng-if='vue == 2' style="display: flex; justify-content: center;padding-top: 4px;"> <button ng-disabled="!$root.droit.FPHMSS" class="button button-positive" ng-click="open_add_modal()">Ajouter une tranche</button></div>
+    </div>
+    <div class="col">
+        <div  ng-if='vue == 1' style="display: flex; justify-content: center;"> <button ng-disabled="!$root.droit.FPHADM" class="button button-positive" style="margin:auto" ng-click="open_eg_modal()">Exception globale</button></div>
+    </div>
+</div>
+
+</div>
+
+  <ion-content ng-class="{'withsubheader2': vue == 1 ,'withsubheader3': vue == 2}">
 
     <!-- <div class="recherche">
      <label class="item item-input search-row ">
@@ -40,7 +50,7 @@
 
       <ion-list  can-swipe="true">
        <!-- <ion-item  style= "padding:0"    ng-repeat="item in Tranches | filter : filterVC_ER "  ng-if="item.typeTranche != 4"   > -->
-      <ion-item ng-if="Tranches.length == 0 "  ><p class="RAF">Rien à afficher</p></ion-item>
+      <!-- <ion-item ng-if="Tranches.length == 0 "  ><p class="RAF">Rien à afficher</p></ion-item> -->
       <ion-item ng-if ="item.typeTranche != 4" style= "padding:0" ng-repeat="item in Tranches "  >
 
 

@@ -2,3 +2,4 @@ SQL
 Fuse
 client/logfile.log
 *.exe
+node_modules

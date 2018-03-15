@@ -1,7 +1,7 @@
 module.exports = {
   COURBES :
   {
-    Intervalle_Reconstutution_j : 2,  // en Jours
+    Intervalle_Reconstutution_j : 1,  // en Jours
     Intervalle_Echantillonnage_m : 10,   // en Minutes
     Intervalle_Extraction_h : 6      // en Heures
   },
@@ -51,15 +51,16 @@ module.exports = {
  OPC_OPTIONS : {
       applicationName : 'MOBILITE',
       keepSessionAlive: true,
-      requestedSessionTimeout: 100000,
+      endpoint_must_exist: false,
+      requestedSessionTimeout: 10000,
       connectionStrategy: {
-      maxRetry: 100000,
-      initialDelay: 100,
-      maxDelay: 1000}
+                maxRetry: 100000,
+                initialDelay: 100,
+                maxDelay: 10000
+        }
       //  securityMode: MessageSecurityMode.SIGNANDENCRYPT,
       //  securityPolicy: SecurityPolicy.Basic128Rsa15,
     //  applicationName: "NodeOPCUA-Client",
-    //  endpoint_must_exist: false,
     //  certificateFile: "file.crt",
     //  privateKeyFile: "file.pem",
     //  serverCertificate: crypto_utils.readCertificate("file.crt"),

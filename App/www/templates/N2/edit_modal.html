@@ -44,7 +44,7 @@
             </label>
 
 
-            <label ng-if = "vue == 1" class="item item-input"  ion-datetime-picker date monday-first ng-model="tmp_EL.dateException" title="'Jour de l\'exception'">
+            <label ng-if = "vue == 1" class="item item-input" ng-model="tmp_EL.dateException" title="'Jour de l\'exception'">
               <span class="input-label" > Jour</span>
             <strong style="position:absolute!important;right:40px!important;">{{tmp_EL.dateException | date: "dd-MM-yyyy"}}</strong>
             </label>
@@ -60,10 +60,11 @@
 
               <div  ng-if = "vue == 2" class="item item-input item-select">
                   <div class="input-label">Jour</div>
-                <select ng-model="tmp_EL.numJourSemaine" required ng-options="item.number as item.day for item in daySelect track by item.number ">
-                <option value="">-- Choisir --</option>
-                <!-- <option ng-repeat = " item in Raison" selected value="{{item.id}}">{{item.raison}}</option> -->
-                </select>
+                  <strong style="position:absolute!important;right:60px!important;">{{tmp_EL.dayName}}</strong>
+                <!-- <select ng-model="tmp_EL.numJourSemaine" required ng-options="item.number as item.day for item in daySelect track by item.number ">
+                <option value=""> Choisir </option>
+                 <option ng-repeat = " item in Raison" selected value="{{item.id}}">{{item.raison}}</option>
+                 </select> -->
               </div>
 
             <button style="font-size: 15px!important" class="button button-full button-positive" ng-click="Edit_EL()" ng-disabled = " myForm.$invalid">Modifier</button>

@@ -31,11 +31,11 @@
 
          <div class="row PH_CT_bar">
 
-                     <div class="col PH_CT_Type">CT {{::item.CT}}</div>
+                     <div class="col PH_CT_Type">CT {{item.CT}}</div>
                      <div class="col PH_arrow" style="padding-top:5px"><i class="icon AL_bar_icon" ng-class="isItemExpanded(item) ? 'ion-chevron-up' : 'ion-chevron-down'"></i></div>
          </div>
          <div ng-if="isItemExpanded(item)" ng-repeat="GF in item.GF" >
-          <div class = "row PH_GF" ng-click="PH_CT_GF(item.CT,GF.LG,GF.NGF,GF.DGF,GF.ID)" > {{::GF.LG}} </div>
+          <div class = "row PH_GF" ng-click="PH_CT_GF(item.CT,GF.LG,GF.NGF,GF.DGF,GF.ID)" > {{GF.LG}} </div>
           </div>
 
 

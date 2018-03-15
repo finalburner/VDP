@@ -83,7 +83,7 @@ app
   {  var URL = $localStorage.Srv_url || P.PARAM.SRV_LOCAL[0].url
      var mySocket = socketFactory({
      prefix: '',
-     ioSocket: io.connect(URL, {secure: true , rejectUnauthorized: false })
+     ioSocket: io.connect(URL, {secure: false , rejectUnauthorized: false, transports: ['websocket'] })
      });
   }
 
@@ -92,25 +92,53 @@ app
 }])
 
 
-.service('ConnectivityMonitor', ['P','socket','$rootScope', '$cordovaNetwork', '$cordovaToast','$ionicLoading', function(P,socket,$rootScope, $cordovaNetwork,$cordovaToast,$ionicLoading)
+.service('ConnectivityMonitor', ['P','socket','$rootScope', '$cordovaDialogs' ,'$cordovaNetwork', '$cordovaToast','$ionicLoading','$cordovaDevice', function(P,socket,$rootScope,$cordovaDialogs, $cordovaNetwork,$cordovaToast,$ionicLoading, $cordovaDevice)
 {
+var authorized = true;
 
-    // console.log($cordovaNetwork)
+if(window.screen.height >= 1000 || window.screen.width >= 1000)
+{
+  $cordovaDialogs.alert('Execution impossible sur cet environnement : E1', 'Erreur', 'OK')
+    .then(function() {
+      ionic.Platform.exitApp()
+    });
+    authorized = false;
+}
+
     ionic.Platform.ready(function() {
+
+      if (window.cordova)
+      $rootScope.notify = function (message) { $cordovaToast.show(message, "short", "bottom")}
+      else
+      $rootScope.notify = function (message) {}
+
       if (window.device)
       {
-      $rootScope.Connected = $cordovaNetwork.isOnline()
-      $rootScope.network = $cordovaNetwork.getNetwork()
-    }
+        var device = $cordovaDevice.getDevice()
+        if(device.isVirtual)
+        {
+        authorized = false;
+        $cordovaDialogs.alert('Execution impossible sur cet environnement : E2', 'Erreur', 'OK')
+          .then(function() {
+            ionic.Platform.exitApp()
+          });
+        console.log('Execution impossible sur cet environnement : 2')
+         }
+          $rootScope.Connected = $cordovaNetwork.isOnline()
+          $rootScope.network = $cordovaNetwork.getNetwork()
+          if($rootScope.Connected && authorized)
+          $ionicLoading.hide()
+       }
+
     })
       // listen for Online event
       $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-          $ionicLoading.hide()
+          if (authorized) $ionicLoading.hide()
           $rootScope.Connected = true;
           socket.emit(P.SOCKET.SRVQ);
           $rootScope.network = $cordovaNetwork.getNetwork();
           $cordovaToast.show("Connecté", "short", "bottom")
-          $rootScope.$apply();
+          // $rootScope.$apply();
       })
 
       // listen for Offline event
@@ -128,11 +156,30 @@ app
           }
           $rootScope.network = $cordovaNetwork.getNetwork();
           $cordovaToast.show("Déconnecté", "short", "bottom")
-          $rootScope.$apply();
+          // $rootScope.$apply();
       })
 
 
 }])
+
+.service('FilterChain',
+['$filter', function($filter) {
+    var chain = {
+        value : '',
+        start : function(value) {
+            this.value = value;
+            return this;
+        },
+        applyFilter : function(filterName, args) {
+            args = args || [];
+            args.unshift(this.value);
+            this.value = $filter(filterName).apply(undefined, args)
+            return this;
+        }
+    };
+
+    return chain;
+}]);
 // .service("ApkAutoUpdater", function($q,$ionicPlatform){
 //   setTimeout(function() {
 //

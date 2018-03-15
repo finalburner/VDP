@@ -2,7 +2,7 @@
 "use strict";
 //----------------------OPC-------------------------
 /////////////// =========================== ////////////////////
-var Version = "1.3.10";
+var Version = "1.3.11";
 /////////////// =========================== ////////////////////
 var P =       require(process.cwd() + '/OPC_param.js');
 var winston = require('winston');
@@ -632,9 +632,7 @@ else {
                 }
                 if (dataValue[i + 1].value) GF.LIST[i/5].T1 = dataValue[i + 1].value.value.toFixed(1) ;
                 if (dataValue[i + 2].value) GF.LIST[i/5].D1 = dataValue[i + 2].value.value
-                if (dataValue[i + 2].value) console.log(dataValue[i + 2].value.value)
                 if (dataValue[i + 3].value) GF.LIST[i/5].T2 = dataValue[i + 3].value.value.toFixed(1);
-                if (dataValue[i + 4].value) console.log(dataValue[i + 4].value.value)
                 if (dataValue[i + 4].value) GF.LIST[i/5].D2 = dataValue[i + 4].value.value
                 // if (GF.LIST[i/3].T1 != null) GF.LIST[i/3].T1 = parseFloat(GF.LIST[i/3].T1).toFixed(1)
                 // if (GF.LIST[i/3].T2 != null) GF.LIST[i/3].T2 = parseFloat(GF.LIST[i/3].T2).toFixed(1)
@@ -662,6 +660,100 @@ logger.info("GF Emit ")
   // if (sql != 'Read') socket.emit('Error', { Component: 'SQL', Property : 'Session', Value : 'Off'})
 });
 
+
+
+setTimeout(function(){
+
+  var request = new sql.Request()
+  request.input('LOGIN', sql.NVarChar, 'SEN1')
+  request.input('ASTREINTE', sql.BIT, 0)
+  request.input('Selected_CT', sql.NVarChar, data.Selected_CT )
+  request.execute('BDD_DONNEES.dbo.MOBILE_GET_UTILISATEUR_ALARME', (err, rec) => {
+  if (err) {
+      logger.error(err) ; OPC_Report(err, 'SQLO_E') // Reporting
+  }
+  else
+  {
+    var data = rec.recordset
+    var len = data.length;
+    console.log(data)
+    var NodeId,Mnemo,adr,AL;
+    var OPC_Read = [],ToSend=[];
+    data.map(obj => {
+      Mnemo = 'CVC_PT' + obj.IT + '_' + obj.NGF + obj.DGF + '_' + obj.NOF + obj.DOF + '_' + obj.I ;
+      adr = '/Application/STEGC/Paris/PT/PT' + obj.IT + '/Acquisition/' + Mnemo ;
+      NodeId = "ns=2;s=" + adr;
+      if (obj.C && obj.L)
+      {
+      OPC_Read.push(NodeId + '.valeur')
+      OPC_Read.push(NodeId + '/Alm/Acknowledged')
+      OPC_Read.push(NodeId + '/Alm/Disabled')
+      AL =  P.ALARM.AL_0_Color ; //applique la couleur alarme de base
+      if (obj.C == '1')  AL = P.ALARM.AL_1_Color ; //applique la couleur alarme mineure
+      if (obj.C == '2')  AL = P.ALARM.AL_2_Color ; //applique la couleur alarme majeure
+      if (obj.C == '3')  AL = P.ALARM.AL_3_Color ; //applique la couleur alarme critique
+      if (obj.C == '10') AL = P.ALARM.AL_10_Color ; //applique la couleur alarme def com
+      if (!data.Selected_CT || data.Selected_CT == 'null')  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : obj.L , C : obj.C , LO : obj.LO , LG : obj.LG , T0 : obj.T0, T1 : obj.T1 })
+      else  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : obj.L , C : obj.C , LG : obj.LG , LO : data.Selected_CT, T0 : obj.T0, T1 : obj.T1})     }
+    })
+     // console.log(OPC_Read)
+     // console.log(ToSend)
+
+
+    the_session.readVariableValue(OPC_Read, function(err,dataValue,diagnostics) {
+     if (err) {
+            logger.error("OPC error"+ err); OPC_Report(err, 'OPC_E')
+     }
+     else {
+
+
+      // console.log(dataValue)
+       var Act,Ack,Dis,date;
+       for (var i = 0 ; i < len ; i++) {
+
+         if(dataValue[3*i].value && dataValue[3*i].value != null && dataValue[3*i + 1].value && dataValue[3*i + 1].value != null && dataValue[3*i + 2].value && dataValue[3*i + 2].value != null )
+           {
+             Act = dataValue[3*i].value.value;
+             Ack = dataValue[3*i + 1].value.value;
+             Dis = dataValue[3*i + 2].value.value;
+             ToSend[i].V = Act
+             if (Dis == true) ToSend[i].P = 4 //inhibee
+             else if(Act&&Ack) { ToSend[i].P = 1 ; ToSend[i].E = 'Présente acq'} //Présente Acquitée
+             else if(Act&&!Ack) { ToSend[i].P = 2 ; ToSend[i].E = 'Présente '} //Présente ( non Ack )
+             else if(!Act&&!Ack)  {
+             //couleur blanche pour les alarmes disparue non Ack
+               ToSend[i].P = 3 ; // Disparue ( non Ack )
+               ToSend[i].AL = P.ALARM.AL_D_Color ;
+               ToSend[i].E = 'Disparue'
+             }
+           // console.log(Act + '-' + Ack + '-' +  Dis)
+           // console.log(ToSend[i])
+
+           if(dataValue[3*i].value != null && dataValue[3*i].sourceTimestamp)
+            {
+              date = dataValue[3*i].sourceTimestamp;
+              ToSend[i].S = ('0' + date.getDate()).slice(-2) + '/' + ('0' + date.getMonth() + 1).slice(-2)  + '/' + date.getFullYear()
+              ToSend[i].S += ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+           }
+         }
+
+       }
+       console.log(ToSend)
+       // console.log(ToSend)
+       ToSend.push({  OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID, Selected_CT : data.Selected_CT})
+       socket.emit('AL_Answer', ToSend);
+       logger.info('AL_Answer to ' + data.Socket_ID )
+      }
+    })
+  }
+  })
+  .catch(function(err) { //Gestion globale des erreurs SQL
+      logger.error(err)
+      OPC_Report(err, 'SQLO_E') // Reporting
+    })
+
+
+},500000000)
 
 // //////////////////Alarm Fetch on OPC server every 5min////////////////////////////////
 // setTimeout(function(){
@@ -790,162 +882,85 @@ logger.info('AL_Query from ' + data.Socket_ID)
 if (the_session)
 {
  if(data.Mode == "Read") {
-  // logger.info('AL_Query : ' + data.Socket_ID) ;
-  var query ;
-  var Ack;
-  var Actif ;
-  var OPC_Read  = [];
-  var ToSend = [];
 
-  if (!data.Selected_CT || data.Selected_CT == 'null')
-  {
-   query  = "Select top 1000 " + P.SQL.Metier + " as M," + P.SQL.Localisation  + " as LO, " +  P.SQL.Libelle_information + " AS L, " +  P.SQL.Installation_technique + " AS IT,  " + P.SQL.NomGroupeFonctionnel + " AS NGF," + P.SQL.Libelle_groupe + " AS LG,"
-   query +=  P.SQL.DesignGroupeFonctionnel + " AS DGF, " +  P.SQL.NomObjetFonctionnel + " AS NOF,  " + P.SQL.DesignObjetFonctionnel + " AS DOF, " +  P.SQL.Information + " AS I,  " + P.SQL.TOR_CriticiteAlarme + " AS C, "
-   query +=  P.SQL.TOR_CodeEtat0 + " AS T0, " + P.SQL.TOR_CodeEtat1 + " AS T1"
-   query += " from dbo.SUPERVISION WHERE  " + P.SQL.Type + " = 'TA' and  " +  P.SQL.TOR_CriticiteAlarme + " IN (1,2,3) "}
-  else
-   {
-    query = "Select  " + P.SQL.Metier + " as M," + P.SQL.Libelle_information + " AS L,  " + P.SQL.Installation_technique + " AS IT, " +  P.SQL.NomGroupeFonctionnel + " AS NGF," + P.SQL.Libelle_groupe + " AS LG,"
-    query += P.SQL.DesignGroupeFonctionnel + " AS DGF,  " + P.SQL.NomObjetFonctionnel + " AS NOF, " +  P.SQL.DesignObjetFonctionnel + " AS DOF,  " + P.SQL.Information + " AS I, " +  P.SQL.TOR_CriticiteAlarme + " AS C, "
-    query += P.SQL.TOR_CodeEtat0 + " AS T0, " + P.SQL.TOR_CodeEtat1 + " AS T1 "
-    query += "from dbo.SUPERVISION WHERE " + P.SQL.Type + "= 'TA' and  " + P.SQL.Localisation + " =\'" + data.Selected_CT + "\' and  "
-    query += P.SQL.TOR_CriticiteAlarme + " IN (1,2,3) "
-  }
-// console.log(query)
-  var request = new sql.Request().query(query).then(function(rec) {
-  if (rec) {
-  var recordset=JSON.parse(JSON.stringify(rec.recordset).replace(/"\s+|\s+"/g,'"'))
-  var len = recordset.length ;
-  var opc_len ;
-
-  for (var i = 0 ; i < len; i++) {
-                  var id = recordset[i];
-                    // console.log(id)
-                  var Mnemo = id.M + '_PT' + id.IT + '_' + id.NGF + id.DGF + '_' + id.NOF + id.DOF + '_' + id.I ;
-                  var adr = '/Application/STEGC/Paris/PT/PT' + id.IT + '/Acquisition/' + Mnemo ;
-                  var NodeId = "ns=2;s=" + adr;
-                  // if (id.C && id.Libelle_information )
-                  // AlmToRead.push({ NodeId : NodeId , Mnemo : Mnemo , Libelle: id.Libelle_information, Criticite : id.C , Actif : '' , Ack : ''})
-                  OPC_Read.push(NodeId + '.valeur')
-                  OPC_Read.push(NodeId + '/Alm/Acknowledged')
-                  OPC_Read.push(NodeId + '/Alm/Disabled')
-                  var AL =  P.ALARM.AL_0_Color ; //applique la couleur alarme de base
-                  if (id.C == '1')  AL = P.ALARM.AL_1_Color ; //applique la couleur alarme mineure
-                  if (id.C == '2')  AL = P.ALARM.AL_2_Color ; //applique la couleur alarme majeure
-                  if (id.C == '3')  AL = P.ALARM.AL_3_Color ; //applique la couleur alarme critique
-                  if (id.C == '10') AL = P.ALARM.AL_10_Color ; //applique la couleur alarme def com
-
-  if (!data.Selected_CT || data.Selected_CT == 'null')  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : id.L , C : id.C , LO : id.LO , LG : id.LG , T0 : id.T0, T1 : id.T1 })
-  else  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : id.L , C : id.C , LG : id.LG , LO : data.Selected_CT, T0 : id.T0, T1 : id.T1})
-
-     };
-// console.log(OPC_Read)
-the_session.readVariableValue(OPC_Read, function(err,dataValue,diagnostics) {
-if (err) {
-logger.error("OPC error"+ err); OPC_Report(err, 'OPC_E')
-}
-else {
-var Ack,Act,Dis,date;
- for (var i = 0 ; i < len ; i++) {
-//Gestion d'erreur OPC lecture attribut Actif
-// console.log(opc_len)
-/////////////Debug TOOL for alarms //////////////////
-// if(ToSend[i].M == 'CVC_PT108595_CHAUD00002_TEMP3DEPAR_E02')
-if(dataValue[3*i].value && dataValue[3*i].value != null && dataValue[3*i + 1].value && dataValue[3*i + 1].value != null && dataValue[3*i + 2].value && dataValue[3*i + 2].value != null )
-  {
-    Act = dataValue[3*i].value.value;
-    Ack = dataValue[3*i + 1].value.value;
-    Dis = dataValue[3*i + 2].value.value;
-    ToSend[i].V = Act
-    if (Dis == true) ToSend[i].P = 4 //inhibee
-    else if(Act&&Ack) { ToSend[i].P = 1 ; ToSend[i].E = 'Présente acq'} //Présente Acquitée
-    else if(Act&&!Ack) { ToSend[i].P = 2 ; ToSend[i].E = 'Présente '} //Présente ( non Ack )
-    else if(!Act&&!Ack)  {
-    //couleur blanche pour les alarmes disparue non Ack
-      ToSend[i].P = 3 ; // Disparue ( non Ack )
-      ToSend[i].AL = P.ALARM.AL_D_Color ;
-      ToSend[i].E = 'Disparue'
-    }
-  // console.log(Act + '-' + Ack + '-' +  Dis)
-  // console.log(ToSend[i])
-
-  if(dataValue[3*i].value != null && dataValue[3*i].sourceTimestamp)
-   {
-     date = dataValue[3*i].sourceTimestamp;
-     ToSend[i].S = ('0' + date.getDate()).slice(-2) + '/' + ('0' + date.getMonth() + 1).slice(-2)  + '/' + date.getFullYear()
-     ToSend[i].S += ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-  }
-}
+     var request = new sql.Request()
+     request.input('LOGIN', sql.NVarChar, 'SEN1')
+     request.input('ASTREINTE', sql.BIT, 0)
+     request.input('Selected_CT', sql.NVarChar, data.Selected_CT )
+     request.execute('BDD_DONNEES.dbo.MOBILE_GET_UTILISATEUR_ALARME', (err, rec) => {
+     if (err) {
+         logger.error(err) ; OPC_Report(err, 'SQLO_E') // Reporting
+     }
+     else
+     {
+       var record = rec.recordset
+       var len = record.length;
+       // console.log(data)
+       var NodeId,Mnemo,adr,AL;
+       var OPC_Read = [],ToSend=[];
+       record.map(obj => {
+         Mnemo = 'CVC_PT' + obj.IT + '_' + obj.NGF + obj.DGF + '_' + obj.NOF + obj.DOF + '_' + obj.I ;
+         adr = '/Application/STEGC/Paris/PT/PT' + obj.IT + '/Acquisition/' + Mnemo ;
+         NodeId = "ns=2;s=" + adr;
+         if (obj.C && obj.L)
+         {
+         OPC_Read.push(NodeId + '/Alm/Status')
+         AL =  P.ALARM.AL_0_Color ; //applique la couleur alarme de base
+         if (obj.C == '1')  AL = P.ALARM.AL_1_Color ; //applique la couleur alarme mineure
+         if (obj.C == '2')  AL = P.ALARM.AL_2_Color ; //applique la couleur alarme majeure
+         if (obj.C == '3')  AL = P.ALARM.AL_3_Color ; //applique la couleur alarme critique
+         if (obj.C == '10') AL = P.ALARM.AL_10_Color ; //applique la couleur alarme def com
+         if (!data.Selected_CT || data.Selected_CT == 'null')  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : obj.L , C : obj.C , LO : obj.LO , LG : obj.LG , T0 : obj.T0, T1 : obj.T1 , S : ''})
+         else  ToSend.push({ N : NodeId, M : Mnemo, AL: AL, L : obj.L , C : obj.C , LG : obj.LG , LO : data.Selected_CT, T0 : obj.T0, T1 : obj.T1 , S : ''})     }
+       })
+        console.log(OPC_Read.length)
+        console.log(ToSend.length)
 
 
-////////////////////////////////////
-// if(dataValue[2*i].value != null && dataValue[2*i].sourceTimestamp)
-// ToSend[i].S= moment(dataValue[2*i].sourceTimestamp).format('DD-MM-YYYY HH:MM') //date type
-// console.log(ToSend[i].S)
+       the_session.readVariableValue(OPC_Read, function(err,dataValue,diagnostics) {
+        if (err) {
+               logger.error("OPC error"+ err); OPC_Report(err, 'OPC_E')
+        }
+        else {
 
-// //Gestion d'erreur OPC lecture attribut value
-// if (dataValue[2*i].statusCode )
-// {
-//   if (dataValue[2*i].statusCode._base)
-//   {
-//      id.StatusCode_Actif = dataValue[2*i].statusCode._base['name'];
-//      if ( id.StatusCode_Actif = 'Good' && dataValue[2*i].value)
-//      {
-//      Act = dataValue[2*i].value.value;
-//      ToSend[i].V = Act
-//     }
-//   }
-//   if (dataValue[2*i].statusCode['name'])
-//   {
-//       id.StatusCode_Actif = dataValue[2*i].statusCode['name'];
-//       if( id.StatusCode_Actif = 'Good' && dataValue[2*i].value)
-//       Act = dataValue[2*i].value.value;
-//   }
-//  }
-// //Gestion d'erreur OPC lecture attribut Ack
-//
-//  if (dataValue[2*i+1].statusCode )
-//  {
-//    if (dataValue[2*i+1].statusCode._base)
-//    {
-//       id.StatusCode_Ack = dataValue[2*i+1].statusCode._base['name'];
-//       if ( id.StatusCode_Ack = 'Good' && dataValue[2*i+1].value)
-//       Ack = dataValue[2*i+1].value.value;
-//     }
-//
-//   if (dataValue[2*i+1].statusCode['name'])
-//     {
-//        id.StatusCode_Ack = dataValue[2*i+1].statusCode['name'];
-//        if( id.StatusCode_Ack = 'Good' && dataValue[2*i+1].value)
-//       Ack = dataValue[2*i+1].value.value;
-//     }
-//
-// }
-//
-// if(Act&&Ack) ToSend[i].P = 1 ; //Présente Acquitée
-// if(Act&&!Ack)  ToSend[i].P = 2 ; //Présente ( non Ack )
-// if(!Act&&!Ack)  {
-// //couleur blanche pour les alarmes disparue non Ack
-//   ToSend[i].P = 3 ; // Disparue ( non Ack )
-//   ToSend[i].AL = P.ALARM.AL_D_Color ;
-// }
-}
 
-// console.log(ToSend)
-ToSend.push({  OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID, Selected_CT : data.Selected_CT})
-socket.emit('AL_Answer', ToSend);
-logger.info('AL_Answer to ' + data.Socket_ID )
-  }
+         console.log(dataValue)
+          var Act,Ack,Dis,date;
+          for (var i = 0 ; i < len ; i++) {
 
-      });
-    };
-      }).catch(function(err) { //Gestion globale des erreurs SQL
-        logger.error(err)
-        OPC_Report(err, 'SQLO_E') // Reporting
+            if(dataValue[i] && dataValue[i].value && dataValue[i].value != null)
+              {
+                console.log(dataValue[i].value.value)
+                if (dataValue[i].value.value == 3)
+                { ToSend[i].P = 2 ; ToSend[i].E = 'Présente'}
+                else if (dataValue[i].value.value == 6)
+                { ToSend[i].P = 1 ; ToSend[i].E = 'Présente acq'} //Présente Acquitée
+                else if (dataValue[i].value.value == 8)
+                { ToSend[i].P = 4 ; ToSend[i].E = 'inhibée'}//inhibee
+                else if (dataValue[i].value.value == 5) {
+                ToSend[i].P = 3 ;
+                ToSend[i].AL = P.ALARM.AL_D_Color ;
+                ToSend[i].E = 'Disparue' }
+                if (dataValue[i].sourceTimestamp){
+                  date = dataValue[i].sourceTimestamp;
+                  ToSend[i].S = ('0' + date.getDate()).slice(-2) + '/' + ('0' + date.getMonth() + 1).slice(-2)  + '/' + date.getFullYear()
+                  ToSend[i].S += ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+                }
 
-      });
+            }
 
-}
+          }
+          console.log(ToSend)
+          // console.log(ToSend)
+          ToSend.push({  OPC_Socket_ID : data.OPC_Socket_ID, Socket_ID: data.Socket_ID, Selected_CT : data.Selected_CT})
+          socket.emit('AL_Answer', ToSend);
+          logger.info('AL_Answer to ' + data.Socket_ID )
+         }
+       })
+     }
+     })
+
+ }
 
 if( data.Mode == "Write" )
 {

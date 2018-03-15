@@ -2,7 +2,7 @@ app
 .constant('P', {
 
   INFO : {
-    Version : '1.3.9'
+    Version : '1.3.11'
     },
 
   PARAM : {
@@ -14,8 +14,8 @@ app
     ],
     SRV_LOCAL :  [
       { id : 0, name : 'DEV', url : 'https://localhost:443'},
-      { id : 1 , name : 'VDP PREPROD', url : 'https://k51-ppr-seb.apps.paris.fr:443'},
-      { id : 0 , name : 'VDP PROD', url : 'https://k51-seb.apps.paris.fr:443'}
+      { id : 0 , name : 'VDP PREPROD', url : 'https://k51-ppr-seb.apps.paris.fr:443'},
+      { id : 1 , name : 'VDP PROD', url : 'https://k51-seb.apps.paris.fr:443'}
   ]// dev 3000 // on local web dev SSL
 
   },

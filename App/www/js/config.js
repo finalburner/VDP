@@ -92,7 +92,7 @@ app
     $ionicPickerI18n.arrowButtonClass = "button-positive";
   })
 
-.run(function($rootScope) {
+.run(function($rootScope,$ionicLoading) {
       $rootScope.once = function(e, func) {
           var unhook = this.$on(e, function() {
               unhook();
@@ -100,9 +100,25 @@ app
           });
       };
 
+      $ionicLoading.show({
+          template: 'Attente de connexion internet'
+       });
 
   })
 
+  ///Log AngularJs Event
+  // .config(['$provide', function ($provide) {
+  //   $provide.decorator('$rootScope', function ($delegate) {
+  //     var _emit = $delegate.$emit;
+  //
+  //     $delegate.$emit = function () {
+  //       console.log.apply(console, arguments);
+  //       _emit.apply(this, arguments);
+  //     };
+  //
+  //     return $delegate;
+  //   });
+  // }]);
 
 // .run(function($ionicPlatform, $ionicPopup, $cordovaNetwork) {
 //    $ionicPlatform.ready(function() {

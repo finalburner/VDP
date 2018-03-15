@@ -228,7 +228,7 @@ $scope.JAL = function() {
       $rootScope.device = {
                             available:true,
                             cordova:"6.1.2",
-                            isVirtual:false,
+                            isVirtual:true,
                             manufacturer:"LENOVO",
                             model:"LENOVO P50",
                             platform:"Windows",
@@ -1023,7 +1023,7 @@ $scope.JAL = function() {
 
   }])
 
-.controller('ALctrl', ['$ionicListDelegate','$ionicModal', '$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$state', '$stateParams', function($ionicListDelegate,$ionicModal, $rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
+.controller('ALctrl', ['$filter','$ionicListDelegate','$ionicModal', '$rootScope', '$scope', 'socket', '$ionicLoading', 'P', '$state', '$stateParams', function($filter, $ionicListDelegate,$ionicModal, $rootScope,$scope,socket,$ionicLoading,P,$state, $stateParams) {
 
    if ($scope.mode == 2)
    {
@@ -1039,7 +1039,7 @@ $scope.JAL = function() {
 
   $ionicLoading.show({
   content: 'Loading', animation: 'fade-in', showBackdrop: true,
-  duration: 20000, maxWidth: 200,  showDelay: 0
+  duration: 30000, maxWidth: 200,  showDelay: 0
   });
   //  $scope.tog = false;
   //  $scope.toggler = function() { return $scope.tog };
@@ -1051,8 +1051,9 @@ $scope.JAL = function() {
    };
 
   $scope.modalm_close = function ()
-  {  $scope.modalm.hide(); $scope.Filter_Alm = $scope.Filter_Alm_local ;
-    //  $scope.$broadcast('toggleWatchers', false); //turn off watchers
+  {
+    $scope.modalm.hide(); $scope.Filter_Alm = $scope.Filter_Alm_local ;
+    $scope.titre_vue = "<div class='main-title' style='line-height: 1.6;padding-top:0px'>Journal des Alarmes</div><div class='sub-title' style='line-height: .6;font-size: 12px;color: #315286;'> " + $scope.$eval('(List_AL| filter:filtercriticite| filter : filteretat | filter : search).length') + " alarmes</div>"
    }
 
   $ionicModal.fromTemplateUrl('templates/N0/modalm.html', function(modal) {
@@ -1069,6 +1070,13 @@ $scope.btn_voir = function(CT)   // Action boutton Alarmes->Voir
 
 $scope.List_AL = []
 $scope.Synthese_PresentCount= 0 ;
+//Cleanup the modal when we're done with it!
+
+
+  // Execute action on hide modal
+  // $scope.$on('modal.hidden', function() {
+  //       if ($scope.List_AL.length >0) $scope.titre_vue = "<div class='main-title' style='line-height: 1.6;padding-top:0px'>Journal des Alarmes</div><div class='sub-title' style='line-height: .6;font-size: 12px;color: #315286;'> " + $scope.$eval('(List_AL| filter:filtercriticite| filter : filteretat | filter : search).length') + " alarmes</div>"
+  // });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////                   FILTRAGE                    //////////////////////////////////////////
@@ -1081,6 +1089,22 @@ $scope.filtertoutes = function() { $scope.Filter_Alm = { ARI : 3 , AMA : 2, AMI 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function calculate_title()
+{
+  if ($scope.List_AL.length >0 && $scope.mode == 1) $scope.titre_vue = "<div class='main-title' style='line-height: 1.6;padding-top:0px'>Journal des Alarmes</div><div class='sub-title' style='line-height: .6;font-size: 12px;color: #315286;'> " + $scope.$eval('(List_AL| filter:filtercriticite| filter : filteretat | filter : search).length') + " alarmes</div>"
+  if ($scope.List_AL.length >0 && $scope.mode == 2) $scope.titre = "<div class='main-title' style='line-height: 1.6;padding-top:0px'>CT " + $rootScope.Selected_CT + "</div><div class='sub-title' style='line-height: .6;font-size: 12px;color: #315286;'> " + $scope.$eval('(List_AL| filter:filtercriticite| filter : filteretat | filter : search).length') + " alarmes</div>"
+
+}
+
+$scope.$watch('search', function(oldVal, newVal)
+{ calculate_title() });
+
+$scope.$watchCollection('Filter_Alm', function(newValues, oldValues) {
+calculate_title()  });
+
+$scope.$watchCollection('Filter_Alm_local', function(newValues, oldValues) {
+calculate_title()  });
+
 
 $scope.ACK = function(item)
 {
@@ -1109,7 +1133,6 @@ $scope.isItemExpanded = function(item) {
   // console.log("shownitem : " + $scope.shownItem)
         return $scope.shownItem === item.M;
       }
-
 
 socket.removeListener(P.SOCKET.OGU);
 socket.on(P.SOCKET.OGU, function(data){
@@ -1168,11 +1191,12 @@ socket.on(P.SOCKET.ALA, function(data){
   }
   else {
     $scope.List_AL = data //Met à jour la liste
+    calculate_title()
   }
 
-$ionicLoading.hide(); //enleve le spinner
-$scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinning
-$ionicListDelegate.closeOptionButtons();
+  $ionicLoading.hide(); //enleve le spinner
+  $scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinning
+  $ionicListDelegate.closeOptionButtons();
    });
 
 }])
@@ -1530,10 +1554,82 @@ $scope.options = {
          $scope.edit_modal = modal;
        });
 
-       $scope.open_edit_modal = function(item) {
-       console.log(item)
+         $ionicModal.fromTemplateUrl('templates/N2/apply_EG.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+          }).then(function(modal) {
+            $scope.eg_modal = modal;
+          });
+
+       $ionicModal.fromTemplateUrl('templates/N2/add_modal.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+        }).then(function(modal) {
+          $scope.add_modal = modal;
+        });
+
+       $scope.getdayName = function(day)
+       {
+         var h = $scope.daySelect.findIndex((obj) => obj.number == day)
+         return $scope.daySelect[h].day
+       }
+
+       $scope.open_eg_modal = function() {
          $ionicListDelegate.closeOptionButtons();
-         $scope.tmp_EL = { raison: item.idException,  heureDebut : Del_Offset(new Date(item.heureDebut)) , heureFin : Del_Offset(new Date(item.heureFin)) , dateException : new Date(item.laDate) , GF : $rootScope.Selected_GF , idTrancheRemplace : item.idTrancheRemplace , idTranche :item.idTranche , typeTranche : item.typeTranche }
+         // liste des exception globales totales avec check pour ceux appliquées sur le GF en cours
+            $http.post(URL + '/api/LIST_EG_GF' , { EG : $rootScope.Selected_GF } )
+                 .success(function(data) {
+                        console.log(data)
+                        $scope.LIST_EG = data.map((obj) => {
+                          if(obj.C == 1) obj.C = true
+                          if(obj.C == 0) obj.C = false
+                          return obj
+                        })
+               }).error(function(data) {
+                       console.log('Error: ' + data);
+               });
+
+         $scope.eg_modal.show();
+       };
+
+       $scope.open_add_modal = function() {
+         $ionicListDelegate.closeOptionButtons();
+         $scope.add_EL = {
+                          raison: '',
+                          heureDebut : new Date() ,
+                          heureFin : new Date() ,
+                          dateException : new Date() ,
+                          GF : $rootScope.Selected_GF
+                          // idTrancheRemplace : item.idTrancheRemplace ,
+                          // idTranche :item.idTranche ,
+                          // typeTranche : item.typeTranche,
+                          // day : item.numJourSemaine,
+                          // dayName : $scope.getdayName(item.numJourSemaine)
+           }
+           console.log( $scope.add_EL )
+
+         // if (item.id) $scope.tmp_EL.idTranche = item.id
+         $scope.add_modal.show();
+         // console.log($scope.tmp_EL)
+       };
+
+       $scope.open_edit_modal = function(item) {
+         console.log(item)
+         $ionicListDelegate.closeOptionButtons();
+
+         $scope.tmp_EL = {
+                          raison: item.idException,
+                          heureDebut : Del_Offset(new Date(item.heureDebut)) ,
+                          heureFin : Del_Offset(new Date(item.heureFin)) ,
+                          dateException : new Date(item.laDate) ,
+                          GF : $rootScope.Selected_GF ,
+                          idTrancheRemplace : item.idTrancheRemplace ,
+                          idTranche :item.idTranche ,
+                          typeTranche : item.typeTranche,
+                          day : item.numJourSemaine,
+                          dayName : $scope.getdayName(item.numJourSemaine)
+           }
+
          if (item.id) $scope.tmp_EL.idTranche = item.id
          $scope.edit_modal.show();
          console.log($scope.tmp_EL)
@@ -1558,6 +1654,7 @@ $scope.options = {
              }
         }
 
+
         $scope.daySelect = [
           { day : 'Lundi' , number : 1 },
             { day : 'Mardi' , number : 2 },
@@ -1567,6 +1664,25 @@ $scope.options = {
                     { day : 'Samedi' , number : 6 },
                       { day : 'Dimanche' , number : 7 }
         ]
+
+
+       $scope.apply_EG_State = function(item)
+       {
+         console.log(item)
+         if(item.C)
+            $http.post(URL  + '/api/EG/Check_EG_GF' , {C : 1, EG : item.EG, ID : $rootScope.Selected_GF, Login : $localStorage.currentUser.user.user_sql} )
+                  .success(() => {
+                     $rootScope.notify('Exception globale appliquée')
+                     get_event()
+                  })
+          else
+              $http.post(URL  + '/api/EG/Check_EG_GF' , {C : 0, EG : item.EG, ID : $rootScope.Selected_GF, Login : $localStorage.currentUser.user.user_sql} )
+                    .success(() => {
+                       $rootScope.notify('Exception globale enlevée')
+                       get_event()
+                    })
+       }
+       // liste des exception globales totales avec check pour ceux appliquées sur le GF en cours
 
        $scope.Edit_EL = function() {
 
@@ -1584,7 +1700,6 @@ $scope.options = {
            SEND.Login = $localStorage.currentUser.user.user_sql
            if ($scope.vue == 2)
            { //Evenement Recurrent Modification
-             SEND.day = SEND.numJourSemaine
              console.log(SEND)
              $http.post(URL + '/api/TR/Update' , SEND )
                   .success(function(data) {
@@ -1616,8 +1731,49 @@ $scope.options = {
              }
         }
 
+        $scope.Add_EL = function() {
+            console.log($scope.add_EL)
+            $ionicLoading.show({ //Spinner au chargement initial
+            content: 'Loading', animation: 'fade-in', showBackdrop: true,
+            duration: 10000, maxWidth: 200,  showDelay: 0
+            });
+
+            $scope.add_EL.heureDebut = Add_Offset($scope.add_EL.heureDebut)
+            $scope.add_EL.heureFin = Add_Offset($scope.add_EL.heureFin)
+            $scope.add_EL.dateException = Add_Offset($scope.add_EL.dateException)
+            var SEND = $scope.add_EL;
+           //  console.log($scope.tmp_EL)
+            // SEND.raison = SEND.idException
+            SEND.Login = $localStorage.currentUser.user.user_sql
+            if ($scope.vue == 2)
+            { //Evenement Recurrent Ajout
+              console.log(SEND)
+              $http.post(URL + '/api/TR/Add' , SEND )
+                   .success(function(data) {
+                         $scope.add_modal.hide();
+                         get_event()
+                         $rootScope.notify("Tranche récurrente ajoutée")
+                 }).error(function(data) {
+                         console.log('Error: ' + data);
+                 });
+             }
+             else {
+
+                 $http.post( URL  + '/api/EL/Add' , SEND )
+                 .success(function(data) {
+                          $scope.add_modal.hide();
+                          get_event()
+                          $rootScope.notify("Exception locale ajoutée")
+                          }).error(function(data) {
+                                console.log('Error: ' + data);
+                          });
+               }
+         }
+
        $scope.close_edit_modal = function() {
          $scope.edit_modal.hide();
+         $scope.add_modal.hide();
+         $scope.eg_modal.hide();
        };
 
        $scope.get_raison = function(id_raison)
@@ -1691,7 +1847,7 @@ $scope.options = {
       if (d_start.getMonth() == d_end.getMonth())
       $scope.interval = "Du " + d_start.getDate() + " au " + d_end.getDate() + " " + P.PH.DATE.mois[d_end.getMonth()]
       else
-      $scope.interval = "Du " + d_start.getDate() + " " + P.PH.DATE.mois[d_start.getMonth()] +  " au " + d_end.getDate() + " " + P.PH.DATE.mois[d_end.getMonth()-1]
+      $scope.interval = "Du " + d_start.getDate() + " " + P.PH.DATE.mois[d_start.getMonth()] +  " au " + d_end.getDate() + " " + P.PH.DATE.mois[d_end.getMonth()]
       }
 
       $scope.List_CT = [] ;
@@ -1731,7 +1887,7 @@ $scope.options = {
          else {
                $http.post(URL + '/api/event_ER' , SEND )
                     .success(function(data) {
-                            // console.log(data)
+                            console.log(data)
                             $scope.Tranches = data ;
                             $ionicLoading.hide(); //enleve le spinner
                             $scope.$broadcast('scroll.refreshComplete');//Stop the ion-refresher from spinning
@@ -1745,6 +1901,7 @@ $scope.options = {
 
   $scope.get_day = function (date)
   {
+     // console.log(date)
      var dat = new Date(date)
      if ($scope.vue == 1 )
      return P.PH.DATE.jours_min[dat.getDay()]
@@ -1773,12 +1930,7 @@ $scope.options = {
 
    $scope.Refresh2 = function() //Exécuté lors du Pull-to-Refresh et Initiation du controlleur-vue (ng-init)
    {
-     //////////TEST/////////////
-    //  $rootScope.Selected_CT= "12003"
-    // $rootScope.Selected_NomGrp = "CIRCU"
-    // $rootScope.Selected_DesGrp = "00001"
-    // $rootScope.Selected_GF = "108822CIRCU00001"
-    // $rootScope.Selected_LibGrp = ""
+
    if(!$rootScope.Selected_GF)  $state.go('app.PH'); //Redirect to CT
   //////////////////////////////////////////
    if ($state.current.url == "/PHtr") RefreshDate() ;

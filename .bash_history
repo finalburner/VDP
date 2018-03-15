@@ -1,71 +1,3 @@
-cordova run android --prod
-npm uninstall cordova-minify-v2
-npm uninstall cordova-minify-v2 --save
-cordova build android 
-cordova run android --prod
-cordova run android --prod
-
-cordova run android --prod
-npm install cordova-minify-v2 --save
-npm install imagemin --save
-npm install find-file --save
-npm install imagemin --save
-npm install cordova-minify-v2 --save
-npm install clean-css --save
-cordova run android --prod
-cordova run android --prod
-cordova run android --prod
-npm install cordova-minify-v2 --save-dev
-npm uninstall cordova-minify-v2
-npm uninstall cordova-minify-v2
-cordova run android --prod
-cordova run android --prod
-cordova run android --prod
-cordova build android --prod --release
-cordova run android --prod --release
-cordova run android --prod --release
-cordova platform add windows
-cordova run windows
-cordova build windows
-cordova platform add windows
-cordova build windows --verbose
-cd .. 
-cd.. 
-cd .. 
-mkdir corwin
-cd corwin
-cordova create test 
-ls
-cd test
-ls
-cd .. 
-cd . .
-cd ..
-cordova create corwin
-cordova platform add windows
-cd corwin
-cordova platform add windows
-cordova run
-cordova platform rm windows
-cordova build android
-cd .. 
-cd vdp 
-cd app 
-cordova build android
-cordova run android
-cordova run android --build
-cordova run android --prod
-cordova run android --prod --release
-cordova run android --prod 
-cordova build android --prod 
-cordova run android --prod 
-cordova run android --prod 
-cordova plugin rm cordova-plugin-client-certificate-addictic
-cordova run android --prod 
-cordova platform rm windows
-cordova plugin rm cordova-plugin-client-certificate-addictic
-cordova run android --prod 
-cordova build android --prod 
 cordova build android --prod --release
 cordova build android --prod --release
 cordova build android --prod --release
@@ -498,3 +430,71 @@ npm install -g ionic@latest
 cd vdp/app
 ionic -v
 ionic --version
+node opc
+build-opc
+build-opc
+node client
+build-client
+build-client
+build-client --verbose
+node client
+build-client --verb
+build-client --verbose
+node client 
+build-client
+npm cache clean
+npm cache verify
+npm cache verify
+node client
+build-client
+chkdsk
+f:
+cd .. 
+cd f:
+cd f:/
+chkdsk f:
+npm uninstall pkg
+npm install pkg -g --save
+npm install pkg -g
+node client
+node client
+build-client
+node opc
+node opc
+npm install node-opcua@latest --save
+npm install node-opcua@latest --save
+node opc
+npm view nodeopcua version
+npm view node-opcua version
+npm install node-opcua@latest --save
+npm view nodeopcua version
+npm view node-opcua version
+node opc
+build-opc
+node opc
+node opc
+build-opc
+cd .. 
+cd .. 
+ls
+cd PH
+node ph
+build-ph
+cd ihm
+ls
+node ihm
+node ihm
+build-ihm
+node ihm
+node ihm
+build-ihm
+node ihm
+node ihm
+node ihm
+node ihm
+node ihm
+node ihm
+node ihm
+node ihm
+build-ihm
+node client.kjs

@@ -11,7 +11,7 @@
 
         <div class="row Login_User">Nom d'utilisateur</div>
           <label class="item item-input row Login_User_Input" >
-          <input type="text" id="user" ng-model="$root.Cnx.username" value= "VDP" tabindex="1" ng-blur="login_blur()"  autofocus>
+          <input type="text" id="user" ng-model="$root.Cnx.username" value= "VDP" tabindex="1" ng-blur="login_blur()" ng-enter="login_blur()" autofocus>
           </label>
 
           <div class="row Login_Pass">Mot de passe</div>
@@ -19,8 +19,8 @@
         <div class="item item-input row Login_Pass_Input">
           <input type="password" ng-click="!Authorize_Cnx && login_blur()" ng-if='!IspasswordShown' id="pass" ng-model="$root.Cnx.password" ng-pattern="/[\w\d]{1,15}/i" data-dependency="user" tabindex="2" required>
           <input type="text" ng-click="!Authorize_Cnx && login_blur()" ng-if='IspasswordShown' id="pass" ng-model="$root.Cnx.password" ng-pattern="/[\w\d]{1,15}/i" data-dependency="user" tabindex="2" required>
-          <button ng-click="switchPassword()" ng-if='!IspasswordShown'class="button button-clear btn-show-pwd no-animate"  type="button"><i class="ion-eye" ></i></button>
-          <button ng-click="switchPassword()" ng-if='IspasswordShown'class="button button-clear btn-show-pwd no-animate"  type="button"><i class="ion-eye-disabled" ></i></button>
+          <button ng-click="switchPassword()" ng-if='!IspasswordShown' class="button button-clear btn-show-pwd no-animate" type="button"><i class="ion-eye" ></i></button>
+          <button ng-click="switchPassword()" ng-if='IspasswordShown' class="button button-clear btn-show-pwd no-animate" type="button"><i class="ion-eye-disabled" ></i></button>
 
         </div>
 

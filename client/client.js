@@ -2,7 +2,7 @@
  /////////////// =========================== ////////////////////
  /*=============> */  /* <================= */
  /////////////// =========================== ////////////////////
-const Version = "1.3.10"
+const Version = "1.3.11"
 
 console.log("Serveur Mobilite version : " + Version )
 var P = require(process.cwd() + '/Client_Param.js')
@@ -10,37 +10,39 @@ var PROD = P.SRV_MOBILITE.PROD
  ////////////// Variables et Dépendances /////////////////////////
 var sql = require('mssql') ;
 var request = require('request');
-var socketioJwt = require('socketio-jwt');
+// var methodOverride = require('method-override')
+// var socketioJwt = require('socketio-jwt');
 var fs = require('fs') ;
 var cors = require('cors')
-var passport	= require('passport');
-var passportJWT = require("passport-jwt");
-var ExtractJwt = passportJWT.ExtractJwt;
-var JwtStrategy = passportJWT.Strategy;
+// var passport	= require('passport');
+// var passportJWT = require("passport-jwt");
+// // var ExtractJwt = passportJWT.ExtractJwt;
+// var JwtStrategy = passportJWT.Strategy;
 // var jwt  = require('jwt-simple');
-var jwt = require('jsonwebtoken');
-var jwtOptions = {}
-jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken() ;
-jwtOptions.secretOrKey = 'VdP2016!';
+// var jwt = require('jsonwebtoken');
+// var jwtOptions = {}
+// jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken() ;
+// jwtOptions.secretOrKey = 'VdP2016!';
 var express = require('express') ;
-var session = require('express-session');
-var RedisStore = require('connect-redis')(session);
-var redisUrl = require('redis-url')
-var LdapStrategy = require('passport-ldapauth');
+// var session = require('express-session');
+// var RedisStore = require('connect-redis')(session);
+// var redisUrl = require('redis-url')
+// var LdapStrategy = require('passport-ldapauth');
 var bodyParser = require("body-parser");
 var cookieParser = require('cookie-parser');
-var passportSocketIo = require('passport.socketio');
+// var passportSocketIo = require('passport.socketio');
 var app = express() ;
 var crypto = require('crypto') ;
 var morgan = require('morgan') ;
 var opn = require('opn') ;
+// var forceSsl = require('express-force-ssl');
 var AD = require('ad');
 // var ActiveDirectory = require('activedirectory');
 var _ = require("lodash");
 var https = require('https');
 var Connected = []
 // Sets up a session store with Redis
-var sessionStore = new RedisStore({ client: redisUrl.connect(process.env.REDIS_URL) });
+// var sessionStore = new RedisStore({ client: redisUrl.connect(process.env.REDIS_URL) });
 var OPC_Socket_ID ;
 var Server_ID ;
 var j ;
@@ -132,22 +134,26 @@ process.setMaxListeners(0);
 // }))
 
 app.use(morgan('dev'));
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
 
 // Express session middleware
-app.use(session({
-  store: sessionStore,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: true,
-    maxAge: 2419200000
-  },
-  secret: 'VdP2016!'
-}));
+// app.use(session({
+//   store: sessionStore,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     secure: true,
+//     maxAge: 2419200000
+//   },
+//   secret: 'VdP2016!'
+// }));
 
 // Initialize Passport session
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // parse application/json
 app.use(bodyParser.json())
@@ -345,20 +351,20 @@ console.log(user)
 //
 //  });
 
-app.post("/secret",passport.authenticate('jwt', { session: false}), function(req, res){
-  //  console.log(req)
-  var b = req.body
-  console.log(b)
-   res.send("Success! You can not see this without a token");
- });
+// app.post("/secret",passport.authenticate('jwt', { session: false}), function(req, res){
+//   //  console.log(req)
+//   var b = req.body
+//   console.log(b)
+//    res.send("Success! You can not see this without a token");
+//  });
 
- app.get("/secretDebug",
-   function(req, res, next){
-     console.log(req.get('Authorization'));
-     next();
-   }, function(req, res){
-     res.send("debugging");
- });
+ // app.get("/secretDebug",
+ //   function(req, res, next){
+ //     console.log(req.get('Authorization'));
+ //     next();
+ //   }, function(req, res){
+ //     res.send("debugging");
+ // });
 
 
  app.post('/api/event', function(req, res) {
@@ -388,6 +394,17 @@ app.post("/secret",passport.authenticate('jwt', { session: false}), function(req
      }
    })
  })
+
+ app.post('/api/TR/Add', function(req, res) {
+  var b = req.body
+  console.log(b)
+   request.post({ url : P.PrgHoraires + req.route.path, form : b }, function (error, response, body) {
+     if (!error && response.statusCode == 200) {
+       res.send(body) // Show the HTML for the Google homepage.
+     }
+   })
+ })
+
  app.post('/api/TR/Update', function(req, res) {
   var b = req.body
   console.log(b)
@@ -397,6 +414,7 @@ app.post("/secret",passport.authenticate('jwt', { session: false}), function(req
      }
    })
  })
+
  app.post('/api/EL/Add', function(req, res) {
   var b = req.body
    request.post({ url : P.PrgHoraires + req.route.path, form : b }, function (error, response, body) {
@@ -433,6 +451,23 @@ app.post("/secret",passport.authenticate('jwt', { session: false}), function(req
    })
  })
 
+  app.post('/api/LIST_EG_GF', function(req, res) {
+   var b = req.body
+    request.post({ url : P.PrgHoraires + req.route.path, form : b }, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        res.send(body) // Show the HTML for the Google homepage.
+      }
+    })
+  })
+
+  app.post('/api/EG/Check_EG_GF', function(req, res) {
+   var b = req.body
+    request.post({ url : P.PrgHoraires + req.route.path, form : b }, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        res.send(body) // Show the HTML for the Google homepage.
+      }
+    })
+  })
 
 
  sql.connect(P.SQL).then(function() {

@@ -1,4 +1,14 @@
 {
   "name": "blank",
-  "app_id": "ccaa1704"
+  "app_id": "ccaa1704",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic1",
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
 }

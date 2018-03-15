@@ -28,7 +28,7 @@
 
 
 
-      <p ng-if="List_CTA.length == 0" style="text-align: center;margin-top:100px;font-size:18px">Pas de circuit pour l'instant</p>
+      <!-- <p ng-if="List_GF.length === 0" style="text-align: center;margin-top:100px;font-size:18px">Pas de circuit pour l'instant</p> -->
 <!-- Infinite SCROLL Directive Injected HERE - No remarqble performance -->
       <!-- <ion-list infinite-scroll="addMoreItems()" infinite-scroll-distance="2" > -->
       <ion-refresher on-refresh="Refresh()">
@@ -38,7 +38,7 @@
 <!-- <ion-item ng-if="List_GF.length == 0 "  ><p class="RAF">Rien à afficher</p></ion-item> -->
 
 <ion-item ng-class="isItemExpanded(item) ? 'expand-itemcta active' : 'expand-itemcta inactive';"
-           ng-repeat="item in List_GF | filter: search track by $index "
+           ng-repeat="item in List_GF  track by $index "
            class="item row GF_item"  ng-click="expand_AL(item)"   >
 
 <!-- <div class ="col col-5 CT_bar_color" style="background-color:{{::item.AL}};"></div> -->
@@ -61,23 +61,35 @@
     </div>
 
     <div class = "row">
-    <p class= "GF_Tmp" >{{item.T1}} °C </p><div class="icon ion-arrow-graph-up-right"> </div>
+      <p class= "GF_Tmp" >{{item.T1}} °C </p>
+      <div ng-if="item.D1 === '2'" class="icon ion-android-arrow-up" >  </div>
+      <div ng-if="item.D1 === 1"  class="icon ion-arrow-graph-up-right" >  </div>
+      <div ng-if="item.D1 === 0"   class="icon ion-android-arrow-forward" >  </div>
+      <div ng-if="item.D1 === -1" class="icon ion-arrow-graph-down-right" >  </div>
+      <div ng-if="item.D1 === -2" class="icon ion-android-arrow-down" >  </div>
     </div>
-</div>
 
+</div>
 <!-- T2 -->
 <div class = "col" style ="padding: 0 " ng-if="showTmp(item.T2)" >
 <!-- <div class = "col" ng-if="item.TA"> -->
   <div class = "row">
-  <p class = "GF_TMP_T2" ng-if="item.NGF == 'CHAUD' || item.NGF == 'ECHAN'">Cons. Calculée</p>
-  <p class = "GF_TMP_T2" ng-if="item.NGF == 'GENER' || item.NGF == 'PRODU'">T° Extérieure</p>
-  <p class = "GF_TMP_T2" ng-if="item.NGF == 'CIRCU' ">T° Ambiante</p>
-  <p class = "GF_TMP_T2" ng-if="item.NGF == 'EAUCS' ">T° Bouclage</p>
-  <p class = "GF_TMP_T2" ng-if="item.NGF == 'CTAIR' ">T° Reprise</p>
+    <p class = "GF_TMP_T2" ng-if="item.NGF == 'CHAUD' || item.NGF == 'ECHAN'">Cons. Calculée</p>
+    <p class = "GF_TMP_T2" ng-if="item.NGF == 'GENER' || item.NGF == 'PRODU'">T° Extérieure</p>
+    <p class = "GF_TMP_T2" ng-if="item.NGF == 'CIRCU' ">T° Ambiante</p>
+    <p class = "GF_TMP_T2" ng-if="item.NGF == 'EAUCS' ">T° Bouclage</p>
+    <p class = "GF_TMP_T2" ng-if="item.NGF == 'CTAIR' ">T° Reprise</p>
   </div>
+
   <div class = "row">
-  <p class= "GF_Tmp">{{item.T2}} °C </p><div class="icon ion-arrow-graph-up-right"> </div>
+    <p class= "GF_Tmp" >{{item.T2}} °C </p>
+    <div ng-if="item.D2 === 2 "  class="icon ion-android-arrow-up" >  </div>
+    <div ng-if="item.D2 === 1 "  class="icon ion-arrow-graph-up-right" >  </div>
+    <div ng-if="item.D2 === 0 "  class="icon ion-android-arrow-forward" >  </div>
+    <div ng-if="item.D2 === -1 " class="icon ion-arrow-graph-down-right" >  </div>
+    <div ng-if="item.D2 === -2 " class="icon ion-android-arrow-down" >  </div>
   </div>
+
 </div>
 
 </div>

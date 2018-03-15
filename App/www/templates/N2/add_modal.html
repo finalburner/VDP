@@ -1,0 +1,74 @@
+<ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive">
+          <p ng-if="vue == 1" class="ph_modal_title">Ajouter une exception locale</p>
+          <p ng-if="vue == 2" class="ph_modal_title">Ajouter une tranche récurrente</p>
+
+
+          <button class="button button-clear button-primary" style="right:10px!important;position:absolute" ng-click="close_edit_modal()">Annuler</button>
+        </ion-header-bar>
+        <ion-content class="padding">
+  <form novalidate ng-cloak name="myForm">
+
+<!--
+      <div  class="row" style="padding-left:25px">
+        <div class="col col-33" style="padding: 27px 0 0 12px ;min-width:50px;font-size:16px">Date</div>
+        <div class="col" style="padding:15px 0 0 17px;font-weight:600;font-size:16px">
+
+          <md-datepicker  ng-model="add_EL.dateException"  md-placeholder="Date Exception" md-open-on-focus></md-datepicker>
+              </div>
+      </div>
+
+      <div class="row" style="padding-left:25px">
+        <div class="col col-33" style="padding: 27px 0 0 12px ;min-width:50px;font-size:16px">Raison</div>
+        <div class="col" style="padding:2px 0 0 10px;font-weight:600;font-size:16px">
+          <md-input-container >
+         <md-select required ng-model="add_EL.raison" placeholder="Choisir une raison" style = "min-width:200px!important">
+         <md-option ng-value="opt.id" ng-repeat="opt in $root.Raison" style="height:40px;">{{::opt.raison }}</md-option>
+         </md-select>
+        </md-input-container>
+              </div>
+
+ -->
+
+          <div class="list">
+
+            <label class="item item-input" ion-datetime-picker time ng-model="add_EL.heureDebut" title="'Heure de debut'">
+              <span class="input-label" style = "min-width:230px;">Heure de Début</span>
+              <strong style="position:absolute!important;right:60px!important;">{{add_EL.heureDebut| date: "H:mm"}}</strong>
+            </label>
+
+            <label class="item item-input" ion-datetime-picker time ng-model="add_EL.heureFin" title="'Heure de Fin'" >
+              <span class="input-label" style = "min-width:230px;">Heure de Fin</span>
+              <strong style="position:absolute!important;right:60px!important;">{{add_EL.heureFin| date: "H:mm"}}</strong>
+            </label>
+
+
+            <label ng-if = "vue == 1" class="item item-input"  ion-datetime-picker date monday-first ng-model="add_EL.dateException" title="'Jour de l\'exception'">
+              <span class="input-label" > Jour</span>
+            <strong style="position:absolute!important;right:40px!important;">{{add_EL.dateException | date: "dd-MM-yyyy"}}</strong>
+            </label>
+
+
+              <div  ng-if = "vue == 1" class="item item-input item-select">
+                <div class="input-label">Raison</div>
+                <select ng-model="add_EL.raison" required ng-options="item.id as item.raison for item in $root.Raison track by item.id ">
+                  <option value="">-- Choisir -- </option>
+                  <!-- <option ng-repeat = " item in Raison" selected value="{{item.id}}">{{item.raison}}</option> -->
+                </select>
+              </div>
+
+              <div  ng-if = "vue == 2" class="item item-input item-select">
+                  <div class="input-label">Jour</div>
+                  <!-- <strong style="position:absolute!important;right:60px!important;">{{add_EL.dayName}}</strong> -->
+                <select ng-model="add_EL.day" required ng-options="item.number as item.day for item in daySelect track by item.number ">
+                  <option value=""> Choisir </option>
+                  <option ng-repeat = " item in Raison" selected value="{{item.id}}">{{item.raison}}</option>
+                 </select>
+              </div>
+
+            <button style="font-size: 15px!important" class="button button-full button-positive" ng-click="Add_EL()" ng-disabled = "add_EL.heureFin.toTimeString() <= add_EL.heureDebut.toTimeString()  || myForm.$invalid">Ajouter</button>
+          </div>
+            </form>
+        </ion-content>
+
+      </ion-modal-view>

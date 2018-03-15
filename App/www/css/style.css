@@ -218,7 +218,7 @@ padding : 3px 0 0 5px !important;
 .item.button-bar.row
 {
   padding : 8px 0px 8px 10px ;
-  height: 56px ;
+  height: 50px ;
   font-family: "Roboto";
   font-weight : 500;
 }
@@ -228,7 +228,6 @@ background-color: #EAEDF2 ;
 text-align: center;
 font-size: 14px;
 color: #315286;
-height: 40px ;
 margin : 0 10px 0 0 ;
 
 }
@@ -238,9 +237,8 @@ margin : 0 10px 0 0 ;
   text-align: center;
   font-size: 14px;
   color: #315286;
-  height: 40px ;
+  height: 35px ;
   margin : 0 10px 0 0 ;
-
 }
 .CT_row
 {
@@ -854,14 +852,18 @@ text-align: left;
 }
 .withsubheader
 {
-padding-top: 52px;
+padding-top: 55px;
 }
+
 .withsubheader2
 {
-
-padding-top: 96px !important;
+padding-top: 135px !important;
 }
 
+.withsubheader3
+{
+padding-top: 95px !important;
+}
 
 .PH_CT_bar
 {
@@ -892,14 +894,25 @@ padding-top: 96px !important;
   border-top:1px solid #C9CACB;
 
 }
+
 .bar-subheader-ph {
     top: 44px;
-    height: 95px;
+    height: 135px;
     padding-top : 0 ;
+    padding-bottom : 0 ;
 }
+
+.bar-subheader-ph2 {
+    top: 44px;
+    height: 96px;
+    padding-top : 0 ;
+    padding-bottom : 0 ;
+}
+
 .week-selector
 {
-  padding-top: 8px !important ;
+  padding-top: 5px !important ;
+  height: 50px;
 }
 
 .button-selector
